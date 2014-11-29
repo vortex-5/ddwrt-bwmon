@@ -11,6 +11,6 @@ do
 	$SCRIPT_DIR/wrtbwmon setup
 	$SCRIPT_DIR/wrtbwmon read
 	sleep 9
-	$SCRIPT_DIR/wrtbwmon update /tmp/usage.db
+	$SCRIPT_DIR/wrtbwmon update /tmp/www/usage.db
 	$SCRIPT_DIR/wrtbwmon publish /tmp/www/usage.db /tmp/www/usage.html $SCRIPT_DIR/MAC-PCname.txt
 done
