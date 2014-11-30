@@ -9,5 +9,5 @@ echo "bandwidth monitor autobackup started use $SCRIPT_DIR/stop.sh to stop"
 while :
 do
 	sleep 900
-	cp /tmp/www/usage.js $SCRIPT_DIR/usage.js
+	cp /tmp/www/usage.js $SCRIPT_DIR/data/usage.js
 done
