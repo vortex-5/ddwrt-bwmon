@@ -1,7 +1,7 @@
 var bwmon = angular.module('bwmonApp', []);
 
 bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($scope, $timeout, $http) {
-	$scope.POLL_WAIT_TIME = 10;
+	$scope.POLL_WAIT_TIME = 5;
   $scope.usageData = [];
 	$scope.pollCountDown = 0;
 
