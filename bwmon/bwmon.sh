@@ -157,15 +157,15 @@ case ${1} in
 	touch /tmp/sorted_$$.tmp
 	cat ${2} | while IFS=, read MAC PEAKUSAGE_IN PEAKUSAGE_OUT OFFPEAKUSAGE_IN OFFPEAKUSAGE_OUT LASTSEEN
 	do
-		echo ${PEAKUSAGE_IN},${PEAKUSAGE_OUT},$(((${PEAKUSAGE_IN}-${OFFPEAKUSAGE_IN}))),$(((${PEAKUSAGE_OUT}-${OFFPEAKUSAGE_OUT}))),${MAC},${LASTSEEN} >> /tmp/sorted_$$.tmp
+		echo ${PEAKUSAGE_IN},${PEAKUSAGE_OUT},$(((${PEAKUSAGE_IN}-${OFFPEAKUSAGE_IN})/9)),$(((${PEAKUSAGE_OUT}-${OFFPEAKUSAGE_OUT})/9)),${MAC},${LASTSEEN} >> /tmp/sorted_$$.tmp
 	done
 
-  # create JS stats page
-  echo "" > ${3}
-  cat /tmp/sorted_$$.tmp | while IFS=, read PEAKUSAGE_IN PEAKUSAGE_OUT OFFPEAKUSAGE_IN OFFPEAKUSAGE_OUT MAC LASTSEEN
-  do
-    echo "${MAC},${PEAKUSAGE_IN},${PEAKUSAGE_OUT},${OFFPEAKUSAGE_IN},${OFFPEAKUSAGE_OUT},${LASTSEEN}" >> ${3}
-  done
+	# create JS stats page
+	echo "" > ${3}
+	cat /tmp/sorted_$$.tmp | while IFS=, read PEAKUSAGE_IN PEAKUSAGE_OUT OFFPEAKUSAGE_IN OFFPEAKUSAGE_OUT MAC LASTSEEN
+	do
+	echo "${MAC},${PEAKUSAGE_IN},${PEAKUSAGE_OUT},${OFFPEAKUSAGE_IN},${OFFPEAKUSAGE_OUT},${LASTSEEN}" >> ${3}
+	done
 
 	#Free some memory
 	rm -f /tmp/sorted_$$.tmp

@@ -1,55 +1,109 @@
 <!DOCTYPE html>
 <html ng-app="bwmonApp">
 	<head>
-		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.4/angular.min.js"></script>
-    <script src="mac-names.js"></script>
+		<meta charset="UTF-8">
+		<script src="angular.min.js"></script>
+		<script src="mac-names.js"></script>
 		<script src="bwmon.js"></script>
+		
+		<link rel="stylesheet" href="bootstrap.min.css" />
+		<link rel="stylesheet" href="bwmon.css" />
 	</head>
 	<body>
-		<h2>Live Bandwidth Stats</h2>
 		<div ng-controller="MainController">
-		  <table>
-        <tr>
-          <th>
-            Device
-          </th>
-          <th>
-            Downloaded
-          </th>
-          <th>
-            Uploaded
-          </th>
-          <th>
-            Download Rate
-          </th>
-          <th>
-            Upload Rate
-          </th>
-          <th>
-            Last Seen
-          </th>
-        </tr>
-        <tr ng-repeat="device in usageData">
-          <td>
-            {{ getName(device.mac) }}
-          </td>
-          <td>
-            {{ getSize(device.down) }}
-          </td>
-          <td>
-            {{ getSize(device.up) }}
-          </td>
-          <td>
-            {{ getRate(device.downRate) }}
-          </td>
-          <td>
-            {{ getRate(device.upRate) }}
-          </td>
-          <td>
-            {{ device.date }}
-          </td>
-        </tr>
-      </table>
+			<div class="page-heading">
+				<h2 class="text-center">Live Bandwidth Stats</h2>
+			</div>
+			<div class="table-padding">
+				<table class="table table-striped table-hover table-condensed table-padding">
+					<tr class="table-heading">
+						<th>
+							<div class="cell-padding">
+								Device
+							</div>
+						</th>
+						<th class="cell-right">
+							Total
+						</th>
+						<th class="cell-right">
+							Downloaded
+						</th>
+						<th class="cell-right">
+							Uploaded
+						</th>
+						<th class="cell-right">
+							Download Rate
+						</th>
+						<th class="cell-right">
+							Upload Rate
+						</th>
+						<th class="cell-right">
+							<div class="cell-padding">
+								Last Seen
+							</div>
+						</th>
+					</tr>
+					<tr	class="device"
+							ng-repeat="device in usageData | orderBy : sortFunction : true"
+							ng-class="{ warning: getDeviceTotalRate(device) > 0 }">
+						<td class="name">
+							<div class="cell-padding">
+								{{ getName(device.mac) }}
+							</div>
+						</td>
+						<td class="cell-right">
+							{{ getSize(getDeviceTotal(device)) }}
+						</td>
+						<td class="cell-right">
+							{{ getSize(device.down) }}
+						</td>
+						<td class="cell-right">
+							{{ getSize(device.up) }}
+						</td>
+						<td class="cell-right">
+							{{ getRate(device.downRate) }}
+						</td>
+						<td class="cell-right">
+							{{ getRate(device.upRate) }}
+						</td>
+						<td class="cell-right">
+							<div class="cell-padding">
+								{{ device.date }}
+							</div>
+						</td>
+					</tr>
+					<tr class="table-row-total">
+						<td class="total">
+							<div class="cell-padding">
+								Totals
+							</div>
+						</td>
+						<td class="cell-right">
+							{{ getSize(getTotals(usageData)) }}
+						</td>
+						<td class="cell-right">
+							{{ getSize(getTotalDown(usageData)) }}
+						</td>
+						<td class="cell-right">
+							{{ getSize(getTotalUp(usageData)) }}
+						</td>
+						<td class="cell-right">
+							{{ getRate(getTotalDownRate(usageData)) }}
+						</td>
+						<td class="cell-right">
+							{{ getRate(getTotalUpRate(usageData)) }}
+						</td>
+						<td class="cell-right">
+							<div class="cell-padding">
+								<!-- Date -->
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="text-center update-counter">
+				Next update in: {{ pollCountDown }}
+			</div>
 		</div>
 	</body>
 </html>

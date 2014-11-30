@@ -1,1 +1,33 @@
 /* Bandwidth monitor css file */
+
+.page-heading {
+	margin: 1em 0 0 0;
+}
+
+.update-counter {
+	margin: 0 0 1em 0;
+}
+
+.table-padding {
+	padding: 1em;
+}
+
+.cell-padding {
+	padding: 0 1em;
+}
+
+.cell-right {
+	text-align: right;
+}
+
+.table-heading th {
+	background-color: #E0E0E0;
+}
+
+.table-row-total td {
+	background-color: #E5E5E5;
+}
+
+.table-row-total .total {
+	font-weight: bold;
+}
