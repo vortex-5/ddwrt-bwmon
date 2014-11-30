@@ -105,14 +105,6 @@ bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($sco
 		return subTotal;
 	}
 	
-	$scope.getTotalForField = function(arr, arrayItemValue) {
-		var total = 0;
-		angular.forEach(arr, function(value) {
-			total += arrayItemValue(value);
-		});
-		return total;
-	};
-	
 	$scope.getTotalDown = function(devices) {
 		var total =  0;
 		angular.forEach(devices, function(device) {
@@ -140,7 +132,7 @@ bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($sco
 	$scope.getTotalUpRate = function(devices) {
 		var total =  0;
 		angular.forEach(devices, function(device) {
-			total += $scope.getDownRate(device);
+			total += $scope.getUpRate(device);
 		});
 		return total;
 	};
