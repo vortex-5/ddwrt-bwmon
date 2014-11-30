@@ -10,7 +10,7 @@ while :
 do
 	$SCRIPT_DIR/bwmon.sh setup
 	$SCRIPT_DIR/bwmon.sh read
-	sleep 9
+	sleep 10
 	$SCRIPT_DIR/bwmon.sh update /tmp/www/usage.js
 	$SCRIPT_DIR/bwmon.sh publish /tmp/www/usage.js /tmp/www/usage_stats.js
 done

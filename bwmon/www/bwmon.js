@@ -1,7 +1,8 @@
 var bwmon = angular.module('bwmonApp', []);
 
 bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($scope, $timeout, $http) {
-	$scope.POLL_WAIT_TIME = 5;
+	$scope.SCRIPT_INTERVAL = 10;
+	$scope.POLL_WAIT_TIME = $scope.SCRIPT_INTERVAL/2;
   $scope.usageData = [];
 	$scope.pollCountDown = 0;
 
@@ -31,10 +32,10 @@ bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($sco
         var item = {};
         
         item.mac = entry[0];
-        item.down = entry[1];
-        item.up = entry[2];
-        item.downRate = entry[3];
-        item.upRate = entry[4];
+        item.postDown = Number(entry[1]);
+        item.postUp = Number(entry[2]);
+        item.preDown = Number(entry[3]);
+        item.preUp = Number(entry[4]);
         item.date = entry[5];
         
         $scope.usageData.push(item);
@@ -51,22 +52,17 @@ bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($sco
     return Math.round(value * 100)/100;
   };
   
-  $scope.getSize = function(KiB) {
-    var KB = KiB * 1.024;
-  
-    if (KB / 1000000 > 1)
-      return $scope.round(KB/1000000) + ' GB';
+  $scope.getSize = function(KB) {  
+    if (KB / Math.pow(1024, 2) > 1)
+      return $scope.round(KB/Math.pow(1024, 2)) + ' GB';
 
-    if (KB / 1000 > 1)
-      return $scope.round(KB/1000) + ' MB';
+    if (KB / 1024 > 1)
+      return $scope.round(KB/1024) + ' MB';
       
     return $scope.round(KB) + ' KB';
   };
   
-  $scope.getRate = function(KiBs) {
-    var KBps = KiBs * 1.024;
-    var Kbps = KBps * 8;
-    
+  $scope.getRate = function(Kbps) {    
     if (Kbps / 1000 > 1)
       return $scope.round(Kbps/1000) + ' Mbps';
       
@@ -77,14 +73,28 @@ bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($sco
 		if (!device)
 			return 0;
 	
-		return Number(device.up) + Number(device.down);
+		return Number(device.postUp) + Number(device.postDown);
 	};
 	
 	$scope.getDeviceTotalRate = function(device) {
 		if (!device)
 				return 0;
-		
-		return Number(device.upRate) + Number(device.downRate);
+				
+		return $scope.getDownRate(device) + $scope.getUpRate(device);
+	};
+	
+	$scope.getDownRate = function(device) {
+		if (!device)
+			return 0;
+			
+		return ((device.postDown - device.preDown) / $scope.SCRIPT_INTERVAL) * (8 / 1.25);
+	};
+	
+	$scope.getUpRate = function(device) {
+		if (!device)
+			return 0;
+			
+		return ((device.postUp - device.preUp) / $scope.SCRIPT_INTERVAL) * (8 / 1.25);
 	};
 	
 	$scope.getTotals = function(devices) {
@@ -104,31 +114,39 @@ bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($sco
 	};
 	
 	$scope.getTotalDown = function(devices) {
-		return $scope.getTotalForField(devices, function(device) {
-			return Number(device.down);
+		var total =  0;
+		angular.forEach(devices, function(device) {
+			total += device.postDown;
 		});
+		return total;
 	};
 	
 	$scope.getTotalUp = function(devices) {
-		return $scope.getTotalForField(devices, function(device) {
-			return Number(device.up);
+		var total =  0;
+		angular.forEach(devices, function(device) {
+			total += device.postUp;
 		});
+		return total;
 	};
 	
 	$scope.getTotalDownRate = function(devices) {
-		return $scope.getTotalForField(devices, function(device) {
-			return Number(device.downRate);
+		var total =  0;
+		angular.forEach(devices, function(device) {
+			total += $scope.getDownRate(device);
 		});
+		return total;
 	};
 	
 	$scope.getTotalUpRate = function(devices) {
-		return $scope.getTotalForField(devices, function(device) {
-			return Number(device.upRate);
+		var total =  0;
+		angular.forEach(devices, function(device) {
+			total += $scope.getDownRate(device);
 		});
+		return total;
 	};
 	
 	$scope.sortFunction = function(device) {
-		var total = Number(device.up) + Number(device.down);		
+		var total = device.postUp + device.postDown;
 		return total;
 	};
 
