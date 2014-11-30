@@ -3,6 +3,6 @@ SCRIPT_DIR=$(dirname ${0})
 SCRIPT_DIR=$(cd ${SCRIPT_DIR} && pwd)
 
 # Backup the DB immediately
-cp /tmp/www/usage.db $SCRIPT_DIR/usage.db
+cp /tmp/www/usage.js $SCRIPT_DIR/usage.js
 
 echo 'backup completed'
