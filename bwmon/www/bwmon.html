@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="bootstrap.min.css" />
 		<link rel="stylesheet" href="bwmon.css" />
 	</head>
-	<body>
+	<body class="page-wrapper">
 		<div ng-controller="MainController">
 			<div class="page-heading">
 				<h2 class="text-center">Live Bandwidth Stats</h2>
@@ -45,7 +45,7 @@
 					</tr>
 					<tr	class="device"
 							ng-repeat="device in usageData | orderBy : sortFunction : true"
-							ng-class="{ warning: getDeviceTotalRate(device) > 0 }">
+							ng-class="{ 'active-traffic': getDeviceTotalRate(device) > 0 }">
 						<td class="name">
 							<div class="cell-padding">
 								{{ getName(device.mac) }}
