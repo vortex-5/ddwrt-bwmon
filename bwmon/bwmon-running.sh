@@ -8,9 +8,10 @@ echo "bandwidth monitor started use $SCRIPT_DIR/stop.sh to stop"
 # Bandwidth Download/Upload Rate Counter
 while :
 do
-	$SCRIPT_DIR/wrtbwmon setup
-	$SCRIPT_DIR/wrtbwmon read
+	$SCRIPT_DIR/bwmon.sh setup
+	$SCRIPT_DIR/bwmon.sh read
 	sleep 9
-	$SCRIPT_DIR/wrtbwmon update /tmp/www/usage.db
-	$SCRIPT_DIR/wrtbwmon publish /tmp/www/usage.db /tmp/www/usage.html $SCRIPT_DIR/MAC-PCname.txt
+	$SCRIPT_DIR/bwmon.sh update /tmp/www/usage.js
+	#$SCRIPT_DIR/wrtbwmon publish /tmp/www/usage.js /tmp/www/usage.html $SCRIPT_DIR/MAC-PCname.txt
+  $SCRIPT_DIR/bwmon.sh publish /tmp/www/usage.js /tmp/www/usage_stats.js
 done

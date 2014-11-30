@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html ng-app="bwmonApp">
+	<head>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.4/angular.min.js"></script>
+    <script src="mac-names.js"></script>
+		<script src="bwmon.js"></script>
+	</head>
+	<body>
+		<h2>Live Bandwidth Stats</h2>
+		<div ng-controller="MainController">
+		  <table>
+        <tr>
+          <th>
+            Device
+          </th>
+          <th>
+            Downloaded
+          </th>
+          <th>
+            Uploaded
+          </th>
+          <th>
+            Download Rate
+          </th>
+          <th>
+            Upload Rate
+          </th>
+          <th>
+            Last Seen
+          </th>
+        </tr>
+        <tr ng-repeat="device in usageData">
+          <td>
+            {{ getName(device.mac) }}
+          </td>
+          <td>
+            {{ getSize(device.down) }}
+          </td>
+          <td>
+            {{ getSize(device.up) }}
+          </td>
+          <td>
+            {{ getRate(device.downRate) }}
+          </td>
+          <td>
+            {{ getRate(device.upRate) }}
+          </td>
+          <td>
+            {{ device.date }}
+          </td>
+        </tr>
+      </table>
+		</div>
+	</body>
+</html>

@@ -5,6 +5,8 @@ SCRIPT_DIR=$(cd ${SCRIPT_DIR} && pwd)
 # Terminate the bandwidth monitor
 killall bwmon-running.sh
 killall bwmon-autobackup.sh
+killall wrtbwmon
+killall bwmon.sh
 killall sleep
 
 # Backup the DB immediately
