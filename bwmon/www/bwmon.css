@@ -1,5 +1,10 @@
 /* Bandwidth monitor css file */
 
+.page-wrapper {
+	max-width: 800px;
+	margin: 0 auto;
+}
+
 .page-heading {
 	margin: 1em 0 0 0;
 }
@@ -30,4 +35,8 @@
 
 .table-row-total .total {
 	font-weight: bold;
+}
+
+.active-traffic td {
+	background-color: #FCF8C0;
 }
