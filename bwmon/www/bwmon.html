@@ -2,7 +2,7 @@
 <html ng-app="bwmonApp">
 	<head>
 		<meta charset="UTF-8">
-		<meta name="viewport" content="width=675">
+		<meta name="viewport" content="width=400">
 		
 		<script src="angular.min.js"></script>
 		<script src="mac-names.js"></script>
@@ -14,7 +14,7 @@
 	<body class="page-wrapper">
 		<div ng-controller="MainController">
 			<div class="page-heading">
-				<h2 class="text-center">Live Bandwidth Stats</h2>
+				<h3 class="text-center">Live Bandwidth Stats</h3>
 			</div>
 			<div class="table-padding">
 				<table class="table table-striped table-hover table-condensed table-padding">
@@ -27,11 +27,11 @@
 						<th class="cell-right">
 							Total
 						</th>
-						<th class="cell-right">
-							Download
+						<th class="cell-right hidden-xs">
+							Downloaded
 						</th>
-						<th class="cell-right">
-							Upload
+						<th class="cell-right hidden-xs">
+							Uploaded
 						</th>
 						<th class="cell-right">
 							DN Rate
@@ -39,7 +39,7 @@
 						<th class="cell-right">
 							UP Rate
 						</th>
-						<th class="cell-right">
+						<th class="cell-right hidden-xs">
 							<div class="cell-padding">
 								Last Seen
 							</div>
@@ -56,10 +56,10 @@
 						<td class="cell-right">
 							{{ getSize(getDeviceTotal(device)) }}
 						</td>
-						<td class="cell-right">
+						<td class="cell-right hidden-xs">
 							{{ getSize(device.postDown) }}
 						</td>
-						<td class="cell-right">
+						<td class="cell-right hidden-xs">
 							{{ getSize(device.postUp) }}
 						</td>
 						<td class="cell-right">
@@ -68,7 +68,7 @@
 						<td class="cell-right">
 							{{ getRate(getUpRate(device)) }}
 						</td>
-						<td class="cell-right">
+						<td class="cell-right hidden-xs">
 							<div class="cell-padding">
 								{{ device.date }}
 							</div>
@@ -83,10 +83,10 @@
 						<td class="cell-right">
 							{{ getSize(getTotals(usageData)) }}
 						</td>
-						<td class="cell-right">
+						<td class="cell-right hidden-xs">
 							{{ getSize(getTotalDown(usageData)) }}
 						</td>
-						<td class="cell-right">
+						<td class="cell-right hidden-xs">
 							{{ getSize(getTotalUp(usageData)) }}
 						</td>
 						<td class="cell-right">
@@ -95,7 +95,7 @@
 						<td class="cell-right">
 							{{ getRate(getTotalUpRate(usageData)) }}
 						</td>
-						<td class="cell-right">
+						<td class="cell-right hidden-xs">
 							<div class="cell-padding">
 								<!-- Date -->
 							</div>
