@@ -36,7 +36,7 @@ bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($sco
         item.postUp = Number(entry[2]);
         item.preDown = Number(entry[3]);
         item.preUp = Number(entry[4]);
-        item.date = entry[5];
+        item.date = entry[5].replace(' ', ' ');
         
         $scope.usageData.push(item);
       }
@@ -54,19 +54,19 @@ bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($sco
   
   $scope.getSize = function(KB) {  
     if (KB / Math.pow(1024, 2) > 1)
-      return $scope.round(KB/Math.pow(1024, 2)) + ' GB';
+      return $scope.round(KB/Math.pow(1024, 2)) + ' GB';
 
     if (KB / 1024 > 1)
-      return $scope.round(KB/1024) + ' MB';
+      return $scope.round(KB/1024) + ' MB';
       
-    return $scope.round(KB) + ' KB';
+    return $scope.round(KB) + ' KB';
   };
   
   $scope.getRate = function(Kbps) {    
     if (Kbps / 1000 > 1)
-      return $scope.round(Kbps/1000) + ' Mbps';
+      return $scope.round(Kbps/1000) + ' Mbps';
       
-    return $scope.round(Kbps) + ' Kbps';
+    return $scope.round(Kbps) + ' Kbps';
   };
 
 	$scope.getDeviceTotal = function(device) {			
