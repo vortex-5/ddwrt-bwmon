@@ -59,7 +59,7 @@ case ${1} in
 "read" )
 
 	#Read counters
-	iptables -L RRDIPT -vnx > /tmp/traffic_55.tmp
+	iptables -L RRDIPT -vnx > /tmp/traffic_pre.tmp
 	;;
 
 "update" )
@@ -69,14 +69,11 @@ case ${1} in
 	# Uncomment this line if you want to abort if database not found
 	# [ -f "${2}" ] || exit 1
 
-	#Read and reset counters
-	iptables -L RRDIPT -vnxZ > /tmp/traffic_66.tmp
-
 	grep -v "0x0" /proc/net/arp  | while read IP TYPE FLAGS MAC MASK IFACE
 	do
 		#Add new data to the graph. Count in Kbs to deal with 16 bits signed values (up to 2G only)
 		#Have to use temporary files because of crappy busybox shell
-		grep ${IP} /tmp/traffic_55.tmp | while read PKTS BYTES TARGET PROT OPT IFIN IFOUT SRC DST
+		grep ${IP} /tmp/traffic_pre.tmp | while read PKTS BYTES TARGET PROT OPT IFIN IFOUT SRC DST
 		do
 			[ "${DST}" = "${IP}" ] && echo $((${BYTES}/1000)) > /tmp/in_$$.tmp
 			[ "${SRC}" = "${IP}" ] && echo $((${BYTES}/1000)) > /tmp/out_$$.tmp
@@ -92,31 +89,34 @@ case ${1} in
 			LINE=$(grep ${MAC} ${2})
 			if [ -z "${LINE}" ]; then
 				#echo "DEBUG : ${MAC} is a new host !"
-				PEAKUSAGE_IN=0
-				PEAKUSAGE_OUT=0
-				OFFPEAKUSAGE_IN=0
-				OFFPEAKUSAGE_OUT=0
+				POST_USAGE_IN=0
+				POST_USAGE_OUT=0
+				PRE_USAGE_IN=0
+				PRE_USAGE_OUT=0
 			else
-				PEAKUSAGE_IN=$(echo ${LINE} | cut -f2 -s -d, )
-				PEAKUSAGE_OUT=$(echo ${LINE} | cut -f3 -s -d, )
-				OFFPEAKUSAGE_IN=$(echo ${LINE} | cut -f4 -s -d, )
-				OFFPEAKUSAGE_OUT=$(echo ${LINE} | cut -f5 -s -d, )
+				POST_USAGE_IN=$(echo ${LINE} | cut -f2 -s -d, )
+				POST_USAGE_OUT=$(echo ${LINE} | cut -f3 -s -d, )
+				PRE_USAGE_IN=$(echo ${LINE} | cut -f4 -s -d, )
+				PRE_USAGE_OUT=$(echo ${LINE} | cut -f5 -s -d, )
 			fi
 			
-			OFFPEAKUSAGE_IN=$((${OFFPEAKUSAGE_IN}+${IN}))
-			OFFPEAKUSAGE_OUT=$((${OFFPEAKUSAGE_OUT}+${OUT}))
+			PRE_USAGE_IN=$((${PRE_USAGE_IN}+${IN}))
+			PRE_USAGE_OUT=$((${PRE_USAGE_OUT}+${OUT}))
 			
 			grep -v "${MAC}" ${2} > /tmp/db_$$.tmp
 			mv /tmp/db_$$.tmp ${2}
-			echo ${MAC},${PEAKUSAGE_IN},${PEAKUSAGE_OUT},${OFFPEAKUSAGE_IN},${OFFPEAKUSAGE_OUT},$(date "+%Y-%m-%d %H:%M") >> ${2}
+			echo ${MAC},${POST_USAGE_IN},${POST_USAGE_OUT},${PRE_USAGE_IN},${PRE_USAGE_OUT},$(date "+%Y-%m-%d %H:%M") >> ${2}
 		fi
 	done
+	
+	#Read and reset counters
+	iptables -L RRDIPT -vnxZ > /tmp/traffic_post.tmp
 
 	grep -v "0x0" /proc/net/arp  | while read IP TYPE FLAGS MAC MASK IFACE
 	do
 		#Add new data to the graph. Count in Kbs to deal with 16 bits signed values (up to 2G only)
 		#Have to use temporary files because of crappy busybox shell
-		grep ${IP} /tmp/traffic_66.tmp | while read PKTS BYTES TARGET PROT OPT IFIN IFOUT SRC DST
+		grep ${IP} /tmp/traffic_post.tmp | while read PKTS BYTES TARGET PROT OPT IFIN IFOUT SRC DST
 		do
 			[ "${DST}" = "${IP}" ] && echo $((${BYTES}/1000)) > /tmp/in_$$.tmp
 			[ "${SRC}" = "${IP}" ] && echo $((${BYTES}/1000)) > /tmp/out_$$.tmp
@@ -128,17 +128,17 @@ case ${1} in
 		
 		if [ ${IN} -gt 0 -o ${OUT} -gt 0 ];  then
 			LINE=$(grep ${MAC} ${2})
-			PEAKUSAGE_IN=$(echo ${LINE} | cut -f2 -s -d, )
-			PEAKUSAGE_OUT=$(echo ${LINE} | cut -f3 -s -d, )
-			OFFPEAKUSAGE_IN=$(echo ${LINE} | cut -f4 -s -d, )
-			OFFPEAKUSAGE_OUT=$(echo ${LINE} | cut -f5 -s -d, )
+			POST_USAGE_IN=$(echo ${LINE} | cut -f2 -s -d, )
+			POST_USAGE_OUT=$(echo ${LINE} | cut -f3 -s -d, )
+			PRE_USAGE_IN=$(echo ${LINE} | cut -f4 -s -d, )
+			PRE_USAGE_OUT=$(echo ${LINE} | cut -f5 -s -d, )
 			
-			PEAKUSAGE_IN=$((${PEAKUSAGE_IN}+${IN}))
-			PEAKUSAGE_OUT=$((${PEAKUSAGE_OUT}+${OUT}))
+			POST_USAGE_IN=$((${POST_USAGE_IN}+${IN}))
+			POST_USAGE_OUT=$((${POST_USAGE_OUT}+${OUT}))
 			
 			grep -v "${MAC}" ${2} > /tmp/db_$$.tmp
 			mv /tmp/db_$$.tmp ${2}
-			echo ${MAC},${PEAKUSAGE_IN},${PEAKUSAGE_OUT},${OFFPEAKUSAGE_IN},${OFFPEAKUSAGE_OUT},$(date "+%Y-%m-%d %H:%M") >> ${2}
+			echo ${MAC},${POST_USAGE_IN},${POST_USAGE_OUT},${PRE_USAGE_IN},${PRE_USAGE_OUT},$(date "+%Y-%m-%d %H:%M") >> ${2}
 		fi
 	done
 	;;
@@ -153,28 +153,13 @@ case ${1} in
 	[ -z "${4}" ] || USERSFILE=${4}
 	[ -f "${USERSFILE}" ] || USERSFILE="/dev/null"
 
-	# first do some number crunching - rewrite the database so that it is sorted
-	touch /tmp/sorted_$$.tmp
-	cat ${2} | while IFS=, read MAC PEAKUSAGE_IN PEAKUSAGE_OUT OFFPEAKUSAGE_IN OFFPEAKUSAGE_OUT LASTSEEN
-	do
-		echo ${PEAKUSAGE_IN},${PEAKUSAGE_OUT},$(((${PEAKUSAGE_IN}-${OFFPEAKUSAGE_IN})/9)),$(((${PEAKUSAGE_OUT}-${OFFPEAKUSAGE_OUT})/9)),${MAC},${LASTSEEN} >> /tmp/sorted_$$.tmp
-	done
-
-	# create JS stats page
-	echo "" > ${3}
-	cat /tmp/sorted_$$.tmp | while IFS=, read PEAKUSAGE_IN PEAKUSAGE_OUT OFFPEAKUSAGE_IN OFFPEAKUSAGE_OUT MAC LASTSEEN
-	do
-	echo "${MAC},${PEAKUSAGE_IN},${PEAKUSAGE_OUT},${OFFPEAKUSAGE_IN},${OFFPEAKUSAGE_OUT},${LASTSEEN}" >> ${3}
-	done
-
-	#Free some memory
-	rm -f /tmp/sorted_$$.tmp
+	cp ${2} ${3}
 
 	#Make previous bandwidth values match the current
 	touch /tmp/matched_$$.tmp
-	cat ${2} | while IFS=, read MAC PEAKUSAGE_IN PEAKUSAGE_OUT OFFPEAKUSAGE_IN OFFPEAKUSAGE_OUT LASTSEEN
+	cat ${2} | while IFS=, read MAC POST_USAGE_IN POST_USAGE_OUT PRE_USAGE_IN PRE_USAGE_OUT LASTSEEN
 	do
-		echo ${MAC},${PEAKUSAGE_IN},${PEAKUSAGE_OUT},${PEAKUSAGE_IN},${PEAKUSAGE_OUT},${LASTSEEN} >> /tmp/matched_$$.tmp
+		echo ${MAC},${POST_USAGE_IN},${POST_USAGE_OUT},${POST_USAGE_IN},${POST_USAGE_OUT},${LASTSEEN} >> /tmp/matched_$$.tmp
 	done
 	mv /tmp/matched_$$.tmp ${2}
 	;;
