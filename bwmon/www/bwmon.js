@@ -87,14 +87,14 @@ bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($sco
 		if (!device)
 			return 0;
 			
-		return ((device.postDown - device.preDown) / $scope.SCRIPT_INTERVAL) * (8 / 1.25);
+		return (device.postDown - device.preDown) * Math.pow(8 / $scope.SCRIPT_INTERVAL, 2);
 	};
 	
 	$scope.getUpRate = function(device) {
 		if (!device)
 			return 0;
 			
-		return ((device.postUp - device.preUp) / $scope.SCRIPT_INTERVAL) * (8 / 1.25);
+		return (device.postUp - device.preUp) * Math.pow(8 / $scope.SCRIPT_INTERVAL, 2);
 	};
 	
 	$scope.getTotals = function(devices) {
