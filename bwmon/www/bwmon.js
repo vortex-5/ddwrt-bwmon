@@ -2,7 +2,9 @@ var bwmon = angular.module('bwmonApp', []);
 
 bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($scope, $timeout, $http) {
 	$scope.SCRIPT_INTERVAL = 10;
+	$scope.SAMPLED_RATE_TO_KBPS_FACTOR = Math.pow(8 / $scope.SCRIPT_INTERVAL, 2);
 	$scope.OVERHEAD_COMPENSATION_FACTOR = 1.04;
+	$scope.CONVERSION_FACTOR = $scope.SAMPLED_RATE_TO_KBPS_FACTOR * $scope.OVERHEAD_COMPENSATION_FACTOR;
 	$scope.POLL_WAIT_TIME = $scope.SCRIPT_INTERVAL/2;
   $scope.usageData = [];
 	$scope.pollCountDown = 0;
@@ -88,14 +90,14 @@ bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($sco
 		if (!device)
 			return 0;
 			
-		return (device.postDown - device.preDown) * Math.pow(8 / $scope.SCRIPT_INTERVAL, 2) * $scope.OVERHEAD_COMPENSATION_FACTOR;
+		return (device.postDown - device.preDown) * $scope.CONVERSION_FACTOR;
 	};
 	
 	$scope.getUpRate = function(device) {
 		if (!device)
 			return 0;
 			
-		return (device.postUp - device.preUp) * Math.pow(8 / $scope.SCRIPT_INTERVAL, 2) * $scope.OVERHEAD_COMPENSATION_FACTOR;
+		return (device.postUp - device.preUp) * $scope.CONVERSION_FACTOR;
 	};
 	
 	$scope.getTotals = function(devices) {
