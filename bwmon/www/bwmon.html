@@ -24,19 +24,19 @@
 								Device
 							</div>
 						</th>
-						<th class="cell-right">
+						<th class="cell-right min-width">
 							Total
 						</th>
-						<th class="cell-right hidden-xs">
+						<th class="cell-right hidden-xs min-width">
 							Downloaded
 						</th>
-						<th class="cell-right hidden-xs">
+						<th class="cell-right hidden-xs min-width">
 							Uploaded
 						</th>
-						<th class="cell-right">
+						<th class="cell-right min-width">
 							DN Rate
 						</th>
-						<th class="cell-right">
+						<th class="cell-right min-width">
 							UP Rate
 						</th>
 						<th class="cell-right hidden-xs">
@@ -53,19 +53,19 @@
 								{{ getName(device.mac) }}
 							</div>
 						</td>
-						<td class="cell-right">
+						<td class="cell-right min-width">
 							{{ getSize(getDeviceTotal(device)) }}
 						</td>
-						<td class="cell-right hidden-xs">
+						<td class="cell-right hidden-xs min-width">
 							{{ getSize(device.postDown) }}
 						</td>
-						<td class="cell-right hidden-xs">
+						<td class="cell-right hidden-xs min-width">
 							{{ getSize(device.postUp) }}
 						</td>
-						<td class="cell-right">
+						<td class="cell-right min-width">
 							{{ getRate(getDownRate(device)) }}
 						</td>
-						<td class="cell-right">
+						<td class="cell-right min-width">
 							{{ getRate(getUpRate(device)) }}
 						</td>
 						<td class="cell-right hidden-xs">
@@ -80,19 +80,19 @@
 								Totals
 							</div>
 						</td>
-						<td class="cell-right">
+						<td class="cell-right min-width">
 							{{ getSize(getTotals(usageData)) }}
 						</td>
-						<td class="cell-right hidden-xs">
+						<td class="cell-right hidden-xs min-width">
 							{{ getSize(getTotalDown(usageData)) }}
 						</td>
-						<td class="cell-right hidden-xs">
+						<td class="cell-right hidden-xs min-width">
 							{{ getSize(getTotalUp(usageData)) }}
 						</td>
-						<td class="cell-right">
+						<td class="cell-right min-width">
 							{{ getRate(getTotalDownRate(usageData)) }}
 						</td>
-						<td class="cell-right">
+						<td class="cell-right min-width">
 							{{ getRate(getTotalUpRate(usageData)) }}
 						</td>
 						<td class="cell-right hidden-xs">
