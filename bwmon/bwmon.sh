@@ -68,6 +68,9 @@ case ${1} in
 
 	# Uncomment this line if you want to abort if database not found
 	# [ -f "${2}" ] || exit 1
+		
+	#Read and reset counters
+	iptables -L RRDIPT -vnxZ > /tmp/traffic_post.tmp
 
 	grep -v "0x0" /proc/net/arp  | while read IP TYPE FLAGS MAC MASK IFACE
 	do
@@ -108,9 +111,6 @@ case ${1} in
 			echo ${MAC},${POST_USAGE_IN},${POST_USAGE_OUT},${PRE_USAGE_IN},${PRE_USAGE_OUT},$(date "+%Y-%m-%d %H:%M") >> ${2}
 		fi
 	done
-	
-	#Read and reset counters
-	iptables -L RRDIPT -vnxZ > /tmp/traffic_post.tmp
 
 	grep -v "0x0" /proc/net/arp  | while read IP TYPE FLAGS MAC MASK IFACE
 	do
