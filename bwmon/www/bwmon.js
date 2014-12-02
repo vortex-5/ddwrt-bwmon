@@ -5,7 +5,7 @@ bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($sco
 	$scope.SAMPLED_RATE_TO_KBPS_FACTOR = Math.pow(8 / $scope.SCRIPT_INTERVAL, 2);
 	$scope.OVERHEAD_COMPENSATION_FACTOR = 1.04;
 	$scope.CONVERSION_FACTOR = $scope.SAMPLED_RATE_TO_KBPS_FACTOR * $scope.OVERHEAD_COMPENSATION_FACTOR;
-	$scope.POLL_WAIT_TIME = $scope.SCRIPT_INTERVAL/2;
+	$scope.POLL_WAIT_TIME = $scope.SCRIPT_INTERVAL;
   $scope.usageData = [];
 	$scope.pollCountDown = 0;
 
