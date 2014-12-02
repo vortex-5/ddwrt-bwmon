@@ -2,9 +2,7 @@ var bwmon = angular.module('bwmonApp', []);
 
 bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($scope, $timeout, $http) {
 	$scope.SCRIPT_INTERVAL = 10;
-	$scope.SAMPLED_RATE_TO_KBPS_FACTOR = Math.pow(8 / $scope.SCRIPT_INTERVAL, 2);
-	$scope.OVERHEAD_COMPENSATION_FACTOR = 1.04;
-	$scope.CONVERSION_FACTOR = $scope.SAMPLED_RATE_TO_KBPS_FACTOR * $scope.OVERHEAD_COMPENSATION_FACTOR;
+	$scope.CONVERSION_FACTOR = 8/$scope.SCRIPT_INTERVAL; // From KB/s to Kbps
 	$scope.POLL_WAIT_TIME = $scope.SCRIPT_INTERVAL;
   $scope.usageData = [];
 	$scope.pollCountDown = 0;
