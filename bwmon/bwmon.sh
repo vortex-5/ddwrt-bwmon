@@ -30,28 +30,28 @@ case ${1} in
 
 "setup" )
 
-	#Create the RRDIPT CHAIN (it doesn't matter if it already exists).
-	iptables -N RRDIPT 2> /dev/null
+	#Create the BWMON CHAIN (it doesn't matter if it already exists).
+	iptables -N BWMON 2> /dev/null
 
-	#Add the RRDIPT CHAIN to the FORWARD chain (if non existing).
-	iptables -L FORWARD --line-numbers -n | grep "RRDIPT" | grep "1" > /dev/null
+	#Add the BWMON CHAIN to the FORWARD chain (if non existing).
+	iptables -L FORWARD --line-numbers -n | grep "BWMON" | grep "1" > /dev/null
 	if [ $? -ne 0 ]; then
-		iptables -L FORWARD -n | grep "RRDIPT" > /dev/null
+		iptables -L FORWARD -n | grep "BWMON" > /dev/null
 		if [ $? -eq 0 ]; then
 			echo "DEBUG : iptables chain misplaced, recreating it..."
-			iptables -D FORWARD -j RRDIPT
+			iptables -D FORWARD -j BWMON
 		fi
-		iptables -I FORWARD -j RRDIPT
+		iptables -I FORWARD -j BWMON
 	fi
 
 	#For each host in the ARP table
 	grep ${LAN_IFACE} /proc/net/arp | while read IP TYPE FLAGS MAC MASK IFACE
 	do
 		#Add iptable rules (if non existing).
-		iptables -nL RRDIPT | grep "${IP} " > /dev/null
+		iptables -nL BWMON | grep "${IP} " > /dev/null
 		if [ $? -ne 0 ]; then
-			iptables -I RRDIPT -d ${IP} -j RETURN
-			iptables -I RRDIPT -s ${IP} -j RETURN
+			iptables -I BWMON -d ${IP} -j RETURN
+			iptables -I BWMON -s ${IP} -j RETURN
 		fi
 	done	
 	;;
@@ -59,7 +59,7 @@ case ${1} in
 "read" )
 
 	#Read counters
-	iptables -L RRDIPT -vnx > /tmp/traffic_pre.tmp
+	iptables -L BWMON -vnx > /tmp/traffic_pre.tmp
 	;;
 
 "update" )
@@ -70,7 +70,7 @@ case ${1} in
 	# [ -f "${2}" ] || exit 1
 		
 	#Read and reset counters
-	iptables -L RRDIPT -vnxZ > /tmp/traffic_post.tmp
+	iptables -L BWMON -vnxZ > /tmp/traffic_post.tmp
 
 	grep -v "0x0" /proc/net/arp  | while read IP TYPE FLAGS MAC MASK IFACE
 	do
