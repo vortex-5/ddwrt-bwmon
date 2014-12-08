@@ -25,27 +25,27 @@ Usage and Directory Structure
 -----------------------------
 All scripts are self contained in the bwmon directory the following lists how you would use each script. None of the scripts require additional parameters and can be executed by direclty calling the script for simplicity. Note all scripts are listed relative to `bwmon/`. 
 
-`startup.sh` The script that should be run to start the bandwidth monitor note here that the startup script will ensure you don't have multiple versions of bandwidth monitor running so it will kill previous version if they get stuck as well.
+`startup.sh` | The script that should be run to start the bandwidth monitor note here that the startup script will ensure you don't have multiple versions of bandwidth monitor running so it will kill previous version if they get stuck as well.
 
-`start.sh` Script used to start the bandwidth monitor manually you should never have to run this startup.sh should take care of this for you.
+`start.sh` | Script used to start the bandwidth monitor manually you should never have to run this startup.sh should take care of this for you.
 
-`stop.sh` Script to manually stop bandwidth monitoring if you are experiencing issues.
+`stop.sh` | Script to manually stop bandwidth monitoring if you are experiencing issues.
 
-`clean.sh` This script wipes all the counters and resets all devices back to 0KB of usage.
+`clean.sh` | This script wipes all the counters and resets all devices back to 0KB of usage.
 
-`install.sh` Script used only once initially to set all the permissions correctly you can run this again if you're experiencing issues but you should only have to run this once. This will only work on ext4 and ntfs partitions as fat32 lacks chmod ability.
+`install.sh` | Script used only once initially to set all the permissions correctly you can run this again if you're experiencing issues but you should only have to run this once. This will only work on ext4 and ntfs partitions as fat32 lacks chmod ability.
 
-`backup.sh` This is automatically called to backup the bandwidth stats to persistent storage periodically. If you want to backup immediately it is also safe to execute this whenever the user wishes.
+`backup.sh` | This is automatically called to backup the bandwidth stats to persistent storage periodically. If you want to backup immediately it is also safe to execute this whenever the user wishes.
 
-`bwmon-running.sh` The scripts that control the actual bandwith monitoring process (You should not run this it will be called by the startup scripts).
+`bwmon-running.sh` | The scripts that control the actual bandwith monitoring process (You should not run this it will be called by the startup scripts).
 
-`bwmon-autobackup.sh` Sets up the backup script to automatically periodically run in the background.
+`bwmon-autobackup.sh` | Sets up the backup script to automatically periodically run in the background.
 
-`www/mac-names.js` This file contains a user mapping of mac addresses to friendly names. A sample 2 machines are already placed in this file follow the format. Note it's intentional that the final pc name does not end with a comma like every other pc name. Also you will need to run `startup.sh` again after you make your changes for them to appear.
+`www/mac-names.js` | This file contains a user mapping of mac addresses to friendly names. A sample 2 machines are already placed in this file follow the format. Note it's intentional that the final pc name does not end with a comma like every other pc name. Also you will need to run `startup.sh` again after you make your changes for them to appear.
 
-`data/usage.js` This replaces the old usage.db the file is directly read by the browser's javascript handler and this is how we work out the bandwidth. This is your personal backup if you wish to not lose stats during an upgrade then you should backup and restore this file.
+`data/usage.js` | This replaces the old usage.db the file is directly read by the browser's javascript handler and this is how we work out the bandwidth. This is your personal backup if you wish to not lose stats during an upgrade then you should backup and restore this file.
 
-`www` This is the front end files for the web site these are the pages that your browser uses. These files are copied on startup to the `/tmp/www/` directory so you will need to re-run `startup.sh` in order to see your change if you make them.
+`www` | This is the front end files for the web site these are the pages that your browser uses. These files are copied on startup to the `/tmp/www/` directory so you will need to re-run `startup.sh` in order to see your change if you make them.
 
 Hints and tips
 --------------
