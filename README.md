@@ -25,6 +25,8 @@ Usage and Directory Structure
 -----------------------------
 All scripts are self contained in the bwmon directory the following lists how you would use each script. None of the scripts require additional parameters and can be executed by direclty calling the script for simplicity. Note all scripts are listed relative to `bwmon/`. 
 
+Path | Description
+---- | -----------
 `startup.sh` | The script that should be run to start the bandwidth monitor note here that the startup script will ensure you don't have multiple versions of bandwidth monitor running so it will kill previous version if they get stuck as well.
 `start.sh` | Script used to start the bandwidth monitor manually you should never have to run this startup.sh should take care of this for you.
 `stop.sh` | Script to manually stop bandwidth monitoring if you are experiencing issues.
