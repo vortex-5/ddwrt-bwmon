@@ -17,7 +17,7 @@ Installation instructions
 1. Copy the contents of `bwmon` to a persistent storage area of the router. It is recommended to use the automount feature of ddwrt and mount an usb drive to `/opt/`
 2. Execute `sh install.sh` (inside the bwmon directory).
 3. Set the automount script on the router to point to `/path/bwmon/startup.sh` to autostart this script on mount or just run the startup.sh script manually if you don't wish to start on system bootup.
-4. Visit http://your_router_ip/user/bwmon.html
+4. Visit `http://your_router_ip/user/bwmon.html`
 
 There will be more documentation for specific scenarios as they come and probably an easier install process once this tool leaves it's current alpha state.
 
