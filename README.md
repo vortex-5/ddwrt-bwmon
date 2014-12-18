@@ -14,10 +14,16 @@ Also since this tool is created later than WRTBWMon we also try and be mobile fr
 
 Installation instructions
 -------------------------
-1. Copy the contents of `bwmon` to a persistent storage area of the router. It is recommended to use the automount feature of ddwrt and mount an usb drive to `/opt/`
-2. Execute `sh install.sh` (inside the bwmon directory).
-3. Set the automount script on the router to point to `/path/bwmon/startup.sh` to autostart this script on mount or just run the startup.sh script manually if you don't wish to start on system bootup.
-4. Visit `http://your_router_ip/user/bwmon.html`
+
+1. Format a USB flash drive to `ext4` you may try `ntfs` but fat partitions will not work.
+2. On DD-WRT enabled routers go to the web gui. Navigate to Services -> USB enable automount USB drive and set the automount path of the partition to `/opt/`. It is recommended to use the partition GUID to do this. Non DD-WRT routers need to ensure the partition is mounted on `/opt/`.
+3. Log into your router via ssh. You may use putty to do this on windows or just ssh on linux.
+4. From your ssh terminal type: `cd /opt/`.
+5. Either download the tool directly from your router's ssh prompt type: `wget https://github.com/vortex-5/ddwrt-bwmon/raw/master/bwmon.tar.gz`. Alternatively you can download the file above and copy it to your usb flash drive.
+6. Extract the installer package from your router's ssh prompt type: `tar -xzvf bwmon.tar.gz`.
+7. Fix the permissions on your router type: `cd /opt/bwmon/` followed by: `sh install.sh`.
+8. Set the automount script on the router (Under your router's web gui's Services -> USB) to point to `/path/bwmon/startup.sh` to autostart this script on mount or just run the startup.sh script manually if you don't wish to start on system bootup.
+9. Visit `http://your_router_ip/user/bwmon.html` to view your stats.
 
 There will be more documentation for specific scenarios as they come and probably an easier install process once this tool leaves it's current alpha state.
 
