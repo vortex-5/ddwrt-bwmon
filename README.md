@@ -25,8 +25,6 @@ Installation instructions
 8. Set the automount script on the router (Under your router's web gui's Services -> USB) to point to `/path/bwmon/startup.sh` to autostart this script on mount or just run the startup.sh script manually if you don't wish to start on system bootup.
 9. Visit `http://your_router_ip/user/bwmon.html` to view your stats.
 
-There will be more documentation for specific scenarios as they come and probably an easier install process once this tool leaves it's current alpha state.
-
 Usage and Directory Structure
 -----------------------------
 All scripts are self contained in the bwmon directory the following lists how you would use each script. None of the scripts require additional parameters and can be executed by direclty calling the script for simplicity. Note all scripts are listed relative to `bwmon/`. 
