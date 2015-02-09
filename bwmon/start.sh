@@ -8,6 +8,9 @@ cp $SCRIPT_DIR/data/usage.js /tmp/www/usage.js
 #copy html webgui
 cp $SCRIPT_DIR/www/* /tmp/www/
 
+# Create DNS Names from DNS Config (This maybe safely disabled if you wish to use a manual mac-names.js file)
+$SCRIPT_DIR/bwmon-dnsmasq.sh
+
 # Bandwidth Download/Upload Rate Counter
 $SCRIPT_DIR/bwmon-running.sh &
 

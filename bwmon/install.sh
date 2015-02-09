@@ -12,6 +12,7 @@ chmod +x "$SCRIPT_DIR/clean.sh"
 chmod +x "$SCRIPT_DIR/bwmon-running.sh"
 chmod +x "$SCRIPT_DIR/bwmon-autobackup.sh"
 chmod +x "$SCRIPT_DIR/bwmon.sh"
+chmod +x "$SCRIPT_DIR/bwmon-dnsmasq.sh"
 
 # confirmation
 echo "Installation completed."
