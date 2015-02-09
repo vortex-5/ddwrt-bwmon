@@ -14,7 +14,7 @@ Also since this tool is created later than WRTBWMon we also try and be mobile fr
 
 Change log
 ----------
-* Feb-08-2015 You no longer need to update the mac-names.js manually it is now automatically done for you on startup as long as you have static leases in your dnsmasq. Note you will need to restart this script either by executing startup.sh or reboot your router after you update your static leases.
+* **Feb-08-2015**: You no longer need to update the mac-names.js manually it is now automatically done for you on startup as long as you have static leases in your dnsmasq. Note you will need to restart this script either by executing startup.sh or reboot your router after you update your static leases.
 
 Installation instructions
 -------------------------
