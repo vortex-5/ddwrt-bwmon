@@ -3,6 +3,11 @@ SCRIPT_DIR=$(dirname ${0})
 SCRIPT_DIR=$(cd ${SCRIPT_DIR} && pwd)
 
 # Load database
+if [ -d $SCRIPT_DIR/data ]
+then
+	mkdir $SCRIPT_DIR/data
+fi
+
 if [ -f $SCRIPT_DIR/data/usage.js ]
 then
     cp $SCRIPT_DIR/data/usage.js /tmp/www/usage.js
