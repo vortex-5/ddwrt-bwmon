@@ -12,7 +12,8 @@ do
 	if [ "$OPTION" == "dhcp-host" ]; then
 		echo "$VALUE" | while IFS=',' read MAC NAME IP LEASETIME
 		do
-			echo "'$MAC': '$NAME'," >> $DYNAMIC_FILE
+			MAC_LOWERCASE=$(echo $MAC | tr '[A-Z]' '[a-z]')
+			echo "'$MAC_LOWERCASE': '$NAME'," >> $DYNAMIC_FILE
 		done 
 	fi
 done
