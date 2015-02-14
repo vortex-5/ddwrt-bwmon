@@ -3,7 +3,12 @@ SCRIPT_DIR=$(dirname ${0})
 SCRIPT_DIR=$(cd ${SCRIPT_DIR} && pwd)
 
 # Load database
-cp $SCRIPT_DIR/data/usage.js /tmp/www/usage.js
+if [ -f $SCRIPT_DIR/data/usage.js ]
+then
+    cp $SCRIPT_DIR/data/usage.js /tmp/www/usage.js
+else
+	touch /tmp/www/usage.js
+fi
 
 #copy html webgui
 cp $SCRIPT_DIR/www/* /tmp/www/
