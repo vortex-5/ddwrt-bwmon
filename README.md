@@ -1,12 +1,6 @@
 ddwrt-bwmon
 ===========
-A alternative lighter weight solution than WRTBWMon.
-
-The foundations of this tool was rooted in the same needs as WRTBWMon both tools seek to give individual device breakdowns for bandwidth usage and current active download rates per device.
-
-Where WRTBWMon seeks to have tigher integration this tool differs by always trying to be lighter weight on the amount of work your router will have to do. A big part of the difference of this tool is a lot of the functionality previously handled via router sh scripts is now offloaded to html and javascript.
-
-Also since this tool is created later than WRTBWMon we also try and be mobile friendly as much as possible.
+DDWRT-BWMON aims to be a lightweight and simple bandwidth monitor for DDWRT routers.
 
 ![screenshot](https://github.com/vortex-5/ddwrt-bwmon/raw/master/bwmon.png "Screenshot")
 
