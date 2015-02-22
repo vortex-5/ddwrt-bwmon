@@ -13,7 +13,7 @@ Installation instructions
 2. On DD-WRT enabled routers go to the web gui. Navigate to Services -> USB enable automount USB drive and set the automount path of the partition to `/opt/`. It is recommended to use the partition GUID to do this. Non DD-WRT routers need to ensure the partition is mounted on `/opt/`.
 3. Log into your router via ssh. You may use putty to do this on windows or just ssh on linux.
 4. From your ssh terminal type: `cd /opt/`.
-5. Either download the tool directly from your router's ssh prompt type: `wget https://github.com/vortex-5/ddwrt-bwmon/releases/download/1.1.1/bwmon.tar.gz`. Alternatively you can download the file above and copy it to your usb flash drive.
+5. Either download the tool directly from your router's ssh prompt type: `wget https://github.com/vortex-5/ddwrt-bwmon/releases/download/1.2/bwmon.tar.gz`. Alternatively you can download the file above and copy it to your usb flash drive.
 6. Extract the installer package from your router's ssh prompt type: `tar -xzvf bwmon.tar.gz`.
 7. Fix the permissions on your router type: `cd /opt/bwmon/ && sh install.sh`.
 8. Set the automount script on the router (Under your router's web gui's Services -> USB) to point to `/path/bwmon/startup.sh` to autostart this script on mount or just run the startup.sh script manually if you don't wish to start on system bootup.
