@@ -1,8 +1,8 @@
 'use strict'
 
-var bwmon = angular.module('bwmonApp', []);
+var bwmon = angular.module('bwmonApp', ['ngCookies', 'ui.bootstrap']);
 
-bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($scope, $timeout, $http) {
+bwmon.controller('MainController', ['$scope', '$interval', '$http', '$cookieStore', function($scope, $interval, $http, $cookieStore) {
 	
 	$scope.SCRIPT_INTERVAL = 10;
 	$scope.CONVERSION_FACTOR = 8/$scope.SCRIPT_INTERVAL; // From KB/s to Kbps
@@ -10,9 +10,10 @@ bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($sco
 	$scope.usageData = [];
 	$scope.pollCountDown = 0;
 	$scope.macNames = {};
+	$scope.displayDensity = 'Normal';
 
-	$scope.init = function() {
-		(function tick() {
+	$scope.init = function() {		
+		function tick() {
 			if ($scope.pollCountDown > 1) {
 				$scope.pollCountDown--;
 			}
@@ -23,8 +24,9 @@ bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($sco
 					$scope.updateUsageData(data);
 				});
 			}
-			$timeout(tick, 1000);
-		})();
+		}
+		tick();
+		$interval(tick, 1000);
 
 		var macNamesFile = MAC_NAMES; // Required mac names won't read if it's not in a var.
 		for (var mac in macNamesFile) {
@@ -32,6 +34,10 @@ bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($sco
 				$scope.macNames[mac.toUpperCase()] = MAC_NAMES[mac];
 			}
 		}
+		
+		var density = $cookieStore.get('bwmon-density');
+		if (density)
+			$scope.displayDensity = density;
 	};
 
 	$scope.updateUsageData = function(data) {
@@ -153,6 +159,10 @@ bwmon.controller('MainController', ['$scope', '$timeout', '$http', function($sco
 		var total = device.postUp + device.postDown;
 		return total;
 	};
+	
+	$scope.$watch('displayDensity', function() {
+		$cookieStore.put('bwmon-density', $scope.displayDensity);
+	});
 
 	$scope.init();
 }]);
