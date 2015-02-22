@@ -1,8 +1,8 @@
 'use strict'
 
-var bwmon = angular.module('bwmonApp', ['ngCookies', 'ui.bootstrap']);
+var bwmon = angular.module('bwmonApp', ['ui.bootstrap']);
 
-bwmon.controller('MainController', ['$scope', '$interval', '$http', '$cookieStore', function($scope, $interval, $http, $cookieStore) {
+bwmon.controller('MainController', ['$scope', '$interval', '$http', function($scope, $interval, $http) {
 	
 	$scope.SCRIPT_INTERVAL = 10;
 	$scope.CONVERSION_FACTOR = 8/$scope.SCRIPT_INTERVAL; // From KB/s to Kbps
@@ -35,10 +35,44 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$cookieStor
 			}
 		}
 		
-		var density = $cookieStore.get('bwmon-density');
+		var density = $scope.readCookie('bwmon-displayDensity');
 		if (density)
 			$scope.displayDensity = density;
 	};
+	
+	$scope.setCookie = function(name, value, maxAgeSec) {
+		var cookieStream = [];
+		cookieStream.push(name + '=' + value);
+		if (maxAgeSec)
+			cookieStream.push('max-age' + '=' + maxAgeSec);
+			
+		document.cookie = cookieStream.join(';');
+	}
+	
+	$scope.readCookie = function(name) {
+		return $scope.readCookies()[name];
+	}
+	
+	$scope.readCookies = function() {
+		var rawCookies = document.cookie;
+		var cookies = {};
+		
+		if (rawCookies) {
+			var cookieValues = rawCookies.split(';');
+			angular.forEach(cookieValues, function(cookieValue) {
+				var index = cookieValue.indexOf('=');
+				if (!index)
+					return;
+				
+				var key = cookieValue.substring(0, index);
+				var value = cookieValue.substring(index + 1, cookieValue.length);
+				
+				cookies[key] = value;
+			});
+		}
+		
+		return cookies;	
+	}
 
 	$scope.updateUsageData = function(data) {
 		var resultLines = data.split('\n');
@@ -161,7 +195,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$cookieStor
 	};
 	
 	$scope.$watch('displayDensity', function() {
-		$cookieStore.put('bwmon-density', $scope.displayDensity);
+		$scope.setCookie('bwmon-displayDensity', $scope.displayDensity, 60 * 60 * 24 * 30);
 	});
 
 	$scope.init();
