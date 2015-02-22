@@ -5,6 +5,8 @@
 		<meta name="viewport" content="width=400">
 		
 		<script src="angular.min.js"></script>
+		<script src="angular-cookies.min.js"></script>
+		<script src="ui-bootstrap-tpls-0.12.1.min.js"></script>
 		<script src="mac-names.js"></script>
 		<script src="bwmon.js"></script>
 		
@@ -16,7 +18,7 @@
 	<body class="page-wrapper">
 		<div ng-controller="MainController">
 			<div class="table-padding">
-				<table class="table table-striped table-hover table-condensed table-padding">
+				<table class="table table-striped table-hover table-condensed table-padding" ng-class="{'table-compact': displayDensity === 'Compact'}">
 					<tr class="table-heading">
 						<th>
 							<div class="cell-padding">
@@ -102,8 +104,18 @@
 					</tr>
 				</table>
 			</div>
-			<div class="text-center update-counter">
-				Next update in: {{ pollCountDown }}
+			<div class="bottom-controls">
+				<div class="density">
+					<div class="controls">
+						<div class="btn-group">
+							<label class="btn btn-default" ng-model="displayDensity" btn-radio="'Normal'">Normal</label>
+							<label class="btn btn-default" ng-model="displayDensity" btn-radio="'Compact'">Compact</label>
+						</div>
+					</div>
+				</div>
+				<div class="update-counter">
+					Next update in: {{ pollCountDown }}
+				</div>
 			</div>
 		</div>
 	</body>

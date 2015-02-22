@@ -9,11 +9,33 @@
 	margin: 1em 0 0 0;
 }
 
-.update-counter {
-	margin: 0 0 1em 0;
+.bottom-controls {
+	margin-top: 10px;
+	display: flex;
+	display: -webkit-flex;
+	align-items: center;
+}
+
+.bottom-controls .update-counter {
+	margin: 0 0 0 10px;
+}
+
+.bottom-controls .density {
+	flex-grow: 1;
+}
+
+.bottom-controls .density .controls {
+	display: flex;
+	display: -webkit-flex;
+	align-items: center;
+}
+
+.bottom-controls .density .controls .text {
+	padding-right: 12px;
 }
 
 .table-padding {
+	margin-bottom: 0px;
 }
 
 .cell-padding {
@@ -42,4 +64,13 @@
 
 .min-width {
 	min-width: 6em;
+}
+
+.table-compact>thead>tr>th,
+.table-compact>tbody>tr>th,
+.table-compact>tfoot>tr>th,
+.table-compact>thead>tr>td,
+.table-compact>tbody>tr>td,
+.table-compact>tfoot>tr>td {
+	padding: 2px 2px;
 }
