@@ -1,8 +1,7 @@
 'use strict'
-
 var bwmon = angular.module('bwmonApp', ['ui.bootstrap']);
 
-bwmon.controller('MainController', ['$scope', '$interval', '$http', function($scope, $interval, $http) {
+bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location', function($scope, $interval, $http, $location) {
 	
 	$scope.SCRIPT_INTERVAL = 10;
 	$scope.CONVERSION_FACTOR = 8/$scope.SCRIPT_INTERVAL; // From KB/s to Kbps
@@ -11,7 +10,45 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', function($sc
 	$scope.pollCountDown = 0;
 	$scope.macNames = {};
 	$scope.displayDensity = 'Normal';
+	$scope.serviceLocation = '/bwreader.php';
+	$scope.serviceEnabled = true;
 
+	$scope.filterSection = function(data, sectionName) {
+		if (!data)
+			return data;
+		
+		var regex = new RegExp('<pre class="' + sectionName + '">([\\s\\S]+?)</pre>', 'gm');
+		var match = regex.exec(data);
+		return match[1];
+	}
+	
+	$scope.fetchUpdate = function() {
+		function oldService() {
+			$http.get('usage_stats.js').then(function(response) {
+				$scope.usageData = [];
+				$scope.updateUsageData(response.data);
+			});
+		}
+		
+		if ($scope.serviceEnabled) {
+			$http.get($scope.serviceLocation).then(function(response) {
+				console.log('php service available enabling dynamic polling');
+				//console.log(response.data);
+				var filtered = $scope.filterSection(response.data, 'usage-stats');
+				console.log(filtered);
+				$scope.usageData = [];
+				$scope.updateUsageData(filtered);
+				
+			}, function(response) {
+				$scope.serviceEnabled = false;
+				oldService();
+			});
+		}
+		else {
+			oldService();
+		}
+	}
+	
 	$scope.init = function() {		
 		function tick() {
 			if ($scope.pollCountDown > 1) {
@@ -19,10 +56,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', function($sc
 			}
 			else {
 				$scope.pollCountDown = $scope.POLL_WAIT_TIME;
-				$http.get('usage_stats.js').success(function(data, status, headers, config) {
-					$scope.usageData = [];
-					$scope.updateUsageData(data);
-				});
+				$scope.fetchUpdate();
 			}
 		}
 		tick();
@@ -197,6 +231,6 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', function($sc
 	$scope.$watch('displayDensity', function() {
 		$scope.setCookie('bwmon-displayDensity', $scope.displayDensity, 60 * 60 * 24 * 30);
 	});
-
+		
 	$scope.init();
 }]);

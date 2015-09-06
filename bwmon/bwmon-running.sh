@@ -2,19 +2,10 @@
 SCRIPT_DIR=$(dirname ${0})
 SCRIPT_DIR=$(cd ${SCRIPT_DIR} && pwd)
 
-LIGHTTPD_RUNNING_CYCLE_TIME=300
+LIGHTTPD_RUNNING_CYCLE_TIME=60 #Should be 300 but temporarily set to same value as not running for testing
 LIGHTTPD_NOT_RUNNING_CYCLE_TIME=10
 
-isLighttpdEnabled() {
-	psValue=$(ps | grep -c 'lighttpd -f')
-	if [ "$psValue" = "2" ]; then
-		echo 'true'
-	else
-		echo 'false'
-	fi
-}
-
-if [ "$(isLighttpdEnabled)" = "true" ]; then
+if [ "$($SCRIPT_DIR/lighttpd-running.sh)" = "true" ]; then
 	CYCLE_TIME=$LIGHTTPD_RUNNING_CYCLE_TIME
 else
 	CYCLE_TIME=$LIGHTTPD_NOT_RUNNING_CYCLE_TIME
