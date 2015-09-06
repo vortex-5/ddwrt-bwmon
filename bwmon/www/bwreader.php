@@ -1,3 +1,9 @@
+<pre class="usage-stats">
+<?php
+echo file_get_contents('/tmp/www/usage_stats.js');	
+?>
+</pre>
+
 <pre class="dnsmasq">
 <?php
 echo file_get_contents('/tmp/dnsmasq.conf');
