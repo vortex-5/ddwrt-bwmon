@@ -3,7 +3,9 @@ var bwmon = angular.module('bwmonApp', ['ui.bootstrap']);
 
 bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location', function($scope, $interval, $http, $location) {
 	$scope.SCRIPT_INTERVAL = 10;
+	$scope.SERVICE_SCRIPT_INTERVAL = 60;
 	$scope.CONVERSION_FACTOR = 8/$scope.SCRIPT_INTERVAL; // From KB/s to Kbps
+	$scope.CONVERSION_FACTOR_SERVICE = 8/$scope.SERVICE_SCRIPT_INTERVAL;
 	$scope.SERVICE_INTERVAL = 2;
 	$scope.POLL_WAIT_TIME = $scope.SCRIPT_INTERVAL;
 	$scope.usageData = [];
@@ -12,6 +14,8 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	$scope.displayDensity = 'Normal';
 	$scope.serviceLocation = '/bwreader.php';
 	$scope.serviceEnabled = true;
+	
+	$scope.droppedSamples = 1; // Number of samples to ignore.
 	
 	// Going from mac to ip conversion lookups
 	$scope.macToIpMapping = {};
@@ -113,6 +117,26 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		}
 
 		if ($scope.serviceEnabled) {            
+			if ($scope.droppedSamples > 0) {
+				$scope.droppedSamples--;
+				(function() {
+					for (var ip in $scope.dataDownSamples[$scope.currentSample]) {
+						if ($scope.dataDownSamples[$scope.currentSample].hasOwnProperty(ip)) {
+							$scope.downRateAverage[ip] = -1;
+						}
+						
+					}
+				})();
+				(function() {
+					for (var ip in $scope.dataUpSamples[$scope.currentSample]) {
+						if ($scope.dataUpSamples[$scope.currentSample].hasOwnProperty(ip)) {
+							$scope.upRateAverage[ip] = -1;
+						}
+					}
+				})();
+				return;
+			}
+				
 			(function() {
 				for (var ip in $scope.dataDownSamples[$scope.currentSample]) {
 					if ($scope.dataDownSamples[$scope.currentSample].hasOwnProperty(ip)) {
@@ -125,16 +149,17 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 						if (!preDown)
 							preDown = 0;
 										
-						if (!$scope.downHistoryValue[ip])
-							$scope.downHistoryValue[ip] = [-1, -1, -1];
+						if (!$scope.downHistoryValue[ip]) {
+								$scope.downHistoryValue[ip] = [0, 0, 0];
+						}
 							
 						var value = (curDown - preDown) * (8 / getInterval());
-						if (value >= 0) {                           
+						if (value >= 0) {
 							$scope.downHistoryValue[ip].splice(0, 1);
 							$scope.downHistoryValue[ip].push(value);
 						}
+						$scope.downRateAverage[ip] = average($scope.downHistoryValue[ip]);
 					}
-					$scope.downRateAverage[ip] = average($scope.downHistoryValue[ip]);
 				}
 			})();
 			(function() {
@@ -149,16 +174,17 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 						if (!preUp)
 							preUp = 0;
 						
-						if (!$scope.upHistoryValue[ip])
-							$scope.upHistoryValue[ip] = [-1, -1, -1];
+						if (!$scope.upHistoryValue[ip]) {
+							$scope.upHistoryValue[ip] = [0, 0, 0];
+						}
 						
 						var value = (curUp - preUp) * (8 / getInterval());
 						if (value >= 0) {
 							$scope.upHistoryValue[ip].splice(0, 1);
 							$scope.upHistoryValue[ip].push(value);
 						}
+						$scope.upRateAverage[ip] = average($scope.upHistoryValue[ip]);
 					}
-					$scope.upRateAverage[ip] = average($scope.upHistoryValue[ip]);
 				}
 			})();
 		}   
