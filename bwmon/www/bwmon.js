@@ -122,12 +122,12 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 						
 						if (!preDown)
 							preDown = 0;
-						
-						if (!$scope.downHistoryValue[ip])
-							$scope.downHistoryValue[ip] = [0, 0, 0, 0, 0];
-						
+												
 						var value = (curDown - preDown) * (8 / getInterval());
 						if (value >= 0) {
+							if (!$scope.downHistoryValue[ip])
+								$scope.downHistoryValue[ip] = [value, value, value];
+							
 							$scope.downHistoryValue[ip].splice(0, 1);
 							$scope.downHistoryValue[ip].push(value);
 						}
@@ -152,6 +152,9 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 						
 						var value = (curUp - preUp) * (8 / getInterval());
 						if (value >= 0) {
+							if (!$scope.upHistoryValue[ip])
+								$scope.upHistoryValue[ip] = [value, value, value];
+							
 							$scope.upHistoryValue[ip].splice(0, 1);
 							$scope.upHistoryValue[ip].push(value);
 						}
