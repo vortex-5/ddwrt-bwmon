@@ -2,7 +2,7 @@
 SCRIPT_DIR=$(dirname ${0})
 SCRIPT_DIR=$(cd ${SCRIPT_DIR} && pwd)
 
-LIGHTTPD_RUNNING_CYCLE_TIME=60 #Should be 300 but temporarily set to same value as not running for testing
+LIGHTTPD_RUNNING_CYCLE_TIME=10 #Should be 300 but temporarily set to same value as not running for testing
 LIGHTTPD_NOT_RUNNING_CYCLE_TIME=10
 
 if [ "$($SCRIPT_DIR/lighttpd-running.sh)" = "true" ]; then
