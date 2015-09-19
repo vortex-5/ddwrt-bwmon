@@ -154,6 +154,9 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 						}
 							
 						var value = (curDown - preDown) * (8 / getInterval());
+						if (isNaN(value)) {
+							value = 0;
+						}
 						if (value >= 0) {
 							$scope.downHistoryValue[ip].splice(0, 1);
 							$scope.downHistoryValue[ip].push(value);
@@ -179,6 +182,9 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 						}
 						
 						var value = (curUp - preUp) * (8 / getInterval());
+						if (isNaN(value)) {
+							value = 0;
+						}
 						if (value >= 0) {
 							$scope.upHistoryValue[ip].splice(0, 1);
 							$scope.upHistoryValue[ip].push(value);
