@@ -47,7 +47,8 @@
 					</tr>
 					<tr	class="device"
 							ng-repeat="device in usageData | orderBy : sortFunction : true"
-							ng-class="{ 'active-traffic': getDeviceTotalRate(device) > 0 }">
+							ng-class="{ 'active-traffic': getDeviceTotalRate(device) > 0 }"
+							ng-hide="isZeroUsage(device)">
 						<td class="name">
 							<div class="cell-padding" title="Mac Address: {{ device.mac.toUpperCase() }}">
 								{{ getName(device.mac) }}

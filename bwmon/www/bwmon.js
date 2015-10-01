@@ -70,6 +70,36 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			match = dnsmasqRegex.exec(data);
 		}
 		$scope.macNames = macNames;
+		
+		// Updates the missing dnsmasq entries.
+		function addEntry(mac) {
+			var item = {};
+
+			item.mac = mac;
+			item.postDown = 0;
+			item.postUp = 0;
+			item.preDown = 0;
+			item.preUp = 0;
+			item.date = '--';
+			
+			$scope.usageData.push(item);
+		}
+		
+		function updateMissingEntries(macNames) {
+			var knownMacs = [];
+			angular.forEach($scope.usageData, function(item) {
+				knownMacs.push(item.mac.toUpperCase());
+			});
+		
+			for (var mac in macNames) {
+				if (macNames.hasOwnProperty(mac)) {
+					if (knownMacs.indexOf(mac) == -1) {
+						addEntry(mac.toLowerCase());
+					}
+				}
+			}
+		}
+		updateMissingEntries($scope.macNames);
 	}
 	
 	$scope.updatemacToIpMapping = function(data) {
@@ -336,7 +366,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 				item.postUp = Number(entry[2]);
 				item.preDown = Number(entry[3]);
 				item.preUp = Number(entry[4]);
-				item.date = entry[5].replace(' ', ' ');
+				item.date = entry[5];
 
 				$scope.usageData.push(item);
 			}
@@ -467,6 +497,10 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			total += $scope.getUpRate(device);
 		});
 		return total;
+	};
+	
+	$scope.isZeroUsage = function(device) {
+		return $scope.getDeviceTotal(device) + $scope.getDownRate(device) + $scope.getUpRate(device) <= 0;
 	};
 
 	$scope.sortFunction = function(device) {
