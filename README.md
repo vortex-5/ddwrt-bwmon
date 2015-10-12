@@ -11,13 +11,16 @@ Installation instructions
 
 1. Format a USB flash drive to `ext4` you may try `ntfs` but fat partitions will not work.
 2. On DD-WRT enabled routers go to the web gui. Navigate to Services -> USB enable automount USB drive and set the automount path of the partition to `/jffs/`. It is recommended to use the partition GUID to do this. Non DD-WRT routers need to ensure the partition is mounted on `/jffs/`.
-3. Log into your router via ssh. You may use putty to do this on windows or just ssh on linux.
-4. From your ssh terminal type: `cd /jffs/`.
-5. Either download the tool directly from your router's ssh prompt type: `wget https://github.com/vortex-5/ddwrt-bwmon/releases/download/1.2.1/bwmon.tar.gz`. Alternatively you can download the file above and copy it to your usb flash drive.
-6. Extract the installer package from your router's ssh prompt type: `tar -xzvf bwmon.tar.gz`.
-7. Fix the permissions on your router type: `cd /jffs/bwmon/ && sh install.sh`.
-8. Set the automount script on the router (Under your router's web gui's Services -> USB) to point to `/path/bwmon/startup.sh` to autostart this script on mount or just run the startup.sh script manually if you don't wish to start on system bootup.
-9. Visit `http://your_router_ip/user/bwmon.html` to view your stats.
+3. Optionally enable lighttpd support from Services -> Webserver -> Lighttpd Server. Keep it at the default port 81 and do not enable WAN access.
+4. Log into your router via ssh. You may use putty to do this on windows or just ssh on linux.
+5. From your ssh terminal type: `cd /jffs/`.
+6. Either download the tool directly from your router's ssh prompt type: `wget https://github.com/vortex-5/ddwrt-bwmon/releases/download/1.5/bwmon.tar.gz`. Alternatively you can download the file from the releases page and copy it to your usb flash drive.
+7. Extract the installer package from your router's ssh prompt type: `tar -xzvf bwmon.tar.gz`.
+8. Fix the permissions on your router type: `cd /jffs/bwmon/ && sh install.sh`.
+9. Set the automount script on the router (Under your router's web gui's Services -> USB) to point to `/path/bwmon/startup.sh` to autostart this script on mount or just run the startup.sh script manually if you don't wish to start on system bootup.
+10. If you enabled lighttpd server for better performance you can visit `http://your_router_ip:81/bwmon.html`. If you do not have lighttpd capability or have chosen not to run lighttpd you can visit the legacy page at `http://your_router_ip/user/bwmon.html` to view your stats. 
+
+*Notes:* Only one of the two URL's will be available and Bwmon will autodetect which mode it should run in based on if the lighttpd server is enabled at script startup. Bwmon will automatically fall back to legacy mode if it does not have lighttpd access. Please also note that lighttpd mode also requires php execution which has been part of DDWRT since build verion 275XX and later.
 
 Usage and Directory Structure
 -----------------------------
@@ -34,6 +37,7 @@ Path | Description
 `bwmon-running.sh` | The scripts that control the actual bandwith monitoring process (You should not run this it will be called by the startup scripts).
 `bwmon-autobackup.sh` | Sets up the backup script to automatically periodically run in the background.
 `bwmon-dnsmasq.sh` | A script to automatically generate mac names from statically assigned dnsmasq entries.
+`lighttpd-running.sh` | A simple utility script to determine if the lighttpd process is currently running.
 `www/mac-names.js` | This file contains a user mapping of mac addresses to friendly names. A sample 2 machines are already placed in this file follow the format. Note it's intentional that the final pc name does not end with a comma like every other pc name. Also you will need to run `startup.sh` again after you make your changes for them to appear. Finally you will need to disable the automatic dnsmasq hostname resolution located in start.sh
 `data/usage.js` | This replaces the old usage.db the file is directly read by the browser's javascript handler and this is how we work out the bandwidth. This is your personal backup if you wish to not lose stats during an upgrade then you should backup and restore this file.
 `www` | This is the front end files for the web site these are the pages that your browser uses. These files are copied on startup to the `/tmp/www/` directory so you will need to re-run `startup.sh` in order to see your change if you make them.
@@ -43,3 +47,5 @@ Hints and tips
 The yellow highlighting indicates active connections.
 
 If you resize your browser or view from a devices with a smaller screen the cumulative download and upload columns will automatically hide along with the last seen date to better fit the screen space available.
+
+There is a normal and compact view at the bottom for better manual scaling on different device form factors.
