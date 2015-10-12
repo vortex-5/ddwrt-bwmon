@@ -403,7 +403,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	};
 
 	$scope.getRate = function(Kbps) {
-		if (Kbps < 0)
+		if (isNaN(Kbps) || Kbps < 0)
 			return '--';
 		
 		if (Kbps / 1000 > 1)
