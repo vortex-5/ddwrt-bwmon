@@ -13,7 +13,7 @@ echo file_get_contents('/tmp/dnsmasq.conf');
 <pre class="ipmapping">
 <?php
 $wan = shell_exec('/usr/sbin/nvram get wan_ifname');
-echo shell_exec('grep -v "0x0" /proc/net/arp | grep -v ' . $wan);
+echo shell_exec('grep -v "0x0" /proc/net/arp | grep -v ' . $wan | ' grep IP);
 ?>
 </pre>
 
