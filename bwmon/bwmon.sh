@@ -26,6 +26,7 @@
 
 WAN_IFACE=$(nvram get wan_ifname)
 
+
 case ${1} in
 
 "setup" )
@@ -45,7 +46,7 @@ case ${1} in
 	fi
 
 	#For each host in the ARP table
-	grep -v ${WAN_IFACE} /proc/net/arp | while read IP TYPE FLAGS MAC MASK IFACE
+	grep -v ${WAN_IFACE} /proc/net/arp | grep -v IP | while read IP TYPE FLAGS MAC MASK IFACE
 	do
 		#Add iptable rules (if non existing).
 		iptables -nL BWMON | grep "${IP} " > /dev/null
@@ -72,7 +73,7 @@ case ${1} in
 	#Read and reset counters
 	iptables -L BWMON -vnxZ > /tmp/traffic_post.tmp
 
-	grep -v "0x0" /proc/net/arp | grep -v ${WAN_IFACE} | while read IP TYPE FLAGS MAC MASK IFACE
+	grep -v "0x0" /proc/net/arp | grep -v ${WAN_IFACE} | grep -v IP | while read IP TYPE FLAGS MAC MASK IFACE
 	do
 		#Add new data to the graph. Count in Kbs to deal with 16 bits signed values (up to 2G only)
 		#Have to use temporary files because of crappy busybox shell
@@ -112,7 +113,7 @@ case ${1} in
 		fi
 	done
 
-	grep -v "0x0" /proc/net/arp | grep -v ${WAN_IFACE} | while read IP TYPE FLAGS MAC MASK IFACE
+	grep -v "0x0" /proc/net/arp | grep -v ${WAN_IFACE} | grep -v IP | while read IP TYPE FLAGS MAC MASK IFACE
 	do
 		#Add new data to the graph. Count in Kbs to deal with 16 bits signed values (up to 2G only)
 		#Have to use temporary files because of crappy busybox shell
