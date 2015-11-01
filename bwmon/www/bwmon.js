@@ -263,10 +263,12 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		}
 		
 		if ($scope.serviceEnabled) {
+			var beforeSample = new Date();
 			$http.get($scope.serviceLocation).then(function(response) {
 				var filtered = $scope.filterSection(response.data, 'usage-stats');
 				$scope.currentSample = ($scope.currentSample + 1) % 2;
-				$scope.sampleTimes[$scope.currentSample] = new Date();
+				var afterSample = new Date();
+				$scope.sampleTimes[$scope.currentSample] = new Date((beforeSample.getTime() + afterSample.getTime()) / 2);
 				
 				$scope.usageData = [];
 				$scope.updateUsageData(filtered);
