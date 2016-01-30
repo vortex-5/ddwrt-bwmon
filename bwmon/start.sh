@@ -17,9 +17,9 @@ fi
 
 #copy html webgui
 if [ "$($SCRIPT_DIR/lighttpd-running.sh)" = "true" ]; then
-	cp $SCRIPT_DIR/www/* /jffs/www/
+	cp -R $SCRIPT_DIR/www/* /jffs/www/
 else
-	cp $SCRIPT_DIR/www/* /tmp/www/
+	cp -R $SCRIPT_DIR/www/* /tmp/www/
 fi
 
 # Create DNS Names from DNS Config (This maybe safely disabled if you wish to use a manual mac-names.js file)

@@ -34,6 +34,17 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	// running averages
 	$scope.downRateAverage = {};
 	$scope.upRateAverage = {};
+
+	// Sorting options
+	$scope.sortOptions = {
+		TOTAL: 'TOTAL',
+		POST_DOWN: 'POST_DOWN',
+		POST_UP: 'POST_UP',
+		DOWN_RATE: 'DOWN_RATE',
+		UP_RATE: 'UP_RATE'
+	}
+	$scope.sortReverse = true;
+	$scope.sortBy = $scope.sortOptions.TOTAL;
 	
 	function average(array) {       
 		if (!array || array.length === 0)
@@ -506,9 +517,35 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	};
 
 	$scope.sortFunction = function(device) {
-		var total = device.postUp + device.postDown;
-		return total;
+		var metric
+		switch ($scope.sortBy) {
+			case $scope.sortOptions.POST_UP:
+				metric = device.postUp;
+				break;
+			case $scope.sortOptions.POST_DOWN:
+				metric = device.postDown;
+				break;
+			case $scope.sortOptions.DOWN_RATE:
+				metric = $scope.getDownRate(device);
+				break;
+			case $scope.sortOptions.UP_RATE:
+				metric = $scope.getUpRate(device);
+				break;
+			default:
+				metric = device.postUp + device.postDown;
+		}
+		
+		return metric;
 	};
+
+	$scope.setSortBy = function(option) {
+		if ($scope.sortBy === option) {
+			$scope.sortReverse = !$scope.sortReverse;
+		}
+		else {
+			$scope.sortBy = option;		
+		}
+	}
 	
 	$scope.$watch('displayDensity', function() {
 		$scope.setCookie('bwmon-displayDensity', $scope.displayDensity, 60 * 60 * 24 * 30);
