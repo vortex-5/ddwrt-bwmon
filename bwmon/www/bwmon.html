@@ -11,6 +11,7 @@
 		
 		<link rel="stylesheet" href="bootstrap.min.css" />
 		<link rel="stylesheet" href="bwmon.css" />
+        <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
 		
 		<title>Live Bandwidth Stats</title>
 	</head>
@@ -24,19 +25,39 @@
 								Device
 							</div>
 						</th>
-						<th class="cell-right min-width">
+						<th class="cell-right min-width clickable" ng-click="setSortBy(sortOptions.TOTAL)">
+                            <span ng-show="sortBy === sortOptions.TOTAL">
+                                <span class="fa fa-sort-asc" ng-hide="sortReverse">
+                                </span><span class="fa fa-sort-desc" ng-show="sortReverse"></span>
+                            </span>
 							Total
 						</th>
-						<th class="cell-right hidden-xs min-width">
-							Downloaded
+						<th class="cell-right hidden-xs min-width clickable" ng-click="setSortBy(sortOptions.POST_DOWN)">
+                            <span ng-show="sortBy === sortOptions.POST_DOWN">
+                                <span class="fa fa-sort-asc" ng-hide="sortReverse">
+                                </span><span class="fa fa-sort-desc" ng-show="sortReverse"></span>
+                            </span>
+							Down
 						</th>
-						<th class="cell-right hidden-xs min-width">
-							Uploaded
+						<th class="cell-right hidden-xs min-width clickable" ng-click="setSortBy(sortOptions.POST_UP)">
+                            <span ng-show="sortBy === sortOptions.POST_UP">
+                                <span class="fa fa-sort-asc" ng-hide="sortReverse">
+                                </span><span class="fa fa-sort-desc" ng-show="sortReverse"></span>
+                            </span>
+							Up
 						</th>
-						<th class="cell-right min-width">
+						<th class="cell-right min-width clickable" ng-click="setSortBy(sortOptions.DOWN_RATE)">
+                            <span ng-show="sortBy === sortOptions.DOWN_RATE">
+                                <span class="fa fa-sort-asc" ng-hide="sortReverse">
+                                </span><span class="fa fa-sort-desc" ng-show="sortReverse"></span>
+                            </span>
 							DN Rate
 						</th>
-						<th class="cell-right min-width">
+						<th class="cell-right min-width clickable" ng-click="setSortBy(sortOptions.UP_RATE)">
+                            <span ng-show="sortBy === sortOptions.UP_RATE">
+                                <span class="fa fa-sort-asc" ng-hide="sortReverse">
+                                </span><span class="fa fa-sort-desc" ng-show="sortReverse"></span>
+                            </span>
 							UP Rate
 						</th>
 						<th class="cell-right hidden-xs">
@@ -46,7 +67,7 @@
 						</th>
 					</tr>
 					<tr	class="device"
-							ng-repeat="device in usageData | orderBy : sortFunction : true"
+							ng-repeat="device in usageData | orderBy : sortFunction : sortReverse"
 							ng-class="{ 'active-traffic': getDeviceTotalRate(device) > 0 }"
 							ng-hide="isZeroUsage(device)">
 						<td class="name">
