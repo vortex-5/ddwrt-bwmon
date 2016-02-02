@@ -82,6 +82,15 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		}
 		$scope.macNames = macNames;
 		
+		if (MAC_NAMES) {
+		 // Override any DNS entries with the user's custom mac names.
+			for (var mac in MAC_NAMES) {
+				if (MAC_NAMES.hasOwnProperty(mac)) {
+					$scope.macNames[mac.toUpperCase()] = MAC_NAMES[mac];
+				}
+			}
+		}
+		
 		// Updates the missing dnsmasq entries.
 		function addEntry(mac) {
 			var item = {};
@@ -320,10 +329,12 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		tick();
 		$interval(tick, 1000);
 
-		var macNamesFile = MAC_NAMES; // Required mac names won't read if it's not in a var.
-		for (var mac in macNamesFile) {
-			if (macNamesFile.hasOwnProperty(mac)) {
-				$scope.macNames[mac.toUpperCase()] = MAC_NAMES[mac];
+		if (MAC_NAMES) {
+			// Required mac names won't read if it's not in a var.
+			for (var mac in MAC_NAMES) {
+				if (MAC_NAMES.hasOwnProperty(mac)) {
+					$scope.macNames[mac.toUpperCase()] = MAC_NAMES[mac];
+				}
 			}
 		}
 		
