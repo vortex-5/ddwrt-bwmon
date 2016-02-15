@@ -3,7 +3,7 @@ SCRIPT_DIR=$(dirname ${0})
 SCRIPT_DIR=$(cd ${SCRIPT_DIR} && pwd)
 
 # Load database
-if [ -d $SCRIPT_DIR/data ]
+if [ ! -d $SCRIPT_DIR/data ]
 then
 	mkdir $SCRIPT_DIR/data
 fi
