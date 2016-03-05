@@ -4,10 +4,16 @@ echo file_get_contents('/tmp/www/usage_stats.js');
 ?>
 </pre>
 
-<pre class="dnsmasq">
+<pre class="dnsmasq-conf">
 <?php
 echo file_get_contents('/tmp/dnsmasq.conf');
 ?>
+</pre>
+
+<pre class="dnsmasq-leases">
+<?php
+echo file_get_contents('/tmp/dnsmasq.leases');
+?>  
 </pre>
 
 <pre class="ipmapping">
