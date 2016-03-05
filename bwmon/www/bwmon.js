@@ -295,7 +295,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 				$scope.usageData = [];
 				$scope.updateUsageData(filtered);
 				
-				var dnsmasqData = $scope.filterSection(response.data, 'dnsmasq');
+				var dnsmasqData = $scope.filterSection(response.data, 'dnsmasq-conf');
 				$scope.updateDnsmasq(dnsmasqData);
 				
 				var ipmappingData = $scope.filterSection(response.data, 'ipmapping');
