@@ -284,7 +284,9 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		
 		if ($scope.serviceEnabled) {
 			var beforeSample = new Date();
-			$http.get($scope.serviceLocation).then(function(response) {
+			// EDGE and IE insist on caching things even with IE specific no cache tags the only solution then is to force a new URL every call.
+			var url = $scope.serviceLocation + '?no-cache=' + beforeSample.getTime();
+			$http.get(url).then(function(response) {
 				var filtered = $scope.filterSection(response.data, 'usage-stats');
 				$scope.currentSample = ($scope.currentSample + 1) % 2;
 				var afterSample = new Date();
