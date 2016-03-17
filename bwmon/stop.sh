@@ -17,7 +17,7 @@ if [ "$($SCRIPT_DIR/lighttpd-running.sh)" = "true" ]; then
 else
     cd /tmp/www
 fi
-rm -rf font-awesome/
+
 rm angular.min.js
 rm arrow-left.png
 rm bootstrap.min.css
@@ -28,6 +28,9 @@ rm bwreader.php
 rm mac-names.js
 rm ui-bootstrap-tpls.min.js
 # End Cleanup WebGUI
+
+# font-awesome is now depricated we should attempt to remove it.
+rm -rf font-awesome
 
 
 # User confirmation
