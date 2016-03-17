@@ -15,7 +15,14 @@ else
 	touch /tmp/www/usage.js
 fi
 
-#copy html webgui
+# Temporarily all 1.6.x versions will attempt to clear the font-awsome libraries
+# that are now considered depricated and unused so we can clean up the router.
+if [ -d "$SCRIPT_DIR/www/font-awesome" ]
+then
+	rm -rf $SCRIPT_DIR/www/font-awesome
+fi
+
+# copy html webgui
 if [ "$($SCRIPT_DIR/lighttpd-running.sh)" = "true" ]; then
 	cp -R $SCRIPT_DIR/www/* /jffs/www/
 else
