@@ -78,3 +78,12 @@
 .clickable {
     cursor: pointer;
 }
+
+.arrow-up {
+	transform: rotate(90deg);
+}
+
+.arrow-down {
+	transform: rotate(-90deg);
+	
+}

@@ -19,6 +19,7 @@ else
 fi
 rm -rf font-awesome/
 rm angular.min.js
+rm arrow-left.png
 rm bootstrap.min.css
 rm bwmon.css
 rm bwmon.html
