@@ -69,9 +69,9 @@
 							ng-repeat="device in usageData | orderBy : sortFunction : sortReverse"
 							ng-class="{ 'active-traffic': getDeviceTotalRate(device) > 0 }"
 							ng-hide="isZeroUsage(device)">
-						<td class="name" ng-click="nextNameType()">
+						<td class="name" ng-dblclick="nextNameType()">
 							<div class="cell-padding"
-								title="MAC: {{ device.mac.toUpperCase() }}&#013;IP: {{ macIpDns[device.mac] }}">
+								tooltip="MAC:&nbsp;{{ device.mac.toUpperCase() }} IP:&nbsp;{{ macIpDns[device.mac] }}">
 								{{ getName(device.mac) }}
 							</div>
 						</td>
@@ -134,7 +134,7 @@
 						</div>
 					</div>
 					<div class="controls">
-						<div class="btn-group">
+						<div class="btn-group" tooltip="Shortcut double click on the device field in the table above to cycle through.">
 							<label class="btn btn-default" ng-model="displayNameType" btn-radio="'NAME'">Name</label>
 							<label class="btn btn-default" ng-model="displayNameType" btn-radio="'IP'">IP</label>
 							<label class="btn btn-default" ng-model="displayNameType" btn-radio="'MAC'">MAC</label>
