@@ -116,7 +116,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
      * @param {string} data The contents of the dnsmasq.conf file.
      */
 	$scope.updateDnsConf = function(data) {
-		var dnsmasqRegex = /dhcp-host=([0-9a-fA-F:]+),([\s\S]+?),([0-9.]+)/gm;
+		var dnsmasqRegex = /^dhcp-host=([0-9a-fA-F:]+),([\s\S]+?),([0-9.]+)/gm;
 		var match = dnsmasqRegex.exec(data);
 
 		while(match) {
@@ -124,8 +124,25 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
             $scope.macIpDns[match[1]] = match[3];
             match = dnsmasqRegex.exec(data);
 		}
-        				
-		// Updates the missing dnsmasq entries.
+	};
+    
+    /**
+     * Updates the contents of the macNames using the data in the dnsmasq.leases files.
+     * @param {string} data The contents of the dnsmasq.leases file.
+     */
+    $scope.updateDnsLeases = function(data) {
+        var dnsmasqRegex = /^[0-9]+ ([0-9a-fA-F:]+) ([0-9.]+) ([\s\S]+?) [0-9a-fA-F:*]*$/gm;
+        var match = dnsmasqRegex.exec(data);
+        
+        while(match) {
+			$scope.macNames[match[1]] = match[3];
+            $scope.macIpDns[match[1]] = match[2];
+            match = dnsmasqRegex.exec(data);
+		}
+    };
+    
+    $scope.updateMissingEntries = function(macNames) {
+        // Updates the missing dnsmasq entries.
 		function addEntry(mac) {
 			var item = {};
 
@@ -138,30 +155,19 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			
 			$scope.usageData.push(item);
 		}
-		
-		function updateMissingEntries(macNames) {
-			var knownMacs = [];
-			angular.forEach($scope.usageData, function(item) {
-				knownMacs.push(item.mac);
-			});
-		
-			for (var mac in macNames) {
-				if (macNames.hasOwnProperty(mac)) {
-					if (knownMacs.indexOf(mac) === -1) {
-						addEntry(mac);
-					}
-				}
-			}
-		}
-		updateMissingEntries($scope.macNames);
-	};
+        
+        var knownMacs = [];
+        angular.forEach($scope.usageData, function(item) {
+            knownMacs.push(item.mac);
+        });
     
-    /**
-     * Updates the contents of the macNames using the data in the dnsmasq.leases files.
-     * @param {string} data The contents of the dnsmasq.leases file.
-     */
-    $scope.updateDnsLeases = function(data) {
-        //console.log('DNSMASQ Leases', data);
+        for (var mac in macNames) {
+            if (macNames.hasOwnProperty(mac)) {
+                if (knownMacs.indexOf(mac) === -1) {
+                    addEntry(mac);
+                }
+            }
+        }
     };
     
     /**
@@ -354,6 +360,8 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
                 
 				var dnsmasqConfData = $scope.filterSection(response.data, 'dnsmasq-conf');
 				$scope.updateDnsConf(dnsmasqConfData);
+                
+                $scope.updateMissingEntries($scope.macNames);
                 
                 $scope.macNamesOverride();
 				
