@@ -43,6 +43,12 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	$scope.serviceLocation = '/bwreader.php';
 
 	/**
+	 * When in non service mode we fetch these two resources to decode things.
+	 */
+	$scope.nonServiceDnsConf = 'dnsmasq-conf.js';
+	$scope.nonServiceDnsLeases = 'dnsmasq-leases.js';
+
+	/**
 	 * @type {boolean} This is updated to reflect the state of the service.
 	 *                 Any 404 message from the server will cause this to be set false until refresh.
 	 */
@@ -342,6 +348,19 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 
 	$scope.fetchUpdate = function() {
 		function oldService() {
+			$http.get($scope.nonServiceDnsLeases).then(function(responseLeases) {
+				$http.get($scope.nonServiceDnsConf).then(function(responseConf) {
+					$scope.macNames = {};
+
+					var dnsmasqLeasesData = responseLeases.data;
+					var dnsmasqConfData = responseConf.data;
+
+					$scope.updateDnsLeases(dnsmasqLeasesData);
+					$scope.updateDnsConf(dnsmasqConfData);
+					$scope.updateMissingEntries($scope.macNames);
+					$scope.macNamesOverride();
+				});
+			});
 			$http.get('usage_stats.js').then(function(response) {
 				$scope.usageData = [];
 				$scope.updateUsageData(response.data);
@@ -405,15 +424,6 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		}
 		tick();
 		$interval(tick, 1000);
-
-		if (MAC_NAMES) {
-			// Required mac names won't read if it's not in a var.
-			for (var mac in MAC_NAMES) {
-				if (MAC_NAMES.hasOwnProperty(mac)) {
-					$scope.macNames[mac] = MAC_NAMES[mac];
-				}
-			}
-		}
 
 		var density = $scope.readCookie('bwmon-displayDensity');
 		if (density)

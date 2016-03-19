@@ -13,9 +13,9 @@ $SCRIPT_DIR/backup.sh
 
 # Begin Cleanup the WebGUI
 if [ "$($SCRIPT_DIR/lighttpd-running.sh)" = "true" ]; then
-    cd /jffs/www
+	cd /jffs/www
 else
-    cd /tmp/www
+	cd /tmp/www
 fi
 
 rm angular.min.js
@@ -27,6 +27,8 @@ rm bwmon.js
 rm bwreader.php
 rm mac-names.js
 rm ui-bootstrap-tpls.min.js
+rm dnsmasq-conf.js
+rm dnsmasq-leases.js
 # End Cleanup WebGUI
 
 # font-awesome is now depricated we should attempt to remove it.
