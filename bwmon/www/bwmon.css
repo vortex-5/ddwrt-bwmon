@@ -20,17 +20,21 @@
 	margin: 0 0 0 10px;
 }
 
-.bottom-controls .density {
+.bottom-controls .left {
 	flex-grow: 1;
-}
-
-.bottom-controls .density .controls {
 	display: flex;
 	display: -webkit-flex;
 	align-items: center;
 }
 
-.bottom-controls .density .controls .text {
+.bottom-controls .left .controls {
+	display: flex;
+	display: -webkit-flex;
+	align-items: center;
+	padding-right: 10px;
+}
+
+.bottom-controls .left .controls .text {
 	padding-right: 12px;
 }
 
@@ -85,5 +89,5 @@
 
 .arrow-down {
 	transform: rotate(-90deg);
-	
+
 }
