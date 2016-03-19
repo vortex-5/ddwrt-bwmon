@@ -70,7 +70,8 @@
 							ng-class="{ 'active-traffic': getDeviceTotalRate(device) > 0 }"
 							ng-hide="isZeroUsage(device)">
 						<td class="name">
-							<div class="cell-padding" title="Mac Address: {{ device.mac.toUpperCase() }}">
+							<div class="cell-padding"
+                                title="MAC: {{ device.mac.toUpperCase() }}&#013;IP: {{ macIpDns[device.mac] }}">
 								{{ getName(device.mac) }}
 							</div>
 						</td>
