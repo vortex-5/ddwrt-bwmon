@@ -10,7 +10,7 @@ fi
 
 if [ -f $SCRIPT_DIR/data/usage.js ]
 then
-    cp $SCRIPT_DIR/data/usage.js /tmp/www/usage.js
+	cp $SCRIPT_DIR/data/usage.js /tmp/www/usage.js
 else
 	touch /tmp/www/usage.js
 fi
@@ -27,10 +27,9 @@ if [ "$($SCRIPT_DIR/lighttpd-running.sh)" = "true" ]; then
 	cp -R $SCRIPT_DIR/www/* /jffs/www/
 else
 	cp -R $SCRIPT_DIR/www/* /tmp/www/
+	ln -s /tmp/dnsmasq.conf /tmp/www/dnsmasq-conf.js
+	ln -s /tmp/dnsmasq.leases /tmp/www/dnsmasq-leases.js
 fi
-
-# Create DNS Names from DNS Config (This maybe safely disabled if you wish to use a manual mac-names.js file)
-$SCRIPT_DIR/bwmon-dnsmasq.sh
 
 # Publish first set of usage stats so we don't start with a blank page.
 $SCRIPT_DIR/bwmon.sh publish /tmp/www/usage.js /tmp/www/usage_stats.js

@@ -3,15 +3,15 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=400">
-		
+
 		<script src="angular.min.js"></script>
 		<script src="ui-bootstrap-tpls.min.js"></script>
 		<script src="mac-names.js"></script>
 		<script src="bwmon.js"></script>
-		
+
 		<link rel="stylesheet" href="bootstrap.min.css" />
 		<link rel="stylesheet" href="bwmon.css" />
-		
+
 		<title>Live Bandwidth Stats</title>
 	</head>
 	<body class="page-wrapper">
@@ -25,38 +25,38 @@
 							</div>
 						</th>
 						<th class="cell-right min-width clickable" ng-click="setSortBy(sortOptions.TOTAL)">
-                            <span ng-show="sortBy === sortOptions.TOTAL">
-                                <img src="arrow-left.png" class="arrow-up" ng-hide="sortReverse">
+							<span ng-show="sortBy === sortOptions.TOTAL">
+								<img src="arrow-left.png" class="arrow-up" ng-hide="sortReverse">
 								<img src="arrow-left.png" class="arrow-down" ng-show="sortReverse">
-                            </span>
+							</span>
 							Total
 						</th>
 						<th class="cell-right hidden-xs min-width clickable" ng-click="setSortBy(sortOptions.POST_DOWN)">
-                            <span ng-show="sortBy === sortOptions.POST_DOWN">
-                                <img src="arrow-left.png" class="arrow-up" ng-hide="sortReverse">
+							<span ng-show="sortBy === sortOptions.POST_DOWN">
+								<img src="arrow-left.png" class="arrow-up" ng-hide="sortReverse">
 								<img src="arrow-left.png" class="arrow-down" ng-show="sortReverse">
-                            </span>
+							</span>
 							Down
 						</th>
 						<th class="cell-right hidden-xs min-width clickable" ng-click="setSortBy(sortOptions.POST_UP)">
-                            <span ng-show="sortBy === sortOptions.POST_UP">
-                                <img src="arrow-left.png" class="arrow-up" ng-hide="sortReverse">
+							<span ng-show="sortBy === sortOptions.POST_UP">
+								<img src="arrow-left.png" class="arrow-up" ng-hide="sortReverse">
 								<img src="arrow-left.png" class="arrow-down" ng-show="sortReverse">
-                            </span>
+							</span>
 							Up
 						</th>
 						<th class="cell-right min-width clickable" ng-click="setSortBy(sortOptions.DOWN_RATE)">
-                            <span ng-show="sortBy === sortOptions.DOWN_RATE">
-                                <img src="arrow-left.png" class="arrow-up" ng-hide="sortReverse">
+							<span ng-show="sortBy === sortOptions.DOWN_RATE">
+								<img src="arrow-left.png" class="arrow-up" ng-hide="sortReverse">
 								<img src="arrow-left.png" class="arrow-down" ng-show="sortReverse">
-                            </span>
+							</span>
 							DN Rate
 						</th>
 						<th class="cell-right min-width clickable" ng-click="setSortBy(sortOptions.UP_RATE)">
-                            <span ng-show="sortBy === sortOptions.UP_RATE">
-                                <img src="arrow-left.png" class="arrow-up" ng-hide="sortReverse">
+							<span ng-show="sortBy === sortOptions.UP_RATE">
+								<img src="arrow-left.png" class="arrow-up" ng-hide="sortReverse">
 								<img src="arrow-left.png" class="arrow-down" ng-show="sortReverse">
-                            </span>
+							</span>
 							UP Rate
 						</th>
 						<th class="cell-right hidden-xs">
@@ -69,8 +69,9 @@
 							ng-repeat="device in usageData | orderBy : sortFunction : sortReverse"
 							ng-class="{ 'active-traffic': getDeviceTotalRate(device) > 0 }"
 							ng-hide="isZeroUsage(device)">
-						<td class="name">
-							<div class="cell-padding" title="Mac Address: {{ device.mac.toUpperCase() }}">
+						<td class="name" ng-dblclick="nextNameType()">
+							<div class="cell-padding"
+								tooltip="MAC:&nbsp;{{ device.mac.toUpperCase() }} IP:&nbsp;{{ macIpDns[device.mac] }}">
 								{{ getName(device.mac) }}
 							</div>
 						</td>
@@ -125,11 +126,18 @@
 				</table>
 			</div>
 			<div class="bottom-controls">
-				<div class="density">
+				<div class="left">
 					<div class="controls">
 						<div class="btn-group">
 							<label class="btn btn-default" ng-model="displayDensity" btn-radio="'Normal'">Normal</label>
 							<label class="btn btn-default" ng-model="displayDensity" btn-radio="'Compact'">Compact</label>
+						</div>
+					</div>
+					<div class="controls">
+						<div class="btn-group" tooltip="Shortcut double click on the device field in the table above to cycle through.">
+							<label class="btn btn-default" ng-model="displayNameType" btn-radio="'NAME'">Name</label>
+							<label class="btn btn-default" ng-model="displayNameType" btn-radio="'IP'">IP</label>
+							<label class="btn btn-default" ng-model="displayNameType" btn-radio="'MAC'">MAC</label>
 						</div>
 					</div>
 				</div>
