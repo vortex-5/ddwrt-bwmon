@@ -71,7 +71,7 @@
 							ng-hide="isZeroUsage(device)">
 						<td class="name" ng-dblclick="nextNameType()">
 							<div class="cell-padding"
-								tooltip="MAC:&nbsp;{{ device.mac.toUpperCase() }} IP:&nbsp;{{ macIpDns[device.mac] }}">
+								tooltip="MAC:&nbsp;{{ device.mac.toUpperCase() }} IP:&nbsp;{{ macIpDns[device.mac] }}" tooltip-placement="right">
 								{{ getName(device.mac) }}
 							</div>
 						</td>
@@ -134,7 +134,7 @@
 						</div>
 					</div>
 					<div class="controls">
-						<div class="btn-group" tooltip="Shortcut double click on the device field in the table above to cycle through.">
+						<div class="btn-group" tooltip="Shortcut double click on the device field in the table above to cycle through." tooltip-placement="right">
 							<label class="btn btn-default" ng-model="displayNameType" btn-radio="'NAME'">Name</label>
 							<label class="btn btn-default" ng-model="displayNameType" btn-radio="'IP'">IP</label>
 							<label class="btn btn-default" ng-model="displayNameType" btn-radio="'MAC'">MAC</label>
