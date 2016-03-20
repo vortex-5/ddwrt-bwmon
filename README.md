@@ -36,9 +36,9 @@ Path | Description
 `backup.sh` | This is automatically called to backup the bandwidth stats to persistent storage periodically. If you want to backup immediately it is also safe to execute this whenever the user wishes.
 `bwmon-running.sh` | The scripts that control the actual bandwith monitoring process (You should not run this it will be called by the startup scripts).
 `bwmon-autobackup.sh` | Sets up the backup script to automatically periodically run in the background.
-`bwmon-dnsmasq.sh` | A script to automatically generate mac names from statically assigned dnsmasq entries.
+`bwmon-dnsmasq.sh` | A script to automatically generate mac names from statically assigned dnsmasq entries. (This was removed as of 1.7.0)
 `lighttpd-running.sh` | A simple utility script to determine if the lighttpd process is currently running.
-`www/mac-names.js` | This file contains a user mapping of mac addresses to friendly names. A sample 2 machines are already placed in this file follow the format. Note it's intentional that the final pc name does not end with a comma like every other pc name. Also you will need to run `startup.sh` again after you make your changes for them to appear. Finally you will need to disable the automatic dnsmasq hostname resolution located in start.sh
+`www/mac-names.js` | This file contains a user mapping of mac addresses to friendly names. A sample 2 machines are already placed in this file follow the format. Note it's intentional that the final pc name does not end with a comma like every other pc name. Also you will need to run `startup.sh` again after you make your changes for them to appear. Finally you will need to disable the automatic dnsmasq hostname resolution located in start.sh. As of 1.7.0 this file only overrides existing entries and should only be used to override dnsmasq resolved names.
 `data/usage.js` | This replaces the old usage.db the file is directly read by the browser's javascript handler and this is how we work out the bandwidth. This is your personal backup if you wish to not lose stats during an upgrade then you should backup and restore this file.
 `www` | This is the front end files for the web site these are the pages that your browser uses. These files are copied on startup to the `/tmp/www/` directory so you will need to re-run `startup.sh` in order to see your change if you make them.
 
