@@ -14,17 +14,17 @@ Installation instructions
 3. Optionally enable lighttpd support from Services -> Webserver -> Lighttpd Server. Keep it at the default port 81 and do not enable WAN access.
 4. Log into your router via ssh. You may use putty to do this on windows or just ssh on linux.
 5. From your ssh terminal type: `cd /jffs/`.
-6. Either download the tool directly from your router's ssh prompt type: `wget https://github.com/vortex-5/ddwrt-bwmon/releases/download/1.7.0/bwmon.tar.gz`. Alternatively you can download the file from the releases page and copy it to your usb flash drive.
+6. Either download the tool directly from your router's ssh prompt type: `wget https://github.com/vortex-5/ddwrt-bwmon/releases/download/1.7.1/bwmon.tar.gz`. Alternatively you can download the file from the releases page and copy it to your usb flash drive.
 7. Extract the installer package from your router's ssh prompt type: `tar -xzvf bwmon.tar.gz`.
 8. Fix the permissions on your router type: `cd /jffs/bwmon/ && sh install.sh`.
 9. Set the automount script on the router (Under your router's web gui's Services -> USB) to point to `/path/bwmon/startup.sh` to autostart this script on mount or just run the startup.sh script manually if you don't wish to start on system bootup.
-10. If you enabled lighttpd server for better performance you can visit `http://your_router_ip:81/bwmon.html`. If you do not have lighttpd capability or have chosen not to run lighttpd you can visit the legacy page at `http://your_router_ip/user/bwmon.html` to view your stats. 
+10. If you enabled lighttpd server for better performance you can visit `http://your_router_ip:81/bwmon.html`. If you do not have lighttpd capability or have chosen not to run lighttpd you can visit the legacy page at `http://your_router_ip/user/bwmon.html` to view your stats.
 
 **Notes:** Only one of the two URL's will be available and Bwmon will autodetect which mode it should run in based on if the lighttpd server is enabled at script startup. Bwmon will automatically fall back to legacy mode if it does not have lighttpd access. Please also note that lighttpd mode also requires php execution which has been part of DDWRT since build verion 275XX and later.
 
 Usage and Directory Structure
 -----------------------------
-All scripts are self contained in the bwmon directory the following lists how you would use each script. None of the scripts require additional parameters and can be executed by direclty calling the script for simplicity. Note all scripts are listed relative to `bwmon/`. 
+All scripts are self contained in the bwmon directory the following lists how you would use each script. None of the scripts require additional parameters and can be executed by direclty calling the script for simplicity. Note all scripts are listed relative to `bwmon/`.
 
 Path | Description
 ---- | -----------
