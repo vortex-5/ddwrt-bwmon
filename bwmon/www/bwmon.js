@@ -16,6 +16,11 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	$scope.CONVERSION_FACTOR_SERVICE = 8/$scope.SERVICE_SCRIPT_INTERVAL;
 
 	/**
+	 * @type {number} 1 month in seconds.
+	 */
+	$scope.SECONDS_IN_MONTH = 60 * 60 * 24 * 30;
+
+	/**
 	 * @type {string} How frequently the service will call bwreader.php.
 	 */
 	$scope.SERVICE_INTERVAL = 2;
@@ -409,27 +414,6 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		}
 	};
 
-	$scope.init = function() {
-		function tick() {
-			if ($scope.pollCountDown > 1) {
-				$scope.pollCountDown--;
-			}
-			else {
-				if ($scope.serviceEnabled)
-					$scope.pollCountDown = $scope.SERVICE_INTERVAL;
-				else
-					$scope.pollCountDown = $scope.POLL_WAIT_TIME;
-				$scope.fetchUpdate();
-			}
-		}
-		tick();
-		$interval(tick, 1000);
-
-		var density = $scope.readCookie('bwmon-displayDensity');
-		if (density)
-			$scope.displayDensity = density;
-	};
-
 	$scope.setCookie = function(name, value, maxAgeSec) {
 		var cookieStream = [];
 		cookieStream.push(name + '=' + value);
@@ -454,7 +438,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 				if (!index)
 					return;
 
-				var key = cookieValue.substring(0, index);
+				var key = cookieValue.substring(0, index).trim();
 				var value = cookieValue.substring(index + 1, cookieValue.length);
 
 				cookies[key] = value;
@@ -499,11 +483,9 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			case $scope.displayNameOptions.NAME:
 				var name = $scope.macNames[macAddress];
 				return name ? name : macAddress.toUpperCase();
-				break;
 			case $scope.displayNameOptions.IP:
 				var name = $scope.macIpDns[macAddress];
 				return name ? name : macAddress.toUpperCase();
-				break;
 		}
 		return macAddress.toUpperCase();
 	};
@@ -667,9 +649,38 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		}
 	};
 
-	$scope.$watch('displayDensity', function() {
-		$scope.setCookie('bwmon-displayDensity', $scope.displayDensity, 60 * 60 * 24 * 30);
-	});
+	$scope.init = function() {
+		function tick() {
+			if ($scope.pollCountDown > 1) {
+				$scope.pollCountDown--;
+			}
+			else {
+				if ($scope.serviceEnabled)
+					$scope.pollCountDown = $scope.SERVICE_INTERVAL;
+				else
+					$scope.pollCountDown = $scope.POLL_WAIT_TIME;
+				$scope.fetchUpdate();
+			}
+		}
+		tick();
+		$interval(tick, 1000);
+
+		var density = $scope.readCookie('bwmon-displayDensity');
+		if (density)
+			$scope.displayDensity = density;
+
+		$scope.$watch('displayDensity', function() {
+			$scope.setCookie('bwmon-displayDensity', $scope.displayDensity, $scope.SECONDS_IN_MONTH);
+		});
+
+		var displayNameType = $scope.readCookie('bwmon-displayNameType');
+		if (displayNameType)
+			$scope.displayNameType = displayNameType;
+
+		$scope.$watch('displayNameType', function() {
+			$scope.setCookie('bwmon-displayNameType', $scope.displayNameType, $scope.SECONDS_IN_MONTH);
+		});
+	};
 
 	$scope.init();
 }]);
