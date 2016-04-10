@@ -139,8 +139,8 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		var match = dnsmasqRegex.exec(data);
 
 		while(match) {
-			$scope.macNames[match[1]] = match[2];
-			$scope.macIpDns[match[1]] = match[3];
+			$scope.macNames[match[1].toLowerCase()] = match[2];
+			$scope.macIpDns[match[1].toLowerCase()] = match[3];
 			match = dnsmasqRegex.exec(data);
 		}
 	};
@@ -154,8 +154,8 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		var match = dnsmasqRegex.exec(data);
 
 		while(match) {
-			$scope.macNames[match[1]] = match[3];
-			$scope.macIpDns[match[1]] = match[2];
+			$scope.macNames[match[1].toLowerCase()] = match[3];
+			$scope.macIpDns[match[1].toLowerCase()] = match[2];
 			match = dnsmasqRegex.exec(data);
 		}
 	};
@@ -196,7 +196,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		if (MAC_NAMES) {
 			for (var mac in MAC_NAMES) {
 				if (MAC_NAMES.hasOwnProperty(mac)) {
-					$scope.macNames[mac] = MAC_NAMES[mac];
+					$scope.macNames[mac.toLowerCase()] = MAC_NAMES[mac];
 				}
 			}
 		}
