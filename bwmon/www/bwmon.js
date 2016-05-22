@@ -13,7 +13,6 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	$scope.SERVICE_SCRIPT_INTERVAL = 60;
 
 	$scope.CONVERSION_FACTOR = 8/$scope.SCRIPT_INTERVAL; // From KB/s to Kbps
-	$scope.CONVERSION_FACTOR_SERVICE = 8/$scope.SERVICE_SCRIPT_INTERVAL;
 
 	/**
 	 * @type {number} 1 month in seconds.
@@ -41,6 +40,11 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	 * @type {string} Valid values are Normal and Compact.
 	 */
 	$scope.displayDensity = 'Normal';
+
+	/**
+	 * @type {string} Defines the rate to be shown in the speed indicator this is either Kbps or KB/s
+	 */
+	$scope.displayRate = 'Kbps';
 
 	/**
 	 * @type {string} The url to the bwreader.php service.
@@ -517,14 +521,23 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		return $scope.round(KB) + ' KB';
 	};
 
-	$scope.getRate = function(Kbps) {
-		if (isNaN(Kbps) || Kbps < 0)
+	$scope.getRate = function(KBps) {
+		if (isNaN(KBps) || KBps < 0)
 			return '--';
 
-		if (Kbps / 1000 > 1)
-			return $scope.round(Kbps/1000) + ' Mbps';
+		if ($scope.displayRate === 'Kbps') {
+			var Kbps = KBps * $scope.CONVERSION_FACTOR;
+			if (Kbps / 1000 > 1)
+				return $scope.round(Kbps/1000) + ' Mbps';
 
-		return $scope.round(Kbps) + ' Kbps';
+			return $scope.round(Kbps) + ' Kbps';
+		}
+		else {
+			if (KBps / 1000 > 1)
+				return $scope.round(KBps/1000) + ' MB/s';
+
+			return $scope.round(KBps) + ' KB/s';
+		}
 	};
 
 	$scope.getDeviceTotal = function(device) {
@@ -555,7 +568,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			return $scope.downRateAverage[ip];
 		}
 		else {
-			return (device.postDown - device.preDown) * $scope.CONVERSION_FACTOR;
+			return device.postDown - device.preDown;
 		}
 	};
 
@@ -570,7 +583,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			return $scope.upRateAverage[ip];
 		}
 		else {
-			return (device.postUp - device.preUp) * $scope.CONVERSION_FACTOR;
+			return device.postUp - device.preUp;
 		}
 	};
 
@@ -679,6 +692,14 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 
 		$scope.$watch('displayNameType', function() {
 			$scope.setCookie('bwmon-displayNameType', $scope.displayNameType, $scope.SECONDS_IN_MONTH);
+		});
+
+		var displayRate = $scope.readCookie('bwmon-displayRate');
+		if (displayRate)
+			$scope.displayRate = displayRate;
+
+		$scope.$watch('displayRate',function() {
+			$scope.setCookie('bwmon-displayRate', $scope.displayRate, $scope.SECONDS_IN_MONTH);
 		});
 	};
 

@@ -140,6 +140,12 @@
 							<label class="btn btn-default" ng-model="displayNameType" btn-radio="'MAC'">MAC</label>
 						</div>
 					</div>
+					<div class="controls">
+						<div class="btn-group">
+							<label class="btn btn-default" ng-model="displayRate" btn-radio="'Kbps'">Kbps</label>
+							<label class="btn btn-default" ng-model="displayRate" btn-radio="'KB/s'">KB/s</label>
+						</div>
+					</div>
 				</div>
 				<div class="update-counter" ng-hide="serviceEnabled">
 					Next update in: {{ pollCountDown }}
