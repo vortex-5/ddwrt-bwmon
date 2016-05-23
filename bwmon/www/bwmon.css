@@ -34,6 +34,16 @@
 	padding-right: 10px;
 }
 
+.bottom-controls .left .controls:last-child {
+	padding-right: 0;
+}
+
+@media screen and (max-width: 436px) {
+    .bottom-controls .left .controls .btn {
+		padding: 6px 6px;
+	}
+}
+
 .bottom-controls .left .controls .text {
 	padding-right: 12px;
 }
