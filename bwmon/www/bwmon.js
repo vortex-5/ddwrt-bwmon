@@ -7,11 +7,6 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	 */
 	$scope.SCRIPT_INTERVAL = 10;
 
-	/**
-	 * @type {string} The speed at which the bwmon-running.sh polls during lighttpd mode.
-	 */
-	$scope.SERVICE_SCRIPT_INTERVAL = 60;
-
 	$scope.CONVERSION_FACTOR = 8/$scope.SCRIPT_INTERVAL; // From KB/s to Kbps
 
 	/**
@@ -521,18 +516,19 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		return $scope.round(KB) + ' KB';
 	};
 
-	$scope.getRate = function(KBps) {
-		if (isNaN(KBps) || KBps < 0)
+	$scope.getRate = function(KBps10) {
+		if (isNaN(KBps10) || KBps10 < 0)
 			return '--';
 
 		if ($scope.displayRate === 'Kbps') {
-			var Kbps = KBps * $scope.CONVERSION_FACTOR;
+			var Kbps = KBps10 * $scope.CONVERSION_FACTOR;
 			if (Kbps / 1000 > 1)
 				return $scope.round(Kbps/1000) + ' Mbps';
 
 			return $scope.round(Kbps) + ' Kbps';
 		}
 		else {
+			var KBps = KBps10 / $scope.SCRIPT_INTERVAL;
 			if (KBps / 1000 > 1)
 				return $scope.round(KBps/1000) + ' MB/s';
 
