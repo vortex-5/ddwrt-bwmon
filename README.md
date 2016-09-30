@@ -22,6 +22,8 @@ Installation instructions
 
 **Notes:** Only one of the two URL's will be available and Bwmon will autodetect which mode it should run in based on if the lighttpd server is enabled at script startup. Bwmon will automatically fall back to legacy mode if it does not have lighttpd access. Please also note that lighttpd mode also requires php execution which has been part of DDWRT since build verion 275XX and later.
 
+**Update:** DDWRT has been having some issues with lighttpd operation, the last know working version is: 30534 newer beta versions have broken lighttpd support. I've also not been able to properly test the fallbacks so for the time being I'm waiting for a newer release that fixes the lighttpd support from the DDWRT team. If you are running a version newer than 30534 there maybe unexpected bugs.
+
 Usage and Directory Structure
 -----------------------------
 All scripts are self contained in the bwmon directory the following lists how you would use each script. None of the scripts require additional parameters and can be executed by direclty calling the script for simplicity. Note all scripts are listed relative to `bwmon/`.
