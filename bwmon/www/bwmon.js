@@ -478,6 +478,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	};
 
 	$scope.getName = function(macAddress) {
+		macAddress = macAddress.toLowerCase(); // Internal mac addresses are always stored in lowercase.
 		switch ($scope.displayNameType) {
 			case $scope.displayNameOptions.NAME:
 				var name = $scope.macNames[macAddress];
