@@ -20,9 +20,9 @@ Installation instructions
 9. Set the automount script on the router (Under your router's web gui's Services -> USB) to point to `/path/bwmon/startup.sh` to autostart this script on mount or just run the startup.sh script manually if you don't wish to start on system bootup.
 10. If you enabled lighttpd server for better performance you can visit `http://your_router_ip:81/bwmon.html`. If you do not have lighttpd capability or have chosen not to run lighttpd you can visit the legacy page at `http://your_router_ip/user/bwmon.html` to view your stats.
 
-**Notes:** Only one of the two URL's will be available and Bwmon will autodetect which mode it should run in based on if the lighttpd server is enabled at script startup. Bwmon will automatically fall back to legacy mode if it does not have lighttpd access. Please also note that lighttpd mode also requires php execution which has been part of DDWRT since build verion 275XX and later.
+**Notes:** Only one of the two URL's will be available and Bwmon will autodetect which mode it should run in based on if the lighttpd server is enabled at script startup. Bwmon will automatically fall back to legacy mode if it does not have lighttpd access.
 
-**Update:** DDWRT has been having some issues with lighttpd operation, the last know working version is: 30534 newer beta versions have broken lighttpd support. I've also not been able to properly test the fallbacks so for the time being I'm waiting for a newer release that fixes the lighttpd support from the DDWRT team. If you are running a version newer than 30534 there maybe unexpected bugs.
+**Update:** The latest tested version of DD-WRT confirmed to be working is 30949 with this module.
 
 Usage and Directory Structure
 -----------------------------
