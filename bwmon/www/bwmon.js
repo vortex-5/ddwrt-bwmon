@@ -42,6 +42,11 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	$scope.displayRate = 'Kbps';
 
 	/**
+	 * @type {string} Valid values are bwmon and bwmondark.
+	 */
+	$scope.displayStyleSheet = 'bwmon';
+
+	/**
 	 * @type {string} The url to the bwreader.php service.
 	 */
 	$scope.serviceLocation = '/bwreader.php';
@@ -698,7 +703,25 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		$scope.$watch('displayRate',function() {
 			$scope.setCookie('bwmon-displayRate', $scope.displayRate, $scope.SECONDS_IN_MONTH);
 		});
+
+		var stylesheet = $scope.readCookie('bwmon-displayStyleSheet');
+		if (stylesheet)
+			$scope.displayStyleSheet = stylesheet;
+
+		$scope.$watch('displayStyleSheet', function() {
+			$scope.setCookie('bwmon-displayStyleSheet', $scope.displayStyleSheet, $scope.SECONDS_IN_MONTH);
+			changeCSS($scope.displayStyleSheet+'.css', 1);
+		});
 	};
 
 	$scope.init();
-}]);
+}]);// Changes the css file on the fly. Index must be 1 because 0 is bootstrap
+// Changes the css file on the fly. Index must be 1 because 0 is bootstrap
+function changeCSS(cssFile, cssLinkIndex) {
+		var oldlink = document.getElementsByTagName("link").item(cssLinkIndex);
+		var newlink = document.createElement("link");
+		newlink.setAttribute("rel", "stylesheet");
+		newlink.setAttribute("type", "text/css");
+		newlink.setAttribute("href", cssFile);
+		document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
+	}

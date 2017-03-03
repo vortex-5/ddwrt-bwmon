@@ -1,0 +1,132 @@
+/* Bandwidth monitor css file */
+
+.page-wrapper {
+	max-width: 800px;
+	margin: 0 auto;
+	background-color: #282a36;
+	color:#f8f8f2;
+}
+
+.page-heading {
+	margin: 1em 0 0 0;
+}
+
+.bottom-controls {
+	margin-top: 10px;
+	display: flex;
+	display: -webkit-flex;
+	align-items: center;
+}
+
+.bottom-controls .update-counter {
+	margin: 0 0 0 10px;
+}
+
+.bottom-controls .left {
+	flex-grow: 1;
+	display: flex;
+	display: -webkit-flex;
+	align-items: center;
+}
+
+.bottom-controls .left .controls {
+	display: flex;
+	display: -webkit-flex;
+	align-items: center;
+	padding-right: 10px;
+}
+
+.bottom-controls .left .controls .text {
+	padding-right: 12px;
+}
+
+.bottom-controls .left .controls:last-child {
+	padding-right: 0;
+}
+
+@media screen and (max-width: 436px) {
+    .bottom-controls .left .controls .btn {
+		padding: 6px 6px;
+	}
+}
+
+.table-padding {
+	margin-bottom: 0px;
+}
+
+.cell-padding {
+	padding: 0 1em;
+}
+
+.cell-right {
+	text-align: right;
+}
+
+.table-heading th {
+	background-color: #191a21;
+}
+
+.table-row-total td {
+	background-color: #191a21;
+}
+
+.table-row-total .total {
+	font-weight: bold;
+}
+
+.active-traffic td {
+	background-color: #44475a;
+}
+/* Bootstrap paragraph parent overwrite */
+.table-striped>tbody>tr:nth-of-type(odd){
+	background-color:#282a36;
+}
+/*Bootstrap tr hover fix*/
+.table-hover>tbody>tr:hover{
+	background-color:#6272a4;
+}
+
+.min-width {
+	min-width: 6em;
+}
+
+.table-compact>thead>tr>th,
+.table-compact>tbody>tr>th,
+.table-compact>tfoot>tr>th,
+.table-compact>thead>tr>td,
+.table-compact>tbody>tr>td,
+.table-compact>tfoot>tr>td {
+	padding: 2px 2px;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.arrow-up {
+	transform: rotate(90deg);
+}
+
+.arrow-down {
+	transform: rotate(-90deg);
+
+}
+
+.btn-default {
+	color: #f8f8f2;
+	background-color: #282a36;
+	border-color: #44475a;
+}
+.btn-default.active {
+	color: #f8f8f2;
+	background-color: #44475a;
+	border-color: #44475a;
+}
+.btn-default:hover, .btn-default.active:hover  {
+	color: #f8f8f2;
+	background-color: #44475a;
+	border-color: #44475a;
+}
+.table>tbody>tr>td, .table>tbody>tr>th {
+	border-color: #191a21;
+}
