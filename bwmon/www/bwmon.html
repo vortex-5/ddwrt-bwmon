@@ -146,10 +146,16 @@
 							<label class="btn btn-default" ng-model="displayRate" btn-radio="'KB/s'">KB/s</label>
 						</div>
 					</div>
+					<div class="controls">
+						<div class="btn-group">
+							<label class="btn btn-default" checked ng-model="displayStyleSheet" btn-radio="'bwmon'">LIGHT</label>
+							<label class="btn btn-default" ng-model="displayStyleSheet" btn-radio="'bwmondark'">DARK</label>
+						</div>
+					</div>
 				</div>
-				<div class="update-counter" ng-hide="serviceEnabled">
-					Next update in: {{ pollCountDown }}
-				</div>
+			</div>
+			<div class="update-counter" ng-hide="serviceEnabled">
+				Next update in: {{ pollCountDown }}
 			</div>
 		</div>
 	</body>
