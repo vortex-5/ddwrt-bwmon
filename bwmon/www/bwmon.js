@@ -715,8 +715,13 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	};
 
 	$scope.init();
-}]);// Changes the css file on the fly. Index must be 1 because 0 is bootstrap
-// Changes the css file on the fly. Index must be 1 because 0 is bootstrap
+}]);
+
+/**
+ * Changes the css file on the fly. Index must be 1 because 0 is bootstrap's css.
+ * @param {string} cssFile url path for the css to load.
+ * @param {number} cssLinkIndex index of the link to replace.
+ */
 function changeCSS(cssFile, cssLinkIndex) {
 		var oldlink = document.getElementsByTagName("link").item(cssLinkIndex);
 		var newlink = document.createElement("link");
