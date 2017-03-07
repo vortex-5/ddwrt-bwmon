@@ -24,6 +24,7 @@ rm bootstrap.min.css
 rm bwmon.css
 rm bwmon.html
 rm bwmon.js
+rm bwmondark.css
 rm bwreader.php
 rm mac-names.js
 rm ui-bootstrap-tpls.min.js
