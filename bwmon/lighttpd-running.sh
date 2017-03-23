@@ -1,5 +1,5 @@
 #!/bin/sh
-psValue=$(ps | grep -c 'lighttpd -f')
+psValue=$(ps aux | grep -c 'lighttpd -f')
 if [ "$psValue" = "2" ]; then
 	echo 'true'
 else
