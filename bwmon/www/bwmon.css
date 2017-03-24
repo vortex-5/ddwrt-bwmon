@@ -10,7 +10,6 @@
 }
 
 .bottom-controls {
-	margin-top: 10px;
 	display: flex;
 	display: -webkit-flex;
 	align-items: center;
@@ -25,6 +24,7 @@
 	display: flex;
 	display: -webkit-flex;
 	align-items: center;
+	flex-wrap: wrap;
 }
 
 .bottom-controls .left .controls {
@@ -32,6 +32,7 @@
 	display: -webkit-flex;
 	align-items: center;
 	padding-right: 10px;
+	padding-top: 10px;
 }
 
 .bottom-controls .left .controls:last-child {
