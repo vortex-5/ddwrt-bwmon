@@ -356,9 +356,16 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	};
 
 	$scope.fetchUpdate = function() {
+		var config = {
+			headers: {
+				'pragma': 'no-cache',
+				'cache-control': 'no-cache'
+			}
+		}
+		
 		function oldService() {
-			$http.get($scope.nonServiceDnsLeases).then(function(responseLeases) {
-				$http.get($scope.nonServiceDnsConf).then(function(responseConf) {
+			$http.get($scope.nonServiceDnsLeases, config).then(function(responseLeases) {
+				$http.get($scope.nonServiceDnsConf, config).then(function(responseConf) {
 					$scope.macNames = {};
 
 					var dnsmasqLeasesData = responseLeases.data;
@@ -370,7 +377,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 					$scope.macNamesOverride();
 				});
 			});
-			$http.get('usage_stats.js').then(function(response) {
+			$http.get('usage_stats.js', config).then(function(response) {
 				$scope.usageData = [];
 				$scope.updateUsageData(response.data);
 			});
@@ -378,9 +385,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 
 		if ($scope.serviceEnabled) {
 			var beforeSample = new Date();
-			// EDGE and IE insist on caching things even with IE specific no cache tags the only solution then is to force a new URL every call.
-			var url = $scope.serviceLocation + '?no-cache=' + beforeSample.getTime();
-			$http.get(url).then(function(response) {
+			$http.get($scope.serviceLocation, config).then(function(response) {
 				var filtered = $scope.filterSection(response.data, 'usage-stats');
 				$scope.currentSample = ($scope.currentSample + 1) % 2;
 				var afterSample = new Date();
