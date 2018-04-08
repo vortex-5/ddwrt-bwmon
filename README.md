@@ -14,7 +14,7 @@ Installation instructions
 3. Optionally enable lighttpd support from Services -> Webserver -> Lighttpd Server. Keep it at the default port 81 and do not enable WAN access.
 4. Log into your router via ssh. You may use putty to do this on windows or just ssh on linux.
 5. From your ssh terminal type: `cd /jffs/`.
-6. Either download the tool directly from your router's ssh prompt type: `wget https://github.com/vortex-5/ddwrt-bwmon/releases/download/1.9.2/bwmon.tar.gz`. Alternatively you can download the file from the releases page and copy it to your usb flash drive.
+6. Either download the tool directly from your router's ssh prompt type: `wget https://github.com/vortex-5/ddwrt-bwmon/releases/download/1.10/bwmon.tar.gz`. Alternatively you can download the file from the releases page and copy it to your usb flash drive.
 7. Extract the installer package from your router's ssh prompt type: `tar -xzvf bwmon.tar.gz`.
 8. Fix the permissions on your router type: `cd /jffs/bwmon/ && sh install.sh`.
 9. Set the automount script on the router (Under your router's web gui's Services -> USB) to point to `/path/bwmon/startup.sh` to autostart this script on mount or just run the startup.sh script manually if you don't wish to start on system bootup.

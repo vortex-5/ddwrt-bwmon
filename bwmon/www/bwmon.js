@@ -44,7 +44,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	/**
 	 * @type {string} Valid values are bwmon and bwmondark.
 	 */
-	$scope.displayStyleSheet = 'bwmon';
+	$scope.displayStyleSheet = 'bwmondark';
 
 	/**
 	 * @type {string} The url to the bwreader.php service.
