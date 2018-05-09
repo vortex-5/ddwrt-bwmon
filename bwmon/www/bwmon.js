@@ -7,7 +7,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	 */
 	$scope.SCRIPT_INTERVAL = 10;
 
-	$scope.CONVERSION_FACTOR = 8/$scope.SCRIPT_INTERVAL; // From KB/s to Kbps
+	$scope.CONVERSION_FACTOR = 8; // From KB/s to Kbps (when divided by the script interval)
 
 	/**
 	 * @type {number} 1 month in seconds.
@@ -284,7 +284,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 								$scope.downHistoryValue[ip] = [0, 0, 0];
 						}
 
-						var value = (curDown - preDown) * (8 / getInterval());
+						var value = (curDown - preDown) * ($scope.CONVERSION_FACTOR / getInterval());
 						if (isNaN(value)) {
 							value = 0;
 						}
@@ -312,7 +312,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 							$scope.upHistoryValue[ip] = [0, 0, 0];
 						}
 
-						var value = (curUp - preUp) * (8 / getInterval());
+						var value = (curUp - preUp) * ($scope.CONVERSION_FACTOR / getInterval());
 						if (isNaN(value)) {
 							value = 0;
 						}
@@ -532,7 +532,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			return '--';
 
 		if ($scope.displayRate === 'Kbps') {
-			var Kbps = KBps10 * $scope.CONVERSION_FACTOR;
+			var Kbps = KBps10 * ($scope.CONVERSION_FACTOR / $scope.SCRIPT_INTERVAL);
 			if (Kbps / 1000 > 1)
 				return $scope.round(Kbps/1000) + ' Mbps';
 
