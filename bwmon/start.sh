@@ -24,6 +24,7 @@ fi
 
 # copy html webgui
 if [ "$($SCRIPT_DIR/lighttpd-running.sh)" = "true" ]; then
+	mkdir -p -- "/jffs/www/"
 	cp -R $SCRIPT_DIR/www/* /jffs/www/
 else
 	cp -R $SCRIPT_DIR/www/* /tmp/www/
