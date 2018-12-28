@@ -9,7 +9,7 @@ Please check the releases page to get the most current release.
 Installation instructions
 -------------------------
 
-1. Format a USB flash drive to `ext4` you may try `ntfs` but fat partitions will not work.
+1. Format a USB flash drive to `ext4` (linux) or `ntfs` (windows). Fat partitions will not work.
 2. On DD-WRT enabled routers go to the web gui. Navigate to Services -> USB enable automount USB drive and set the automount path of the partition to `/jffs/`. It is recommended to use the partition GUID to do this. Non DD-WRT routers need to ensure the partition is mounted on `/jffs/`.
 3. Optionally enable lighttpd support from Services -> Webserver -> Lighttpd Server. Keep it at the default port 81 and do not enable WAN access.
 4. Log into your router via ssh. You may use putty to do this on windows or just ssh on linux.
@@ -22,7 +22,7 @@ Installation instructions
 
 **Notes:** Only one of the two URL's will be available and Bwmon will autodetect which mode it should run in based on if the lighttpd server is enabled at script startup. Bwmon will automatically fall back to legacy mode if it does not have lighttpd access.
 
-**Update:** The latest tested version of DD-WRT confirmed to be working is 37932 with this module.
+**Update:** The latest tested version of DD-WRT confirmed to be working is 38060 with this module.
 
 Usage and Directory Structure
 -----------------------------
