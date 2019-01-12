@@ -362,7 +362,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 				'cache-control': 'no-cache'
 			}
 		}
-		
+
 		function oldService() {
 			$http.get($scope.nonServiceDnsLeases, config).then(function(responseLeases) {
 				$http.get($scope.nonServiceDnsConf, config).then(function(responseConf) {
@@ -637,6 +637,10 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	$scope.isZeroUsage = function(device) {
 		return $scope.getDeviceTotal(device) + $scope.getDownRate(device) + $scope.getUpRate(device) <= 0;
 	};
+
+	$scope.resetStats = function() {
+		$http.get('/bwreset.php')
+	}
 
 	$scope.sortFunction = function(device) {
 		var metric
