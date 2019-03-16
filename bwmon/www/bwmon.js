@@ -1,5 +1,5 @@
 'use strict'
-var bwmon = angular.module('bwmonApp', ['ui.bootstrap']);
+let bwmon = angular.module('bwmonApp', ['ui.bootstrap']);
 
 bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location', function($scope, $interval, $http, $location) {
 	/**
@@ -112,16 +112,16 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		if (!array || array.length === 0)
 			return 0;
 
-		for (var i = 0; i < array.length; i++) {
+		for (let i = 0; i < array.length; i++) {
 			if (array[i] < 0)
 				return -1;
 		}
 
-		var total = 0;
+		let total = 0;
 
-		angular.forEach(array, function(item) {
-			total += item;
-		});
+		for (let i = 0; i < array.length; i++) {
+			total += array[i];
+		}
 		return total / array.length;
 	}
 
@@ -129,8 +129,8 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		if (!data)
 			return data;
 
-		var regex = new RegExp('<pre class="' + sectionName + '">([\\s\\S]+?)</pre>', 'gm');
-		var match = regex.exec(data);
+		let regex = new RegExp('<pre class="' + sectionName + '">([\\s\\S]+?)</pre>', 'gm');
+		let match = regex.exec(data);
 		return match[1];
 	};
 
@@ -139,8 +139,8 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	 * @param {string} data The contents of the dnsmasq.conf file.
 	 */
 	$scope.updateDnsConf = function(data) {
-		var dnsmasqRegex = /^dhcp-host=([0-9a-fA-F:]+),([\s\S]+?),([0-9.]+)/gm;
-		var match = dnsmasqRegex.exec(data);
+		let dnsmasqRegex = /^dhcp-host=([0-9a-fA-F:]+),([\s\S]+?),([0-9.]+)/gm;
+		let match = dnsmasqRegex.exec(data);
 
 		while(match) {
 			$scope.macNames[match[1].toLowerCase()] = match[2];
@@ -154,8 +154,8 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	 * @param {string} data The contents of the dnsmasq.leases file.
 	 */
 	$scope.updateDnsLeases = function(data) {
-		var dnsmasqRegex = /^[0-9]+ ([0-9a-fA-F:]+) ([0-9.]+) ([\s\S]+?) [0-9a-fA-F:*]*$/gm;
-		var match = dnsmasqRegex.exec(data);
+		let dnsmasqRegex = /^[0-9]+ ([0-9a-fA-F:]+) ([0-9.]+) ([\s\S]+?) [0-9a-fA-F:*]*$/gm;
+		let match = dnsmasqRegex.exec(data);
 
 		while(match) {
 			$scope.macNames[match[1].toLowerCase()] = match[3];
@@ -167,7 +167,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	$scope.updateMissingEntries = function(macNames) {
 		// Updates the missing dnsmasq entries.
 		function addEntry(mac) {
-			var item = {};
+			let item = {};
 
 			item.mac = mac;
 			item.postDown = 0;
@@ -179,12 +179,12 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			$scope.usageData.push(item);
 		}
 
-		var knownMacs = [];
-		angular.forEach($scope.usageData, function(item) {
-			knownMacs.push(item.mac);
-		});
+		let knownMacs = [];
+		for (let i = 0; i < $scope.usageData.length; i++) {
+			knownMacs.push($scope.usageData[i].mac);
+		}
 
-		for (var mac in macNames) {
+		for (let mac in macNames) {
 			if (macNames.hasOwnProperty(mac)) {
 				if (knownMacs.indexOf(mac) === -1) {
 					addEntry(mac);
@@ -198,7 +198,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	 */
 	$scope.macNamesOverride = function() {
 		if (MAC_NAMES) {
-			for (var mac in MAC_NAMES) {
+			for (let mac in MAC_NAMES) {
 				if (MAC_NAMES.hasOwnProperty(mac)) {
 					$scope.macNames[mac.toLowerCase()] = MAC_NAMES[mac];
 				}
@@ -207,9 +207,9 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
     };
 
 	$scope.updatemacToIpMapping = function(data) {
-		var regex = /^([0-9.]+)[\s]+[0-9]x[0-9][\s]+[0-9]x[0-9][\s]+([0-9a-zA-Z:]+)/gm;
-		var match = regex.exec(data);
-		var ipmap = {};
+		let regex = /^([0-9.]+)[\s]+[0-9]x[0-9][\s]+[0-9]x[0-9][\s]+([0-9a-zA-Z:]+)/gm;
+		let match = regex.exec(data);
+		let ipmap = {};
 		while(match) {
 			ipmap[match[2]] = match[1];
 			match = regex.exec(data);
@@ -218,13 +218,13 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	};
 
 	$scope.updateUsage = function(data) {
-		var iptables = data;
-		var regex = /^[\s]+\d+[\s]+(\d+)[\s]+\w+\s+\d+\s+[a-zA-z0-9-]+\s+\S+\s+\S+\s+([0-9./]+)\s+([0-9./]+)/gm;
+		let iptables = data;
+		let regex = /^[\s]+\d+[\s]+(\d+)[\s]+\w+\s+\d+\s+[a-zA-z0-9-]+\s+\S+\s+\S+\s+([0-9./]+)\s+([0-9./]+)/gm;
 
-		var match = regex.exec(iptables);
+		let match = regex.exec(iptables);
 
-		var dataIn = {};
-		var dataOut = {};
+		let dataIn = {};
+		let dataOut = {};
 
 		while(match) {
 			if (match[2] === '0.0.0.0/0') {
@@ -242,8 +242,8 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 
 	$scope.updateRates = function() {
 		function getInterval() {
-			var curTime = $scope.sampleTimes[$scope.currentSample].getTime();
-			var preTime = $scope.sampleTimes[($scope.currentSample + 1) % 2].getTime();
+			let curTime = $scope.sampleTimes[$scope.currentSample].getTime();
+			let preTime = $scope.sampleTimes[($scope.currentSample + 1) % 2].getTime();
 			return curTime - preTime;
 		}
 
@@ -251,7 +251,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			if ($scope.droppedSamples > 0) {
 				$scope.droppedSamples--;
 				(function() {
-					for (var ip in $scope.dataDownSamples[$scope.currentSample]) {
+					for (let ip in $scope.dataDownSamples[$scope.currentSample]) {
 						if ($scope.dataDownSamples[$scope.currentSample].hasOwnProperty(ip)) {
 							$scope.downRateAverage[ip] = -1;
 						}
@@ -259,7 +259,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 					}
 				})();
 				(function() {
-					for (var ip in $scope.dataUpSamples[$scope.currentSample]) {
+					for (let ip in $scope.dataUpSamples[$scope.currentSample]) {
 						if ($scope.dataUpSamples[$scope.currentSample].hasOwnProperty(ip)) {
 							$scope.upRateAverage[ip] = -1;
 						}
@@ -269,10 +269,10 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			}
 
 			(function() {
-				for (var ip in $scope.dataDownSamples[$scope.currentSample]) {
+				for (let ip in $scope.dataDownSamples[$scope.currentSample]) {
 					if ($scope.dataDownSamples[$scope.currentSample].hasOwnProperty(ip)) {
-						var curDown = $scope.dataDownSamples[$scope.currentSample][ip];
-						var preDown = $scope.dataDownSamples[($scope.currentSample + 1) % 2][ip];
+						let curDown = $scope.dataDownSamples[$scope.currentSample][ip];
+						let preDown = $scope.dataDownSamples[($scope.currentSample + 1) % 2][ip];
 
 						if (!curDown)
 							curDown = 0;
@@ -284,7 +284,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 								$scope.downHistoryValue[ip] = [0, 0, 0];
 						}
 
-						var value = (curDown - preDown) * ($scope.CONVERSION_FACTOR / getInterval());
+						let value = (curDown - preDown) * ($scope.CONVERSION_FACTOR / getInterval());
 						if (isNaN(value)) {
 							value = 0;
 						}
@@ -297,10 +297,10 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 				}
 			})();
 			(function() {
-				for (var ip in $scope.dataUpSamples[$scope.currentSample]) {
+				for (let ip in $scope.dataUpSamples[$scope.currentSample]) {
 					if ($scope.dataUpSamples[$scope.currentSample].hasOwnProperty(ip)) {
-						var curUp = $scope.dataUpSamples[$scope.currentSample][ip];
-						var preUp = $scope.dataUpSamples[($scope.currentSample + 1) % 2][ip];
+						let curUp = $scope.dataUpSamples[$scope.currentSample][ip];
+						let preUp = $scope.dataUpSamples[($scope.currentSample + 1) % 2][ip];
 
 						if (!curUp)
 							curUp = 0;
@@ -312,7 +312,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 							$scope.upHistoryValue[ip] = [0, 0, 0];
 						}
 
-						var value = (curUp - preUp) * ($scope.CONVERSION_FACTOR / getInterval());
+						let value = (curUp - preUp) * ($scope.CONVERSION_FACTOR / getInterval());
 						if (isNaN(value)) {
 							value = 0;
 						}
@@ -328,11 +328,11 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	};
 
 	$scope.addMissingUsage = function() {
-		var downRate = 0;
-		var upRate = 0;
+		let downRate = 0;
+		let upRate = 0;
 
 		function containsMac(mac) {
-			for (var i = 0; i < $scope.usageData.length; i++) {
+			for (let i = 0; i < $scope.usageData.length; i++) {
 				if ($scope.usageData[i].mac === mac) {
 					return true;
 				}
@@ -340,12 +340,12 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			return false;
 		}
 
-		for (var mac in $scope.macToIpMapping) {
+		for (let mac in $scope.macToIpMapping) {
 			if ($scope.macToIpMapping.hasOwnProperty(mac)) {
 				if (!containsMac) {
-					var ip = $scope.macToIpMapping[mac];
-					var postDown = $scope.dataDownSamples[$scope.currentSample][ip];
-					var postUp = $scope.dataUpSamples[$scope.currentSample][ip];
+					let ip = $scope.macToIpMapping[mac];
+					let postDown = $scope.dataDownSamples[$scope.currentSample][ip];
+					let postUp = $scope.dataUpSamples[$scope.currentSample][ip];
 
 					if (postUp + postDown > 0) {
 						$scope.addUsageData(mac, postDown, postUp);
@@ -356,7 +356,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	};
 
 	$scope.fetchUpdate = function() {
-		var config = {
+		let config = {
 			headers: {
 				'pragma': 'no-cache',
 				'cache-control': 'no-cache'
@@ -368,8 +368,8 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 				$http.get($scope.nonServiceDnsConf, config).then(function(responseConf) {
 					$scope.macNames = {};
 
-					var dnsmasqLeasesData = responseLeases.data;
-					var dnsmasqConfData = responseConf.data;
+					let dnsmasqLeasesData = responseLeases.data;
+					let dnsmasqConfData = responseConf.data;
 
 					$scope.updateDnsLeases(dnsmasqLeasesData);
 					$scope.updateDnsConf(dnsmasqConfData);
@@ -384,11 +384,11 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		}
 
 		if ($scope.serviceEnabled) {
-			var beforeSample = new Date();
+			let beforeSample = new Date();
 			$http.get($scope.serviceLocation, config).then(function(response) {
-				var filtered = $scope.filterSection(response.data, 'usage-stats');
+				let filtered = $scope.filterSection(response.data, 'usage-stats');
 				$scope.currentSample = ($scope.currentSample + 1) % 2;
-				var afterSample = new Date();
+				let afterSample = new Date();
 				$scope.sampleTimes[$scope.currentSample] = new Date((beforeSample.getTime() + afterSample.getTime()) / 2);
 
 				$scope.usageData = [];
@@ -396,20 +396,20 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 
 				$scope.macNames = {};
 
-				var dnsmasqLeasesData = $scope.filterSection(response.data, 'dnsmasq-leases');
+				let dnsmasqLeasesData = $scope.filterSection(response.data, 'dnsmasq-leases');
 				$scope.updateDnsLeases(dnsmasqLeasesData);
 
-				var dnsmasqConfData = $scope.filterSection(response.data, 'dnsmasq-conf');
+				let dnsmasqConfData = $scope.filterSection(response.data, 'dnsmasq-conf');
 				$scope.updateDnsConf(dnsmasqConfData);
 
 				$scope.updateMissingEntries($scope.macNames);
 
 				$scope.macNamesOverride();
 
-				var ipmappingData = $scope.filterSection(response.data, 'ipmapping');
+				let ipmappingData = $scope.filterSection(response.data, 'ipmapping');
 				$scope.updatemacToIpMapping(ipmappingData);
 
-				var iptablesData = $scope.filterSection(response.data, 'iptables');
+				let iptablesData = $scope.filterSection(response.data, 'iptables');
 				$scope.updateUsage(iptablesData);
 
 				$scope.updateRates();
@@ -424,7 +424,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	};
 
 	$scope.setCookie = function(name, value, maxAgeSec) {
-		var cookieStream = [];
+		let cookieStream = [];
 		cookieStream.push(name + '=' + value);
 		if (maxAgeSec)
 			cookieStream.push('max-age' + '=' + maxAgeSec);
@@ -437,33 +437,35 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	};
 
 	$scope.readCookies = function() {
-		var rawCookies = document.cookie;
-		var cookies = {};
+		let rawCookies = document.cookie;
+		let cookies = {};
 
 		if (rawCookies) {
-			var cookieValues = rawCookies.split(';');
-			angular.forEach(cookieValues, function(cookieValue) {
-				var index = cookieValue.indexOf('=');
+			let cookieValues = rawCookies.split(';');
+			for (let i = 0; i < cookieValues.length; i++) {
+				let cookieValue = cookieValues[i];
+				let index = cookieValue.indexOf('=');
 				if (!index)
 					return;
 
-				var key = cookieValue.substring(0, index).trim();
-				var value = cookieValue.substring(index + 1, cookieValue.length);
+				let key = cookieValue.substring(0, index).trim();
+				let value = cookieValue.substring(index + 1, cookieValue.length);
 
 				cookies[key] = value;
-			});
+			}
 		}
 
 		return cookies;
 	};
 
 	$scope.updateUsageData = function(data) {
-		var resultLines = data.split('\n');
+		let resultLines = data.split('\n');
 
-		angular.forEach(resultLines, function(line) {
+		for (let i = 0; i < resultLines.length; i++) {
+			let line = resultLines[i];
 			if (line.trim().length > 0) {
-				var entry = line.split(',');
-				var item = {};
+				let entry = line.split(',');
+				let item = {};
 
 				item.mac = entry[0];
 				item.postDown = Number(entry[1]);
@@ -474,27 +476,28 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 
 				$scope.usageData.push(item);
 			}
-		});
+		}
 	};
 
 	$scope.addUsageData = function(mac, totalDown, totalUp) {
-		var item = {};
+		let item = {};
 		item.mac = mac;
 		item.postDown = totalDown;
 		item.postUp = totalUp;
-		var now = new Date();
+		let now = new Date();
 		item.date = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate() + ' ' + now.getHours() + ':' + now.getMinutes();
 		$scope.usageData.push(item);
 	};
 
 	$scope.getName = function(macAddress) {
 		macAddress = macAddress.toLowerCase(); // Internal mac addresses are always stored in lowercase.
+		let name;
 		switch ($scope.displayNameType) {
 			case $scope.displayNameOptions.NAME:
-				var name = $scope.macNames[macAddress];
+				name = $scope.macNames[macAddress];
 				return name ? name : macAddress.toUpperCase();
 			case $scope.displayNameOptions.IP:
-				var name = $scope.macIpDns[macAddress];
+				name = $scope.macIpDns[macAddress];
 				return name ? name : macAddress.toUpperCase();
 		}
 		return macAddress.toUpperCase();
@@ -532,14 +535,14 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			return '--';
 
 		if ($scope.displayRate === 'Kbps') {
-			var Kbps = KBps10 * ($scope.CONVERSION_FACTOR / $scope.SCRIPT_INTERVAL);
+			let Kbps = KBps10 * ($scope.CONVERSION_FACTOR / $scope.SCRIPT_INTERVAL);
 			if (Kbps / 1000 > 1)
 				return $scope.round(Kbps/1000) + ' Mbps';
 
 			return $scope.round(Kbps) + ' Kbps';
 		}
 		else {
-			var KBps = KBps10 / $scope.SCRIPT_INTERVAL;
+			let KBps = KBps10 / $scope.SCRIPT_INTERVAL;
 			if (KBps / 1000 > 1)
 				return $scope.round(KBps/1000) + ' MB/s';
 
@@ -569,7 +572,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			return 0;
 
 		if ($scope.serviceEnabled) {
-			var ip = $scope.macToIpMapping[device.mac];
+			let ip = $scope.macToIpMapping[device.mac];
 			if (!ip)
 				return 0;
 			return $scope.downRateAverage[ip];
@@ -584,7 +587,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			return 0;
 
 		if ($scope.serviceEnabled) {
-			var ip = $scope.macToIpMapping[device.mac];
+			let ip = $scope.macToIpMapping[device.mac];
 			if (!ip)
 				return 0;
 			return $scope.upRateAverage[ip];
@@ -595,42 +598,42 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	};
 
 	$scope.getTotals = function(devices) {
-		var subTotal = 0;
-		angular.forEach(devices, function(device) {
-			subTotal += $scope.getDeviceTotal(device);
-		});
+		let subTotal = 0;
+		for (let i = 0; i < devices.length; i++) {
+			subTotal += $scope.getDeviceTotal(devices[i]);
+		}
 		return subTotal;
 	};
 
 	$scope.getTotalDown = function(devices) {
-		var total =  0;
-		angular.forEach(devices, function(device) {
-			total += device.postDown;
-		});
+		let total =  0;
+		for (let i = 0; i < devices.length; i++) {
+			total += devices[i].postDown;
+		}
 		return total;
 	};
 
 	$scope.getTotalUp = function(devices) {
-		var total =  0;
-		angular.forEach(devices, function(device) {
-			total += device.postUp;
-		});
+		let total =  0;
+		for (let i = 0; i < devices.length; i++) {
+			total += devices[i].postUp;
+		}
 		return total;
 	};
 
 	$scope.getTotalDownRate = function(devices) {
-		var total =  0;
-		angular.forEach(devices, function(device) {
-			total += $scope.getDownRate(device);
-		});
+		let total =  0;
+		for (let i = 0; i < devices.length; i++) {
+			total += $scope.getDownRate(devices[i]);
+		}
 		return total;
 	};
 
 	$scope.getTotalUpRate = function(devices) {
-		var total =  0;
-		angular.forEach(devices, function(device) {
-			total += $scope.getUpRate(device);
-		});
+		let total =  0;
+		for (let i = 0; i < devices.length; i++) {
+			total += $scope.getUpRate(devices[i]);
+		}
 		return total;
 	};
 
@@ -643,7 +646,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	}
 
 	$scope.sortFunction = function(device) {
-		var metric
+		let metric
 		switch ($scope.sortBy) {
 			case $scope.sortOptions.POST_UP:
 				metric = device.postUp;
@@ -689,7 +692,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		tick();
 		$interval(tick, 1000);
 
-		var density = $scope.readCookie('bwmon-displayDensity');
+		let density = $scope.readCookie('bwmon-displayDensity');
 		if (density)
 			$scope.displayDensity = density;
 
@@ -697,7 +700,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			$scope.setCookie('bwmon-displayDensity', $scope.displayDensity, $scope.SECONDS_IN_MONTH);
 		});
 
-		var displayNameType = $scope.readCookie('bwmon-displayNameType');
+		let displayNameType = $scope.readCookie('bwmon-displayNameType');
 		if (displayNameType)
 			$scope.displayNameType = displayNameType;
 
@@ -705,7 +708,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			$scope.setCookie('bwmon-displayNameType', $scope.displayNameType, $scope.SECONDS_IN_MONTH);
 		});
 
-		var displayRate = $scope.readCookie('bwmon-displayRate');
+		let displayRate = $scope.readCookie('bwmon-displayRate');
 		if (displayRate)
 			$scope.displayRate = displayRate;
 
@@ -713,7 +716,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			$scope.setCookie('bwmon-displayRate', $scope.displayRate, $scope.SECONDS_IN_MONTH);
 		});
 
-		var stylesheet = $scope.readCookie('bwmon-displayStyleSheet');
+		let stylesheet = $scope.readCookie('bwmon-displayStyleSheet');
 		if (stylesheet)
 			$scope.displayStyleSheet = stylesheet;
 
@@ -732,8 +735,8 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
  * @param {number} cssLinkIndex index of the link to replace.
  */
 function changeCSS(cssFile, cssLinkIndex) {
-		var oldlink = document.getElementsByTagName("link").item(cssLinkIndex);
-		var newlink = document.createElement("link");
+		let oldlink = document.getElementsByTagName("link").item(cssLinkIndex);
+		let newlink = document.createElement("link");
 		newlink.setAttribute("rel", "stylesheet");
 		newlink.setAttribute("type", "text/css");
 		newlink.setAttribute("href", cssFile);
