@@ -1,3 +1,7 @@
+<?php
+ini_set("memory_limit", "8M");
+?>
+
 <pre class="usage-stats">
 <?php
 echo file_get_contents('/tmp/www/usage_stats.js');	
