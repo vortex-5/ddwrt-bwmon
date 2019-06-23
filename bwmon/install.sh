@@ -4,6 +4,8 @@
 SCRIPT_DIR=$(dirname ${0})
 SCRIPT_DIR=$(cd ${SCRIPT_DIR} && pwd)
 
+sh "$SCRIPT_DIR/stop.sh"
+
 # Cleanup junk from previous versions
 rm /jffs/www/bwreader.php
 rm /jffs/www/bwreset.php
