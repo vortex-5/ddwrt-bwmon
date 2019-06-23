@@ -15,7 +15,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	$scope.SECONDS_IN_MONTH = 60 * 60 * 24 * 30;
 
 	/**
-	 * @type {string} How frequently the service will call bwreader.php.
+	 * @type {string} How frequently the service will call bwreader.
 	 */
 	$scope.SERVICE_INTERVAL = 2;
 	$scope.POLL_WAIT_TIME = $scope.SCRIPT_INTERVAL;
@@ -47,9 +47,9 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	$scope.displayStyleSheet = 'bwmondark';
 
 	/**
-	 * @type {string} The url to the bwreader.php service.
+	 * @type {string} The url to the bwreader service.
 	 */
-	$scope.serviceLocation = '/bwreader.php';
+	$scope.serviceLocation = '/bwreader.cgi';
 
 	/**
 	 * When in non service mode we fetch these two resources to decode things.
@@ -642,7 +642,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	};
 
 	$scope.resetStats = function() {
-		$http.get('/bwreset.php')
+		$http.get('/bwreset.cgi')
 	}
 
 	$scope.sortFunction = function(device) {

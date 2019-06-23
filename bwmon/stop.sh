@@ -25,12 +25,12 @@ rm bwmon.css
 rm bwmon.html
 rm bwmon.js
 rm bwmondark.css
-rm bwreader.php
-rm bwreset.php
 rm mac-names.js
 rm ui-bootstrap-tpls.min.js
 rm dnsmasq-conf.js
 rm dnsmasq-leases.js
+rm bwreader.cgi
+rm bwreset.cgi
 # End Cleanup WebGUI
 
 # font-awesome is now depricated we should attempt to remove it.
