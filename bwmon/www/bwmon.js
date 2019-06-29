@@ -356,6 +356,10 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	};
 
 	$scope.fetchUpdate = function() {
+		if (document.hidden) {
+			return;
+		}
+		
 		let config = {
 			headers: {
 				'pragma': 'no-cache',
@@ -382,8 +386,8 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 				$scope.updateUsageData(response.data);
 			});
 		}
-
-		if ($scope.serviceEnabled) {
+		
+		function newService() {
 			let beforeSample = new Date();
 			$http.get($scope.serviceLocation, config).then(function(response) {
 				let filtered = $scope.filterSection(response.data, 'usage-stats');
@@ -417,6 +421,10 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 				$scope.serviceEnabled = false;
 				oldService();
 			});
+		}
+
+		if ($scope.serviceEnabled) {
+			newService();
 		}
 		else {
 			oldService();
