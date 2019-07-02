@@ -373,11 +373,13 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 					$scope.updateDnsConf(dnsmasqConfData);
 					$scope.updateMissingEntries($scope.macNames);
 					$scope.macNamesOverride();
+					$scope.updateDisplayUsage();
 				});
 			});
 			$http.get('usage_stats.js', config).then(function(response) {
 				$scope.usageData = {};
 				$scope.updateUsageData(response.data);
+				$scope.updateDisplayUsage();
 			});
 		}
 
@@ -411,6 +413,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 				$scope.updateUsage(iptablesData);
 
 				$scope.updateRates();
+				$scope.updateDisplayUsage();
 			}, function(response) {
 				$scope.serviceEnabled = false;
 				oldService();
