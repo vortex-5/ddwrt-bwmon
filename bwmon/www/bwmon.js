@@ -17,7 +17,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	/**
 	* @type {number} The threasold to start hilighting given in bps or B/s depending on the current view.
 	*/
-	$scope.activeDeviceThreashold = 1000;
+	$scope.activeDeviceThreashold = 100;
 
 	/**
 	 * @type {string} How frequently the service will call bwreader.
