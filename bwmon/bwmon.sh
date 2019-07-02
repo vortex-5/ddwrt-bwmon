@@ -26,6 +26,15 @@
 
 WAN_IFACE=$(nvram get wan_ifname)
 
+fixValue()
+{
+	if [ -z "$1" ]
+	then
+		fixedValue="0"
+	else
+		fixedValue="$1"
+	fi
+}
 
 case ${1} in
 
@@ -79,8 +88,8 @@ case ${1} in
 		#Have to use temporary files because of crappy busybox shell
 		grep ${IP} /tmp/traffic_pre.tmp | while read PKTS BYTES TARGET PROT OPT IFIN IFOUT SRC DST
 		do
-			[ "${DST}" = "${IP}" ] && echo $((${BYTES}/1000)) > /tmp/in_$$.tmp
-			[ "${SRC}" = "${IP}" ] && echo $((${BYTES}/1000)) > /tmp/out_$$.tmp
+			[ "${DST}" = "${IP}" ] && echo $((${BYTES})) > /tmp/in_$$.tmp
+			[ "${SRC}" = "${IP}" ] && echo $((${BYTES})) > /tmp/out_$$.tmp
 		done
 		IN=$(cat /tmp/in_$$.tmp)
 		OUT=$(cat /tmp/out_$$.tmp)
@@ -104,8 +113,18 @@ case ${1} in
 				PRE_USAGE_OUT=$(echo ${LINE} | cut -f5 -s -d, )
 			fi
 			
-			PRE_USAGE_IN=$((${PRE_USAGE_IN}+${IN}))
-			PRE_USAGE_OUT=$((${PRE_USAGE_OUT}+${OUT}))
+			# Zero values need to be corrected before we attempt to evaluate with expr
+			fixValue "$PRE_USAGE_IN"
+			PRE_USAGE_IN="$fixedValue"
+			fixValue "$IN"
+			IN="$fixedValue"
+			fixValue "$PRE_USAGE_OUT"
+			PRE_USAGE_OUT="$fixedValue"
+			fixValue "$OUT"
+			OUT="$fixedValue"
+			
+			PRE_USAGE_IN=$(expr ${PRE_USAGE_IN} + ${IN})
+			PRE_USAGE_OUT=$(expr ${PRE_USAGE_OUT} + ${OUT})
 			
 			grep -v "${MAC}" ${2} > /tmp/db_$$.tmp
 			mv /tmp/db_$$.tmp ${2}
@@ -119,8 +138,8 @@ case ${1} in
 		#Have to use temporary files because of crappy busybox shell
 		grep ${IP} /tmp/traffic_post.tmp | while read PKTS BYTES TARGET PROT OPT IFIN IFOUT SRC DST
 		do
-			[ "${DST}" = "${IP}" ] && echo $((${BYTES}/1000)) > /tmp/in_$$.tmp
-			[ "${SRC}" = "${IP}" ] && echo $((${BYTES}/1000)) > /tmp/out_$$.tmp
+			[ "${DST}" = "${IP}" ] && echo $((${BYTES})) > /tmp/in_$$.tmp
+			[ "${SRC}" = "${IP}" ] && echo $((${BYTES})) > /tmp/out_$$.tmp
 		done
 		IN=$(cat /tmp/in_$$.tmp)
 		OUT=$(cat /tmp/out_$$.tmp)
@@ -134,8 +153,18 @@ case ${1} in
 			PRE_USAGE_IN=$(echo ${LINE} | cut -f4 -s -d, )
 			PRE_USAGE_OUT=$(echo ${LINE} | cut -f5 -s -d, )
 			
-			POST_USAGE_IN=$((${POST_USAGE_IN}+${IN}))
-			POST_USAGE_OUT=$((${POST_USAGE_OUT}+${OUT}))
+			# Zero values need to be corrected before we attempt to evaluate with expr
+			fixValue "$POST_USAGE_IN"
+			POST_USAGE_IN="$fixedValue"
+			fixValue "$IN"
+			IN="$fixedValue"
+			fixValue "$POST_USAGE_OUT"
+			POST_USAGE_OUT="$fixedValue"
+			fixValue "$OUT"
+			OUT="$fixedValue"
+			
+			POST_USAGE_IN=$(expr ${POST_USAGE_IN} + ${IN})
+			POST_USAGE_OUT=$(expr ${POST_USAGE_OUT} + ${OUT})
 			
 			grep -v "${MAC}" ${2} > /tmp/db_$$.tmp
 			mv /tmp/db_$$.tmp ${2}

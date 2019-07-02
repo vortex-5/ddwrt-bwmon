@@ -66,8 +66,8 @@
 						</th>
 					</tr>
 					<tr	class="device"
-							ng-repeat="device in usageData | orderBy : sortFunction : sortReverse"
-							ng-class="{ 'active-traffic': getDeviceTotalRate(device) > 0 }"
+							ng-repeat="device in usageDisplay | orderBy : sortFunction : sortReverse"
+							ng-class="{ 'active-traffic': getDeviceTotalRate(device) > activeDeviceThreashold }"
 							ng-hide="isZeroUsage(device)">
 						<td class="name" ng-dblclick="nextNameType()">
 							<div class="cell-padding"

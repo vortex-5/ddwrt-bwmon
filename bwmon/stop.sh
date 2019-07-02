@@ -3,9 +3,9 @@ SCRIPT_DIR=$(dirname ${0})
 SCRIPT_DIR=$(cd ${SCRIPT_DIR} && pwd)
 
 # Terminate the bandwidth monitor
-killall bwmon-running.sh
-killall bwmon-autobackup.sh
-killall bwmon.sh
+ps | grep bwmon-running.sh | grep -v grep | awk '{print $1}' | xargs -r kill -9
+ps | grep bwmon-autobackup.sh | grep -v grep | awk '{print $1}' | xargs -r kill -9
+ps | grep bwmon.sh | grep -v grep | awk '{print $1}' | xargs -r kill -9
 killall sleep
 
 # Backup the DB immediately

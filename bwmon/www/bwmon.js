@@ -15,11 +15,17 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	$scope.SECONDS_IN_MONTH = 60 * 60 * 24 * 30;
 
 	/**
+	* @type {number} The threasold to start hilighting given in bps or B/s depending on the current view.
+	*/
+	$scope.activeDeviceThreashold = 1000;
+
+	/**
 	 * @type {string} How frequently the service will call bwreader.
 	 */
 	$scope.SERVICE_INTERVAL = 2;
 	$scope.POLL_WAIT_TIME = $scope.SCRIPT_INTERVAL;
-	$scope.usageData = [];
+	$scope.usageData = {};
+	$scope.usageDisplay = [];
 	$scope.pollCountDown = 0;
 	/**
 	 * @type {Object.<string, string>} Mapping of mac to name.
@@ -176,19 +182,12 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			item.preUp = 0;
 			item.date = '--';
 
-			$scope.usageData.push(item);
-		}
-
-		let knownMacs = [];
-		for (let i = 0; i < $scope.usageData.length; i++) {
-			knownMacs.push($scope.usageData[i].mac);
+			$scope.usageData[item.mac] = item;
 		}
 
 		for (let mac in macNames) {
-			if (macNames.hasOwnProperty(mac)) {
-				if (knownMacs.indexOf(mac) === -1) {
-					addEntry(mac);
-				}
+			if (!$scope.usageData.hasOwnProperty(mac)) {
+				addEntry(mac);
 			}
 		}
 	};
@@ -204,7 +203,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 				}
 			}
 		}
-    };
+	};
 
 	$scope.updatemacToIpMapping = function(data) {
 		let regex = /^([0-9.]+)[\s]+[0-9]x[0-9][\s]+[0-9]x[0-9][\s]+([0-9a-zA-Z:]+)/gm;
@@ -332,17 +331,12 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		let upRate = 0;
 
 		function containsMac(mac) {
-			for (let i = 0; i < $scope.usageData.length; i++) {
-				if ($scope.usageData[i].mac === mac) {
-					return true;
-				}
-			}
-			return false;
+			return $scope.usageData.hasOwnProperty(mac);
 		}
 
 		for (let mac in $scope.macToIpMapping) {
 			if ($scope.macToIpMapping.hasOwnProperty(mac)) {
-				if (!containsMac) {
+				if (!containsMac(mac)) {
 					let ip = $scope.macToIpMapping[mac];
 					let postDown = $scope.dataDownSamples[$scope.currentSample][ip];
 					let postUp = $scope.dataUpSamples[$scope.currentSample][ip];
@@ -359,7 +353,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		if (document.hidden) {
 			return;
 		}
-		
+
 		let config = {
 			headers: {
 				'pragma': 'no-cache',
@@ -382,11 +376,11 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 				});
 			});
 			$http.get('usage_stats.js', config).then(function(response) {
-				$scope.usageData = [];
+				$scope.usageData = {};
 				$scope.updateUsageData(response.data);
 			});
 		}
-		
+
 		function newService() {
 			let beforeSample = new Date();
 			$http.get($scope.serviceLocation, config).then(function(response) {
@@ -395,7 +389,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 				let afterSample = new Date();
 				$scope.sampleTimes[$scope.currentSample] = new Date((beforeSample.getTime() + afterSample.getTime()) / 2);
 
-				$scope.usageData = [];
+				$scope.usageData = {};
 				$scope.updateUsageData(filtered);
 
 				$scope.macNames = {};
@@ -425,9 +419,11 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 
 		if ($scope.serviceEnabled) {
 			newService();
+			$scope.updateDisplayUsage();
 		}
 		else {
 			oldService();
+			$scope.updateDisplayUsage();
 		}
 	};
 
@@ -482,7 +478,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 				item.preUp = Number(entry[4]);
 				item.date = entry[5];
 
-				$scope.usageData.push(item);
+				$scope.usageData[item.mac] = item;
 			}
 		}
 	};
@@ -494,7 +490,16 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		item.postUp = totalUp;
 		let now = new Date();
 		item.date = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate() + ' ' + now.getHours() + ':' + now.getMinutes();
-		$scope.usageData.push(item);
+		$scope.usageData[item.mac] = item;
+	};
+
+	$scope.updateDisplayUsage = function() {
+		$scope.usageDisplay = [];
+		for (let mac in $scope.usageData) {
+			if ($scope.usageData.hasOwnProperty(mac)) {
+				$scope.usageDisplay.push($scope.usageData[mac]);
+			}
+		}
 	};
 
 	$scope.getName = function(macAddress) {
@@ -528,33 +533,44 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		return Math.round(value * 100)/100;
 	};
 
-	$scope.getSize = function(KB) {
-		if (KB / Math.pow(1024, 2) > 1)
-			return $scope.round(KB/Math.pow(1024, 2)) + ' GB';
+	$scope.getSize = function(B) {
+		if (B / Math.pow(1024, 3) > 1)
+			return $scope.round(B/Math.pow(1024, 3)) + ' GB';
 
-		if (KB / 1024 > 1)
-			return $scope.round(KB/1024) + ' MB';
+		if (B / Math.pow(1024, 2) > 1)
+			return $scope.round(B/Math.pow(1024, 2)) + ' MB';
 
-		return $scope.round(KB) + ' KB';
+		if (B / 1024 > 1)
+			return $scope.round(B/1024) + ' KB';
+
+		return $scope.round(B) + ' B';
 	};
 
-	$scope.getRate = function(KBps10) {
-		if (isNaN(KBps10) || KBps10 < 0)
+	$scope.getRate = function(Bps10) {
+		if (isNaN(Bps10) || Bps10 < 0)
 			return '--';
 
 		if ($scope.displayRate === 'Kbps') {
-			let Kbps = KBps10 * ($scope.CONVERSION_FACTOR / $scope.SCRIPT_INTERVAL);
-			if (Kbps / 1000 > 1)
-				return $scope.round(Kbps/1000) + ' Mbps';
+			let bps = Bps10 * ($scope.CONVERSION_FACTOR / $scope.SCRIPT_INTERVAL);
 
-			return $scope.round(Kbps) + ' Kbps';
+			if (bps / Math.pow(1000,2) > 1)
+				return $scope.round(bps/Math.pow(1000,2)) + ' Mbps';
+
+			if (bps / 1000 > 1)
+				return $scope.round(bps/1000) + ' Kbps';
+
+			return $scope.round(bps) + ' bps';
 		}
 		else {
-			let KBps = KBps10 / $scope.SCRIPT_INTERVAL;
-			if (KBps / 1000 > 1)
-				return $scope.round(KBps/1000) + ' MB/s';
+			let Bps = Bps10 / $scope.SCRIPT_INTERVAL;
 
-			return $scope.round(KBps) + ' KB/s';
+			if (Bps / Math.pow(1000, 2) > 1)
+				return $scope.round(Bps/Math.pow(1000, 2)) + ' MB/s';
+
+			if (Bps / 1000 > 1)
+				return $scope.round(Bps/1000) + ' KB/s';
+
+			return $scope.round(Bps) + ' B/s';
 		}
 	};
 
