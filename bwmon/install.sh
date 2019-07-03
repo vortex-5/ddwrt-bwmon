@@ -11,6 +11,7 @@ rm /jffs/www/bwreader.php
 rm /jffs/www/bwreset.php
 rm /tmp/www/bwreader.php
 rm /tmp/www/bwreset.php
+rm $SCRIPT_DIR/bwmon-autobackup.sh
 
 chmod +x "$SCRIPT_DIR/startup.sh"
 chmod +x "$SCRIPT_DIR/start.sh"
@@ -18,7 +19,6 @@ chmod +x "$SCRIPT_DIR/stop.sh"
 chmod +x "$SCRIPT_DIR/backup.sh"
 chmod +x "$SCRIPT_DIR/clean.sh"
 chmod +x "$SCRIPT_DIR/bwmon-running.sh"
-chmod +x "$SCRIPT_DIR/bwmon-autobackup.sh"
 chmod +x "$SCRIPT_DIR/bwmon.sh"
 chmod +x "$SCRIPT_DIR/lighttpd-running.sh"
 chmod +x "$SCRIPT_DIR/www/bwreader.cgi"
