@@ -30,8 +30,8 @@ if [ ! -d /jffs/etc ]
 then
 	mkdir /jffs/etc
 fi
-##cp "$SCRIPT_DIR/etc/lighttpd.conf" "/jffs/etc/lighttpd.conf"
-cat /tmp/lighttpd.conf $SCRIPT_DIR/etc/lighttpd-append.txt > /jffs/etc/lighttpd.conf
+cp "$SCRIPT_DIR/etc/lighttpd.conf" "/jffs/etc/lighttpd.conf"
+# cat /tmp/lighttpd.conf $SCRIPT_DIR/etc/lighttpd-append.txt > /jffs/etc/lighttpd.conf
 startservice lighttpd
 
 # confirmation
