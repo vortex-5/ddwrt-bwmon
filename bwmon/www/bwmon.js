@@ -617,41 +617,51 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	};
 
 	$scope.getTotals = function(devices) {
-		let subTotal = 0;
-		for (let i = 0; i < devices.length; i++) {
-			subTotal += $scope.getDeviceTotal(devices[i]);
+		let total = 0;
+		for (let macAddress in devices) {
+			if (devices.hasOwnProperty(macAddress)) {
+				total += $scope.getDeviceTotal(devices[macAddress]);
+			}
 		}
-		return subTotal;
+		return total;
 	};
 
 	$scope.getTotalDown = function(devices) {
 		let total =  0;
-		for (let i = 0; i < devices.length; i++) {
-			total += devices[i].postDown;
+		for (let macAddress in devices) {
+			if (devices.hasOwnProperty(macAddress)) {
+				total += devices[macAddress].postDown;
+			}
 		}
 		return total;
 	};
 
 	$scope.getTotalUp = function(devices) {
 		let total =  0;
-		for (let i = 0; i < devices.length; i++) {
-			total += devices[i].postUp;
+		for (let macAddress in devices) {
+			if (devices.hasOwnProperty(macAddress)) {
+				total += devices[macAddress].postUp;
+			}
 		}
 		return total;
 	};
 
 	$scope.getTotalDownRate = function(devices) {
 		let total =  0;
-		for (let i = 0; i < devices.length; i++) {
-			total += $scope.getDownRate(devices[i]);
+		for (let macAddress in devices) {
+			if (devices.hasOwnProperty(macAddress)) {
+				total += $scope.getDownRate(devices[macAddress]);
+			}
 		}
 		return total;
 	};
 
 	$scope.getTotalUpRate = function(devices) {
 		let total =  0;
-		for (let i = 0; i < devices.length; i++) {
-			total += $scope.getUpRate(devices[i]);
+		for (let macAddress in devices) {
+			if (devices.hasOwnProperty(macAddress)) {
+				total += $scope.getUpRate(devices[macAddress]);
+			}
 		}
 		return total;
 	};
