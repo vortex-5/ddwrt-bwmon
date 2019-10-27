@@ -37,6 +37,3 @@ $SCRIPT_DIR/bwmon.sh publish /tmp/www/usage.js /tmp/www/usage_stats.js
 
 # Bandwidth Download/Upload Rate Counter
 $SCRIPT_DIR/bwmon-running.sh &
-
-# Startup confirmation
-echo "bandwidth monitor started use $SCRIPT_DIR/bwmon-stop.sh to stop"

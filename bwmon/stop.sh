@@ -38,4 +38,4 @@ rm -rf font-awesome
 
 
 # User confirmation
-echo 'bandwidth monitor shutdown completed'
+printf "bandwidth monitor shutdown completed\n"

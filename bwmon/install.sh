@@ -21,6 +21,7 @@ chmod +x "$SCRIPT_DIR/clean.sh"
 chmod +x "$SCRIPT_DIR/bwmon-running.sh"
 chmod +x "$SCRIPT_DIR/bwmon.sh"
 chmod +x "$SCRIPT_DIR/lighttpd-running.sh"
+chmod +x "$SCRIPT_DIR/keep-alive.sh"
 chmod +x "$SCRIPT_DIR/www/bwreader.cgi"
 chmod +x "$SCRIPT_DIR/www/bwreset.cgi"
 
@@ -35,7 +36,10 @@ cp "$SCRIPT_DIR/etc/lighttpd.conf" "/jffs/etc/lighttpd.conf"
 startservice lighttpd
 
 # confirmation
-echo "Installation completed."
-echo "Type $SCRIPT_DIR/startup.sh to start the script"
-echo "You can visit the stats page by navigating to http://routerip/user/bwmon.html"
-echo "If you are running lighttpd on your router use http://routerip:8000/bwmon.html"
+printf "Installation completed.\n"
+printf "Type $SCRIPT_DIR/startup.sh to start the script\n"
+printf "\n"
+printf "For further robustness you may add $SCRIPT_DIR/keep-alive.sh to your router's cron jobs\n"
+printf "\n"
+printf "You can visit the stats page by navigating to http://routerip/user/bwmon.html\n"
+printf "If you are running lighttpd on your router use http://routerip:8000/bwmon.html\n"
