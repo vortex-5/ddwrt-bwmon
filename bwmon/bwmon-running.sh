@@ -24,8 +24,9 @@ else
 fi
 
 # Startup confirmation
-printf "\nbandwidth monitor running with cycle time of $CYCLE_TIME\n"
-printf "use $SCRIPT_DIR/stop.sh to stop\n"
+echo
+echo "bandwidth monitor running with cycle time of $CYCLE_TIME"
+echo "use $SCRIPT_DIR/stop.sh to stop"
 
 # Bandwidth Download/Upload Rate Counter
 while :

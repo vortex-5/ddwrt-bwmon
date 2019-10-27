@@ -36,10 +36,10 @@ cp "$SCRIPT_DIR/etc/lighttpd.conf" "/jffs/etc/lighttpd.conf"
 startservice lighttpd
 
 # confirmation
-printf "Installation completed.\n"
-printf "Type $SCRIPT_DIR/startup.sh to start the script\n"
-printf "\n"
-printf "For further robustness you may add $SCRIPT_DIR/keep-alive.sh to your router's cron jobs\n"
-printf "\n"
-printf "You can visit the stats page by navigating to http://routerip/user/bwmon.html\n"
-printf "If you are running lighttpd on your router use http://routerip:8000/bwmon.html\n"
+echo "Installation completed."
+echo "Type $SCRIPT_DIR/startup.sh to start the script"
+echo 
+echo "For further robustness you may add $SCRIPT_DIR/keep-alive.sh to your router's cron jobs"
+echo 
+echo "You can visit the stats page by navigating to http://routerip/user/bwmon.html"
+echo "If you are running lighttpd on your router use http://routerip:8000/bwmon.html"

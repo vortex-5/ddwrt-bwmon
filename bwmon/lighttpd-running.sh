@@ -1,7 +1,7 @@
 #!/bin/sh
 psValue=$(ps | grep -c 'lighttpd -f')
 if [ "$psValue" = "2" ]; then
-	printf "true\n"
+	echo 'true'
 else
-	printf "false\n"
+	echo 'false'
 fi
