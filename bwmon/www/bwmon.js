@@ -58,6 +58,11 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	$scope.serviceLocation = '/bwreader.cgi';
 
 	/**
+	 * The password hash location
+	 */
+	$scope.passwordHashLocation = 'password.js';
+
+	/**
 	 * When in non service mode we fetch these two resources to decode things.
 	 */
 	$scope.nonServiceDnsConf = 'dnsmasq-conf.js';
@@ -80,6 +85,23 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	 * @type {Object.<string, string>} Going from mac to ip conversion lookup this is updatd with usage.
 	 */
 	$scope.macToIpMapping = {};
+
+	/**
+	 * @type {string} The hash currently being used for the actively logged in user.
+	 */
+	$scope.loggedInHash = '';
+
+	/**
+	 * @type {string} Login user input field.
+	 */
+	$scope.loginInfo = {pass: '', autoLogin: false};
+
+	/**
+	 * @type {string} The hash of the saved password on server.
+	 */
+	$scope.serverPasswordHash = window.serverPasswordHash ? window.serverPasswordHash : '';
+
+	$scope.passwordInvalid = false;
 
 	// A double buffered sample of the current data
 	$scope.dataDownSamples = [{},{}];
@@ -705,6 +727,30 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		}
 	};
 
+	$scope.login = function() {
+		$scope.loggedInHash = sha256($scope.loginInfo.pass);
+		if ($scope.loginInfo.autoLogin) {
+			$scope.setCookie('bwmon-autoLoginHash', $scope.loggedInHash);
+		}
+
+		if ($scope.loggedInHash !== $scope.serverPasswordHash) {
+			$scope.passwordInvalid = true;
+		} else {
+			$scope.passwordInvalid = false;
+		}
+	};
+
+	$scope.loginKeyup = function($event) {
+		if ($event.key === 'Enter') {
+			$scope.login();
+		}
+	};
+
+	$scope.autofocusLogin = function() {
+		let loginElement = document.getElementById('loginInput');
+		loginElement.focus();
+	};
+
 	$scope.init = function() {
 		function tick() {
 			if ($scope.pollCountDown > 1) {
@@ -722,37 +768,46 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		$interval(tick, 1000);
 
 		let density = $scope.readCookie('bwmon-displayDensity');
-		if (density)
+		if (density) {
 			$scope.displayDensity = density;
+		}
 
 		$scope.$watch('displayDensity', function() {
 			$scope.setCookie('bwmon-displayDensity', $scope.displayDensity, $scope.SECONDS_IN_MONTH);
 		});
 
 		let displayNameType = $scope.readCookie('bwmon-displayNameType');
-		if (displayNameType)
+		if (displayNameType) {
 			$scope.displayNameType = displayNameType;
+		}
 
 		$scope.$watch('displayNameType', function() {
 			$scope.setCookie('bwmon-displayNameType', $scope.displayNameType, $scope.SECONDS_IN_MONTH);
 		});
 
 		let displayRate = $scope.readCookie('bwmon-displayRate');
-		if (displayRate)
+		if (displayRate) {
 			$scope.displayRate = displayRate;
+		}
 
 		$scope.$watch('displayRate',function() {
 			$scope.setCookie('bwmon-displayRate', $scope.displayRate, $scope.SECONDS_IN_MONTH);
 		});
 
 		let stylesheet = $scope.readCookie('bwmon-displayStyleSheet');
-		if (stylesheet)
+		if (stylesheet) {
 			$scope.displayStyleSheet = stylesheet;
+		}
 
 		$scope.$watch('displayStyleSheet', function() {
 			$scope.setCookie('bwmon-displayStyleSheet', $scope.displayStyleSheet, $scope.SECONDS_IN_MONTH);
 			changeCSS($scope.displayStyleSheet+'.css', 1);
 		});
+
+		let autoLoginHash = $scope.readCookie('bwmon-autoLoginHash');
+		if (autoLoginHash !== undefined) {
+			$scope.loggedInHash = autoLoginHash;
+		}
 	};
 
 	$scope.init();
@@ -764,10 +819,10 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
  * @param {number} cssLinkIndex index of the link to replace.
  */
 function changeCSS(cssFile, cssLinkIndex) {
-		let oldlink = document.getElementsByTagName("link").item(cssLinkIndex);
-		let newlink = document.createElement("link");
-		newlink.setAttribute("rel", "stylesheet");
-		newlink.setAttribute("type", "text/css");
-		newlink.setAttribute("href", cssFile);
-		document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
-	}
+	let oldlink = document.getElementsByTagName("link").item(cssLinkIndex);
+	let newlink = document.createElement("link");
+	newlink.setAttribute("rel", "stylesheet");
+	newlink.setAttribute("type", "text/css");
+	newlink.setAttribute("href", cssFile);
+	document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
+}

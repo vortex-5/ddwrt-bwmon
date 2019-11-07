@@ -132,6 +132,43 @@
 	border-color: #191a21;
 }
 
+.login-frame {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.login-frame .title {
+	font-size: xx-large;
+}
+
+.login-frame input {
+	background-color: #282a36;
+	border: 1px solid #414558;
+	padding: 10px 20px;
+	margin: 10px;
+}
+
+.login-frame > input {
+	width: 300px;
+}
+
+.login-frame button {
+	background-color:#282a36;
+	padding: 10px 20px;
+	border-radius: 2px;
+	border: 1px solid #414558;
+	color: white;
+}
+
+.login-frame button:hover {
+	background-color: #414558;
+}
+
+.login-frame .error {
+	color: red;
+}
+
 /* Button group responsive for mobile layout */
 @media (max-width: 768px) {
   .btn-responsive {

@@ -29,6 +29,7 @@ rm mac-names.js
 rm ui-bootstrap-tpls.min.js
 rm dnsmasq-conf.js
 rm dnsmasq-leases.js
+rm password.js
 rm bwreader.cgi
 rm bwreset.cgi
 # End Cleanup WebGUI

@@ -26,8 +26,16 @@ fi
 if [ "$($SCRIPT_DIR/lighttpd-running.sh)" = "true" ]; then
 	mkdir -p -- "/jffs/www/"
 	cp -R $SCRIPT_DIR/www/* /jffs/www/
+	if [ -f $SCRIPT_DIR/data/password.js ]
+	then
+		cp $SCRIPT_DIR/data/password.js /jffs/www/password.js
+	fi
 else
 	cp -R $SCRIPT_DIR/www/* /tmp/www/
+	if [ -f $SCRIPT_DIR/data/password.js ]
+	then
+		cp $SCRIPT_DIR/data/password.js /tmp/www/password.js
+	fi
 	ln -s /tmp/dnsmasq.conf /tmp/www/dnsmasq-conf.js
 	ln -s /tmp/dnsmasq.leases /tmp/www/dnsmasq-leases.js
 fi

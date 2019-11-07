@@ -22,6 +22,7 @@ chmod +x "$SCRIPT_DIR/bwmon-running.sh"
 chmod +x "$SCRIPT_DIR/bwmon.sh"
 chmod +x "$SCRIPT_DIR/lighttpd-running.sh"
 chmod +x "$SCRIPT_DIR/keep-alive.sh"
+chmod +x "$SCRIPT_DIR/set-password.sh"
 chmod +x "$SCRIPT_DIR/www/bwreader.cgi"
 chmod +x "$SCRIPT_DIR/www/bwreset.cgi"
 
