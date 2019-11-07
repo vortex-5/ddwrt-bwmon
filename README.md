@@ -14,7 +14,7 @@ Installation instructions
 3. Optionally enable lighttpd support from Services -> Webserver -> Lighttpd Server. Keep it at the default port 81 and do not enable WAN access.
 4. Log into your router via ssh. You may use putty to do this on windows or just ssh on linux.
 5. From your ssh terminal type: `cd /jffs/`.
-6. Either download the tool directly from your router's ssh prompt type: `wget https://github.com/vortex-5/ddwrt-bwmon/releases/download/1.15.1/bwmon.tar.gz`. Alternatively you can download the file from the releases page and copy it to your usb flash drive.
+6. Either download the tool directly from your router's ssh prompt type: `wget https://github.com/vortex-5/ddwrt-bwmon/releases/download/2.0.0/bwmon.tar.gz`. Alternatively you can download the file from the releases page and copy it to your usb flash drive.
 7. Extract the installer package from your router's ssh prompt type: `tar -xzvf bwmon.tar.gz`.
 8. Fix the permissions on your router type: `cd /jffs/bwmon/ && sh install.sh`.
 9. Set the automount script on the router (Under your router's web gui's Services -> USB) to point to `/path/bwmon/startup.sh` to autostart this script on mount or just run the startup.sh script manually if you don't wish to start on system bootup.
@@ -22,7 +22,7 @@ Installation instructions
 
 **Notes:** Only one of the two URL's will be available and Bwmon will autodetect which mode it should run in based on if the lighttpd server is enabled at script startup. Bwmon will automatically fall back to legacy mode if it does not have lighttpd access.
 
-**Update:** The latest tested version of DD-WRT confirmed to be working is 41057 with this module.
+**Update:** The latest tested version of DD-WRT confirmed to be working is 41468 with this module.
 
 Usage and Directory Structure
 -----------------------------
@@ -40,6 +40,7 @@ Path | Description
 `bwmon-autobackup.sh` | Sets up the backup script to automatically periodically run in the background.
 `bwmon-dnsmasq.sh` | A script to automatically generate mac names from statically assigned dnsmasq entries. (This was removed as of 1.7.0)
 `lighttpd-running.sh` | A simple utility script to determine if the lighttpd process is currently running.
+`set-password.sh` | A script used to set or remove the password protection so you can hide the screen from prying eyes.
 `www/mac-names.js` | This file contains a user mapping of mac addresses to friendly names. A sample 2 machines are already placed in this file follow the format. Note it's intentional that the final pc name does not end with a comma like every other pc name. Also you will need to run `startup.sh` again after you make your changes for them to appear. As of 1.7.0 this file only overrides existing entries and should only be used to override dnsmasq resolved names.
 `data/usage.js` | This replaces the old usage.db the file is directly read by the browser's javascript handler and this is how we work out the bandwidth. This is your personal backup if you wish to not lose stats during an upgrade then you should backup and restore this file.
 `www` | This is the front end files for the web site these are the pages that your browser uses. These files are copied on startup to the `/tmp/www/` directory so you will need to re-run `startup.sh` in order to see your change if you make them.
