@@ -563,31 +563,31 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		return $scope.round(B) + ' B';
 	};
 
-	$scope.getRate = function(Bps10) {
-		if (isNaN(Bps10) || Bps10 < 0)
+	$scope.getRate = function(KBps10) {
+		if (isNaN(KBps10) || KBps10 < 0)
 			return '--';
 
 		if ($scope.displayRate === 'Kbps') {
-			let bps = Bps10 * $scope.CONVERSION_FACTOR;
+			let kbps = KBps10 * $scope.CONVERSION_FACTOR;
 
-			if (bps / Math.pow(1000,2) > 1)
-				return $scope.round(bps/Math.pow(1000,2)) + ' Gbps';
+			if (kbps / Math.pow(1000,2) > 1)
+				return $scope.round(kbps/Math.pow(1000,2)) + ' Gbps';
 
-			if (bps / 1000 > 1)
-				return $scope.round(bps/1000) + ' Mbps';
+			if (kbps / 1000 > 1)
+				return $scope.round(kbps/1000) + ' Mbps';
 
-			return $scope.round(bps) + ' Kbps';
+			return $scope.round(kbps) + ' Kbps';
 		}
 		else {
-			let Bps = Bps10;
+			let KBps = KBps10;
 
-			if (Bps / Math.pow(1000, 2) > 1)
-				return $scope.round(Bps/Math.pow(1000, 2)) + ' GB/s';
+			if (KBps / Math.pow(1000, 2) > 1)
+				return $scope.round(KBps/Math.pow(1000, 2)) + ' GB/s';
 
-			if (Bps / 1000 > 1)
-				return $scope.round(Bps/1000) + ' MB/s';
+			if (KBps / 1000 > 1)
+				return $scope.round(KBps/1000) + ' MB/s';
 
-			return $scope.round(Bps) + ' KB/s';
+			return $scope.round(KBps) + ' KB/s';
 		}
 	};
 
@@ -616,10 +616,11 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			let ip = $scope.macToIpMapping[device.mac];
 			if (!ip)
 				return 0;
-			return $scope.downRateAverage[ip];
+			return $scope.downRateAverage[ip]; // Average rates are already per second.
 		}
 		else {
-			return (device.postDown - device.preDown) / $scope.SERVICE_INTERVAL;
+			// postDown and preDown are in bytes we need KB
+			return ((device.postDown / 1000) - (device.preDown / 1000)) / $scope.SCRIPT_INTERVAL; // A rate is per second pre and post are per interval.
 		}
 	};
 
@@ -631,10 +632,11 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 			let ip = $scope.macToIpMapping[device.mac];
 			if (!ip)
 				return 0;
-			return $scope.upRateAverage[ip];
+			return $scope.upRateAverage[ip]; // Average rates are already per second.
 		}
 		else {
-			return (device.postUp - device.preUp) / $scope.SERVICE_INTERVAL;
+			// postUp and preUp are in bytes we need KB
+			return ((device.postUp / 1000) - (device.preUp / 1000)) / $scope.SCRIPT_INTERVAL; // A rate is per second pre and post are per interval.
 		}
 	};
 
