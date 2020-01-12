@@ -71,8 +71,12 @@
 								</span>
 								UP Rate
 							</th>
-							<th class="cell-right hidden-xs">
+							<th class="cell-right hidden-xs clickable" ng-click="setSortBy(sortOptions.LAST_SEEN)">
 								<div class="cell-padding">
+									<span ng-show="sortBy === sortOptions.LAST_SEEN">
+										<img src="arrow-left.png" class="arrow-up" ng-hide="sortReverse">
+										<img src="arrow-left.png" class="arrow-down" ng-show="sortReverse">
+									</span>
 									Last Seen
 								</div>
 							</th>

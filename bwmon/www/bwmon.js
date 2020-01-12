@@ -123,7 +123,8 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		POST_DOWN: 'POST_DOWN',
 		POST_UP: 'POST_UP',
 		DOWN_RATE: 'DOWN_RATE',
-		UP_RATE: 'UP_RATE'
+		UP_RATE: 'UP_RATE',
+		LAST_SEEN: 'LAST_SEEN'
 	}
 	$scope.sortReverse = true;
 	$scope.sortBy = $scope.sortOptions.TOTAL;
@@ -689,7 +690,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		}
 		return total;
 	};
-
+	
 	$scope.isZeroUsage = function(device) {
 		return $scope.getDeviceTotal(device) + $scope.getDownRate(device) + $scope.getUpRate(device) <= 0;
 	};
@@ -712,6 +713,9 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 				break;
 			case $scope.sortOptions.UP_RATE:
 				metric = $scope.getUpRate(device);
+				break;
+			case $scope.sortOptions.LAST_SEEN:
+				metric = device.date;
 				break;
 			default:
 				metric = device.postUp + device.postDown;
