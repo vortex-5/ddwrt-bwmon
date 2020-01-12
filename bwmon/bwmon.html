@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html ng-app="bwmonApp">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=400">
+
+		<script src="angular.min.js"></script>
+		<script src="ui-bootstrap-tpls.min.js"></script>
+		<script src="sha256.min.js"></script>
+		<script src="mac-names.js"></script>
+		<script src="password.js"></script>
+		<script src="bwmon.js"></script>
+
+		<link rel="stylesheet" href="bootstrap.min.css" />
+		<link rel="stylesheet" href="bwmondark.css" />
+
+		<title>Live Bandwidth Stats</title>
+	</head>
+	<body class="page-wrapper">
+		<div ng-controller="MainController">
+			<div class="login" ng-if="loggedInHash !== serverPasswordHash">
+				<div class="login-frame">
+					<div class="title">DDWRT BWMON</div>
+					<input id="loginInput" type="password" ng-model="loginInfo.pass" ng-keyup="loginKeyup($event)" ng-init="autofocusLogin()" tabindex="0">
+					<label><input type="checkbox" ng-model="loginInfo.autoLogin" tabindex="0">Automatically log me in on this device.</label>
+					<button type="submit" ng-click="login()" tabindex="0">Login</button>
+					<div class="error" ng-show="passwordInvalid">Invalid Password</div>
+				</div>
+			</div>
+			<div class="main" ng-if="loggedInHash === serverPasswordHash">
+				<div class="table-padding">
+					<table class="table table-striped table-hover table-condensed table-padding" ng-class="{'table-compact': displayDensity === 'Compact'}">
+						<tr class="table-heading">
+							<th>
+								<div class="cell-padding">
+									Device
+								</div>
+							</th>
+							<th class="cell-right min-width clickable" ng-click="setSortBy(sortOptions.TOTAL)">
+								<span ng-show="sortBy === sortOptions.TOTAL">
+									<img src="arrow-left.png" class="arrow-up" ng-hide="sortReverse">
+									<img src="arrow-left.png" class="arrow-down" ng-show="sortReverse">
+								</span>
+								Total
+							</th>
+							<th class="cell-right hidden-xs min-width clickable" ng-click="setSortBy(sortOptions.POST_DOWN)">
+								<span ng-show="sortBy === sortOptions.POST_DOWN">
+									<img src="arrow-left.png" class="arrow-up" ng-hide="sortReverse">
+									<img src="arrow-left.png" class="arrow-down" ng-show="sortReverse">
+								</span>
+								Down
+							</th>
+							<th class="cell-right hidden-xs min-width clickable" ng-click="setSortBy(sortOptions.POST_UP)">
+								<span ng-show="sortBy === sortOptions.POST_UP">
+									<img src="arrow-left.png" class="arrow-up" ng-hide="sortReverse">
+									<img src="arrow-left.png" class="arrow-down" ng-show="sortReverse">
+								</span>
+								Up
+							</th>
+							<th class="cell-right min-width clickable" ng-click="setSortBy(sortOptions.DOWN_RATE)">
+								<span ng-show="sortBy === sortOptions.DOWN_RATE">
+									<img src="arrow-left.png" class="arrow-up" ng-hide="sortReverse">
+									<img src="arrow-left.png" class="arrow-down" ng-show="sortReverse">
+								</span>
+								DN Rate
+							</th>
+							<th class="cell-right min-width clickable" ng-click="setSortBy(sortOptions.UP_RATE)">
+								<span ng-show="sortBy === sortOptions.UP_RATE">
+									<img src="arrow-left.png" class="arrow-up" ng-hide="sortReverse">
+									<img src="arrow-left.png" class="arrow-down" ng-show="sortReverse">
+								</span>
+								UP Rate
+							</th>
+							<th class="cell-right hidden-xs clickable" ng-click="setSortBy(sortOptions.LAST_SEEN)">
+								<div class="cell-padding">
+									<span ng-show="sortBy === sortOptions.LAST_SEEN">
+										<img src="arrow-left.png" class="arrow-up" ng-hide="sortReverse">
+										<img src="arrow-left.png" class="arrow-down" ng-show="sortReverse">
+									</span>
+									Last Seen
+								</div>
+							</th>
+						</tr>
+						<tr	class="device"
+								ng-repeat="device in usageDisplay | orderBy : sortFunction : sortReverse"
+								ng-class="{ 'active-traffic': getDeviceTotalRate(device) > activeDeviceThreashold }"
+								ng-hide="isZeroUsage(device)">
+							<td class="name" ng-dblclick="nextNameType()">
+								<div class="cell-padding"
+									tooltip="MAC:&nbsp;{{ device.mac.toUpperCase() }} IP:&nbsp;{{ macIpDns[device.mac] }}" tooltip-placement="right">
+									{{ getName(device.mac) }}
+								</div>
+							</td>
+							<td class="cell-right min-width">
+								{{ getSize(getDeviceTotal(device)) }}
+							</td>
+							<td class="cell-right hidden-xs min-width">
+								{{ getSize(device.postDown) }}
+							</td>
+							<td class="cell-right hidden-xs min-width">
+								{{ getSize(device.postUp) }}
+							</td>
+							<td class="cell-right min-width">
+								{{ getRate(getDownRate(device)) }}
+							</td>
+							<td class="cell-right min-width">
+								{{ getRate(getUpRate(device)) }}
+							</td>
+							<td class="cell-right hidden-xs">
+								<div class="cell-padding">
+									{{ device.date }}
+								</div>
+							</td>
+						</tr>
+						<tr class="table-row-total">
+							<td class="total">
+								<div class="cell-padding">
+									Totals
+								</div>
+							</td>
+							<td class="cell-right min-width">
+								{{ getSize(getTotals(usageData)) }}
+							</td>
+							<td class="cell-right hidden-xs min-width">
+								{{ getSize(getTotalDown(usageData)) }}
+							</td>
+							<td class="cell-right hidden-xs min-width">
+								{{ getSize(getTotalUp(usageData)) }}
+							</td>
+							<td class="cell-right min-width">
+								{{ getRate(getTotalDownRate(usageData)) }}
+							</td>
+							<td class="cell-right min-width">
+								{{ getRate(getTotalUpRate(usageData)) }}
+							</td>
+							<td class="cell-right hidden-xs">
+								<div class="cell-padding">
+									{{ getRate(getTotalDownRate(usageData) + getTotalUpRate(usageData)) }}
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="bottom-controls">
+					<div class="left">
+						<div class="controls">
+							<div class="btn-group">
+								<label class="btn btn-default btn-responsive" ng-model="$parent.displayDensity" btn-radio="'Normal'">Normal</label>
+								<label class="btn btn-default btn-responsive" ng-model="$parent.displayDensity" btn-radio="'Compact'">Compact</label>
+							</div>
+						</div>
+						<div class="controls">
+							<div class="btn-group" tooltip="Shortcut double click on the device field in the table above to cycle through." tooltip-placement="right">
+								<label class="btn btn-default btn-responsive" ng-model="$parent.displayNameType" btn-radio="'NAME'">Name</label>
+								<label class="btn btn-default btn-responsive" ng-model="$parent.displayNameType" btn-radio="'IP'">IP</label>
+								<label class="btn btn-default btn-responsive" ng-model="$parent.displayNameType" btn-radio="'MAC'">MAC</label>
+							</div>
+						</div>
+						<div class="controls">
+							<div class="btn-group">
+								<label class="btn btn-default btn-responsive" ng-model="$parent.displayRate" btn-radio="'Kbps'">Kbps</label>
+								<label class="btn btn-default btn-responsive" ng-model="$parent.displayRate" btn-radio="'KB/s'">KB/s</label>
+							</div>
+						</div>
+						<div class="controls">
+							<div class="btn-group">
+								<label class="btn btn-default btn-responsive" checked ng-model="$parent.displayStyleSheet" btn-radio="'bwmondark'">Dark</label>
+								<label class="btn btn-default btn-responsive" ng-model="$parent.displayStyleSheet" btn-radio="'bwmon'">Light</label>
+							</div>
+						</div>
+						<div class="controls">
+							<label class="btn btn-default btn-responsive" ng-click="resetStats()" ng-show="serviceEnabled">Reset Stats</label>
+						</div>
+					</div>
+				</div>
+				<div class="update-counter" ng-hide="serviceEnabled">
+					Next update in: {{ pollCountDown }}
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
