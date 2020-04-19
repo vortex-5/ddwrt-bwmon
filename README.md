@@ -22,7 +22,7 @@ Installation instructions
 
 **Notes:** Only one of the two URL's will be available and Bwmon will autodetect which mode it should run in based on if the lighttpd server is enabled at script startup. Bwmon will automatically fall back to legacy mode if it does not have lighttpd access.
 
-**Update:** The latest tested version of DD-WRT confirmed to be working is 42747 with this module.
+**Update:** The latest tested version of DD-WRT confirmed to be working is 42925 with this module.
 
 Usage and Directory Structure
 -----------------------------
