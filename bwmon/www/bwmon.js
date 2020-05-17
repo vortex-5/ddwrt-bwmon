@@ -377,20 +377,49 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		}
 
 		function oldService() {
-			$http.get($scope.nonServiceDnsLeases, config).then(function(responseLeases) {
-				$http.get($scope.nonServiceDnsConf, config).then(function(responseConf) {
-					$scope.macNames = {};
+			$scope.macNames = {};
+			let dnsmasqLeasesData = '';
+			let dnsmasqConfData = '';
 
-					let dnsmasqLeasesData = responseLeases.data;
-					let dnsmasqConfData = responseConf.data;
+			function fetchDNSLeases() {
+				let dnsmasqLeasesFetched = false;
+				let dnsmasqConfFetched = false;
 
-					$scope.updateDnsLeases(dnsmasqLeasesData);
-					$scope.updateDnsConf(dnsmasqConfData);
-					$scope.updateMissingEntries($scope.macNames);
-					$scope.macNamesOverride();
-					$scope.updateDisplayUsage();
+				$http.get($scope.nonServiceDnsLeases, config).then(function(responseLeases) {
+					dnsmasqLeasesData = responseLeases.data;
+					dnsmasqLeasesFetched = true;
+					notifyFetchCompleted()
+				}, function(error) {
+					dnsmasqLeasesFetched = true;
+					notifyFetchCompleted()
 				});
-			});
+
+				$http.get($scope.nonServiceDnsConf, config).then(function(responseConf) {
+					dnsmasqConfData = responseConf.data;
+					dnsmasqConfFetched = true;
+					notifyFetchCompleted();
+				}, function(error) {
+					dnsmasqConfFetched = true;
+					notifyFetchCompleted();
+				});
+
+				function notifyFetchCompleted() {
+					if (dnsmasqLeasesFetched && dnsmasqConfFetched) {
+						macNameUpdate(dnsmasqLeasesData, dnsmasqConfData);
+					}
+				}
+			}
+			fetchDNSLeases();
+
+			function macNameUpdate(dnsmasqLeasesData, dnsmasqConfData) {
+				$scope.updateDnsLeases(dnsmasqLeasesData);
+				$scope.updateDnsConf(dnsmasqConfData);
+
+				$scope.updateMissingEntries($scope.macNames);
+				$scope.macNamesOverride();
+				$scope.updateDisplayUsage();
+			}
+
 			$http.get('usage_stats.js', config).then(function(response) {
 				$scope.usageData = {};
 				$scope.updateUsageData(response.data);
