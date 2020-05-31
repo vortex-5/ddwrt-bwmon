@@ -106,11 +106,12 @@
 
 .arrow-up {
 	transform: rotate(90deg);
+	filter: invert(100%);
 }
 
 .arrow-down {
 	transform: rotate(-90deg);
-
+	filter: invert(100%);
 }
 
 .btn-default {
