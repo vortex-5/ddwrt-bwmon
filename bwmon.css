@@ -1,0 +1,157 @@
+/* Bandwidth monitor css file */
+
+.page-wrapper {
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+.page-heading {
+	margin: 1em 0 0 0;
+}
+
+.bottom-controls {
+	display: flex;
+	display: -webkit-flex;
+	align-items: center;
+}
+
+.bottom-controls .update-counter {
+	margin: 0 0 0 10px;
+}
+
+.bottom-controls .left {
+	flex-grow: 1;
+	display: flex;
+	display: -webkit-flex;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.bottom-controls .left .controls {
+	display: flex;
+	display: -webkit-flex;
+	align-items: center;
+	padding-right: 10px;
+	padding-top: 10px;
+}
+
+.bottom-controls .left .controls:last-child {
+	padding-right: 0;
+}
+
+@media screen and (max-width: 436px) {
+    .bottom-controls .left .controls .btn {
+		padding: 6px 6px;
+	}
+}
+
+.bottom-controls .left .controls .text {
+	padding-right: 12px;
+}
+
+.table-padding {
+	margin-bottom: 0px;
+}
+
+.cell-padding {
+	padding: 0 1em;
+}
+
+.cell-right {
+	text-align: right;
+}
+
+.table-heading th {
+	background-color: #E0E0E0;
+}
+
+.table-row-total td {
+	background-color: #E5E5E5;
+}
+
+.table-row-total .total {
+	font-weight: bold;
+}
+
+.active-traffic td {
+	background-color: #FCF8C0;
+}
+
+.min-width {
+	min-width: 6em;
+}
+
+.table-compact>thead>tr>th,
+.table-compact>tbody>tr>th,
+.table-compact>tfoot>tr>th,
+.table-compact>thead>tr>td,
+.table-compact>tbody>tr>td,
+.table-compact>tfoot>tr>td {
+	padding: 2px 2px;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.arrow-up {
+	transform: rotate(90deg);
+}
+
+.arrow-down {
+	transform: rotate(-90deg);
+}
+
+
+.login-frame {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.login-frame .title {
+	font-size: xx-large;
+}
+
+.login-frame input {
+	border: 1px solid #414558;
+	padding: 10px 20px;
+	margin: 10px;
+}
+
+.login-frame > input {
+	width: 300px;
+}
+
+.login-frame button {
+	padding: 10px 20px;
+	border-radius: 2px;
+	background-color: white;
+	border: 1px solid black;
+}
+
+.login-frame button:hover {
+	background-color: #414558;
+}
+
+.login-frame .error {
+	color: red;
+}
+
+/* Button group responsive for mobile layout */
+@media (max-width: 768px) {
+  .btn-responsive {
+    padding:2px 4px;
+    font-size:80%;
+    line-height: 1;
+    border-radius:3px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+  .btn-responsive {
+    padding:4px 9px;
+    font-size:90%;
+    line-height: 1.2;
+  }
+}
