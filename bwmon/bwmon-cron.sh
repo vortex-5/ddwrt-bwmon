@@ -9,5 +9,3 @@ SCRIPT_DIR=$(cd ${SCRIPT_DIR} && pwd)
 $SCRIPT_DIR/bwmon.sh update /tmp/www/usage.js
 $SCRIPT_DIR/bwmon.sh publish /tmp/www/usage.js /tmp/www/usage_stats.js
 $SCRIPT_DIR/bwmon.sh read
-
-cp /tmp/www/usage.js $SCRIPT_DIR/data/usage.js
