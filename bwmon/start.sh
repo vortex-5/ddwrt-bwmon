@@ -50,4 +50,5 @@ $SCRIPT_DIR/bwmon.sh setup
 stopservice crond
 echo "* * * * * root $SCRIPT_DIR/bwmon-cron.sh" > /tmp/cron.d/bwmon_cron
 startservice crond
-echo "Cron Job Added Successfully DDWRT-BWMON is now running in the background. To stop use $SCRIPT_DIR/stop.sh"
+echo "Cron Job Added Successfully DDWRT-BWMON is now running in the background."
+echo "To stop use $SCRIPT_DIR/stop.sh"
