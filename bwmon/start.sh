@@ -44,10 +44,10 @@ fi
 $SCRIPT_DIR/bwmon.sh publish /tmp/www/usage.js /tmp/www/usage_stats.js
 
 # Bandwidth Download/Upload Rate Counter
-#$SCRIPT_DIR/bwmon-running.sh &
+$SCRIPT_DIR/bwmon.sh setup
 
 # Setup cron job
 stopservice crond
 echo "* * * * * root $SCRIPT_DIR/bwmon-cron.sh" > /tmp/cron.d/bwmon_cron
 startservice crond
-echo "Cron Job Added Successfully"
+echo "Cron Job Added Successfully DDWRT-BWMON is now running in the background. To stop use $SCRIPT_DIR/stop.sh"

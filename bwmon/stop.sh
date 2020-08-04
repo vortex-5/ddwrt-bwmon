@@ -37,6 +37,9 @@ rm bwreset.cgi
 # font-awesome is now depricated we should attempt to remove it.
 rm -rf font-awesome
 
+# clear ip tables
+$SCRIPT_DIR/clear-iptables.sh
+
 # remove cron job
 stopservice crond
 rm /tmp/cron.d/bwmon_cron
