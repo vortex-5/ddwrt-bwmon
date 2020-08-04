@@ -5,7 +5,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 	/**
 	 * @type {string} The speed at which the bwmon-running.sh polls during non lighttpd mode.
 	 */
-	$scope.SCRIPT_INTERVAL = 10;
+	$scope.SCRIPT_INTERVAL = 60;
 
 	$scope.CONVERSION_FACTOR = 8; // From KB/s to Kbps (when divided by the script interval)
 

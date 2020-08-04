@@ -37,6 +37,11 @@ rm bwreset.cgi
 # font-awesome is now depricated we should attempt to remove it.
 rm -rf font-awesome
 
+# remove cron job
+stopservice crond
+rm /tmp/cron.d/bwmon_cron
+startservice crond
+echo "Cron job removed successfully"
 
 # User confirmation
 echo 'bandwidth monitor shutdown completed'
