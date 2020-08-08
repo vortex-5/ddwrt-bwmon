@@ -44,7 +44,15 @@ $SCRIPT_DIR/clear-iptables.sh
 stopservice crond
 rm /tmp/cron.d/bwmon_cron
 startservice crond
-echo "Cron job removed successfully"
+echo "Cron job removed successfully."
 
 # User confirmation
-echo 'bandwidth monitor shutdown completed'
+echo 'Bandwidth monitor shutdown completed.'
+
+if [ "$1" != "auto" ]; then
+nvram set rc_startup=""
+nvram set rc_shutdown=""
+echo 'This script will no longer auto-start on router startup.'
+fi
+
+echo 'Please use start.sh if you wish to resume bandwidth monitoring.'

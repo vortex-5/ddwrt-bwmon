@@ -35,7 +35,7 @@ cp "$SCRIPT_DIR/etc/lighttpd.conf" "/jffs/etc/lighttpd.conf"
 
 # confirmation
 echo "Installation completed."
-echo "Type $SCRIPT_DIR/startup.sh to start the script"
+echo "Type $SCRIPT_DIR/start.sh to start the script"
 echo 
 echo "You can visit the stats page by navigating to http://routerip/user/bwmon.html"
 echo "If you are running lighttpd on your router use http://routerip:8000/bwmon.html"

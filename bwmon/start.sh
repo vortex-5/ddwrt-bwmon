@@ -52,4 +52,17 @@ echo "* * * * * root $SCRIPT_DIR/bwmon-cron.sh" > /tmp/cron.d/bwmon_cron
 echo "*/15 * * * * root $SCRIPT_DIR/backup.sh" >> /tmp/cron.d/bwmon_cron
 startservice crond
 echo "Cron Job Added Successfully DDWRT-BWMON is now running in the background."
+
+# Setup resume on reboot
+if [ "$1" != "auto" ]; then
+nvram set rc_startup="
+sleep 60
+$SCRIPT_DIR/start.sh auto
+"
+nvram set rc_shutdown="
+$SCRIPT_DIR/stop.sh auto
+"
+echo "Startup job set the router will auto-start this script on every reboot."
+fi
+
 echo "To stop use $SCRIPT_DIR/stop.sh"
