@@ -30,9 +30,8 @@ All scripts are self contained in the bwmon directory the following lists how yo
 
 Path | Description
 ---- | -----------
-`startup.sh` | The script that should be run to start the bandwidth monitor note here that the startup script will ensure you don't have multiple versions of bandwidth monitor running so it will kill previous version if they get stuck as well.
-`start.sh` | Script used to start the bandwidth monitor manually you should never have to run this startup.sh should take care of this for you.
-`stop.sh` | Script to manually stop bandwidth monitoring if you are experiencing issues.
+`start.sh` | Script used to start the bandwidth monitor it also installs any cron jobs and sets the bandwidth monitor to resume on reboot.
+`stop.sh` | Script to manually stop bandwidth monitoring it will also remove auto-start on reboot.
 `clean.sh` | This script wipes all the counters and resets all devices back to 0KB of usage.
 `install.sh` | Script used only once initially to set all the permissions correctly you can run this again if you're experiencing issues but you should only have to run this once. This will only work on ext4 and ntfs partitions as fat32 lacks chmod ability.
 `backup.sh` | This is automatically called to backup the bandwidth stats to persistent storage periodically. If you want to backup immediately it is also safe to execute this whenever the user wishes.
