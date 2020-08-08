@@ -14,15 +14,15 @@ Installation instructions
 3. Optionally enable lighttpd support from Services -> Webserver -> Lighttpd Server. Keep it at the default port 81 and do not enable WAN access.
 4. Log into your router via ssh. You may use putty to do this on windows or just ssh on linux.
 5. From your ssh terminal type: `cd /jffs/`.
-6. Either download the tool directly from your router's ssh prompt type: `wget https://github.com/vortex-5/ddwrt-bwmon/releases/download/2.2.2/bwmon.tar.gz`. Alternatively you can download the file from the releases page and copy it to your usb flash drive.
+6. Either download the tool directly from your router's ssh prompt type: `wget https://github.com/vortex-5/ddwrt-bwmon/releases/download/3.0.0/bwmon.tar.gz`. Alternatively you can download the file from the releases page and copy it to your usb flash drive.
 7. Extract the installer package from your router's ssh prompt type: `tar -xzvf bwmon.tar.gz`.
 8. Fix the permissions on your router type: `cd /jffs/bwmon/ && sh install.sh`.
 9. Set the automount script on the router (Under your router's web gui's Services -> USB) to point to `/path/bwmon/startup.sh` to autostart this script on mount or just run the startup.sh script manually if you don't wish to start on system bootup.
 10. If you enabled lighttpd server for better performance you can visit `http://your_router_ip:8000/bwmon.html`. If you do not have lighttpd capability or have chosen not to run lighttpd you can visit the legacy page at `http://your_router_ip/user/bwmon.html` to view your stats.
 
-**Notes:** Only one of the two URL's will be available and Bwmon will autodetect which mode it should run in based on if the lighttpd server is enabled at script startup. Bwmon will automatically fall back to legacy mode if it does not have lighttpd access.
+**Notes:** Only one of the two URL's will be available and Bwmon will autodetect which mode it should run in based on if the lighttpd server is enabled at script startup. Bwmon will automatically fall back to legacy mode if it does not have lighttpd access. Shortcut forwarding engine is noted to cause some inaccuracy for some users if you are having large differences try turning this option off on DD-WRT.
 
-**Update:** The latest tested version of DD-WRT confirmed to be working is 43306 with this module.
+**Update:** The latest tested version of DD-WRT confirmed to be working is 44085 with this module.
 
 Usage and Directory Structure
 -----------------------------
@@ -36,8 +36,8 @@ Path | Description
 `clean.sh` | This script wipes all the counters and resets all devices back to 0KB of usage.
 `install.sh` | Script used only once initially to set all the permissions correctly you can run this again if you're experiencing issues but you should only have to run this once. This will only work on ext4 and ntfs partitions as fat32 lacks chmod ability.
 `backup.sh` | This is automatically called to backup the bandwidth stats to persistent storage periodically. If you want to backup immediately it is also safe to execute this whenever the user wishes.
-`bwmon-running.sh` | The scripts that control the actual bandwith monitoring process (You should not run this it will be called by the startup scripts).
-`bwmon-autobackup.sh` | Sets up the backup script to automatically periodically run in the background.
+`bwmon-cron.sh` | This script is called periodically by the cron job to take a snapshot of the current bandwidth.
+`clear-iptables.sh` | This script will reset all modifications bwmon made on the router this is run automatically by stop.sh
 `bwmon-dnsmasq.sh` | A script to automatically generate mac names from statically assigned dnsmasq entries. (This was removed as of 1.7.0)
 `lighttpd-running.sh` | A simple utility script to determine if the lighttpd process is currently running.
 `set-password.sh` | A script used to set or remove the password protection so you can hide the screen from prying eyes.
