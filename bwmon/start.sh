@@ -56,7 +56,7 @@ echo "Cron Job Added Successfully DDWRT-BWMON is now running in the background."
 # Setup resume on reboot
 if [ "$1" != "auto" ]; then
 nvram set rc_startup="
-sleep 60
+sleep 120
 $SCRIPT_DIR/start.sh auto
 "
 nvram set rc_shutdown="
