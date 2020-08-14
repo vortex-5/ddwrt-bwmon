@@ -52,6 +52,7 @@ echo 'Bandwidth monitor shutdown completed.'
 if [ "$1" != "auto" ]; then
 nvram set rc_startup=""
 nvram set rc_shutdown=""
+nvram commit
 echo 'This script will no longer auto-start on router startup.'
 fi
 
