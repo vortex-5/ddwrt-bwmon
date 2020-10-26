@@ -55,13 +55,9 @@ echo "Cron Job Added Successfully DDWRT-BWMON is now running in the background."
 
 # Setup resume on reboot
 if [ "$1" != "auto" ]; then
-nvram set rc_startup="
-sleep 60
-$SCRIPT_DIR/start.sh auto
-"
-nvram set rc_shutdown="
-$SCRIPT_DIR/stop.sh auto
-"
+nvram set rc_startup="sleep 120;$SCRIPT_DIR/start.sh auto"
+nvram set rc_shutdown="$SCRIPT_DIR/stop.sh auto"
+nvram set rc_firewall="$SCRIPT_DIR/firewall.sh"
 nvram commit
 
 echo "Startup job set the router will auto-start this script on every reboot."

@@ -16,6 +16,7 @@ rm $SCRIPT_DIR/bwmon-autobackup.sh
 chmod +x "$SCRIPT_DIR/startup.sh"
 chmod +x "$SCRIPT_DIR/start.sh"
 chmod +x "$SCRIPT_DIR/stop.sh"
+chmod +x "$SCRIPT_DIR/firewall.sh"
 chmod +x "$SCRIPT_DIR/backup.sh"
 chmod +x "$SCRIPT_DIR/clean.sh"
 chmod +x "$SCRIPT_DIR/bwmon.sh"
@@ -27,8 +28,7 @@ chmod +x "$SCRIPT_DIR/www/bwreader.cgi"
 chmod +x "$SCRIPT_DIR/www/bwreset.cgi"
 
 # copy the lighttpd configuration
-if [ ! -d /jffs/etc ]
-then
+if [ ! -d /jffs/etc ]; then
 	mkdir /jffs/etc
 fi
 cp "$SCRIPT_DIR/etc/lighttpd.conf" "/jffs/etc/lighttpd.conf"
