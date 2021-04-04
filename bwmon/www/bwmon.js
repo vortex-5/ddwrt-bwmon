@@ -241,7 +241,7 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 
 	$scope.updateUsage = function(data) {
 		let iptables = data;
-		let regex = /^[\s]+\d+[\s]+(\d+)[\s]+\w+\s+\d+\s+[a-zA-z0-9-]+\s+\S+\s+\S+\s+([0-9./]+)\s+([0-9./]+)/gm;
+		let regex = /^[\s]+\d+[\s]+(\d+)[\s]+\w+\s+\S+\s+[a-zA-z0-9-]+\s+\S+\s+\S+\s+([0-9./]+)\s+([0-9./]+)/gm;
 
 		let match = regex.exec(iptables);
 
