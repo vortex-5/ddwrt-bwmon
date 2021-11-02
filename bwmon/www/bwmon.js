@@ -430,38 +430,47 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		function newService() {
 			let beforeSample = new Date();
 			$http.get($scope.serviceLocation, config).then(function(response) {
-				let filtered = $scope.filterSection(response.data, 'usage-stats');
-				$scope.currentSample = ($scope.currentSample + 1) % 2;
-				let afterSample = new Date();
-				$scope.sampleTimes[$scope.currentSample] = new Date((beforeSample.getTime() + afterSample.getTime()) / 2);
+				if (isNotFound(response)) {
+					$scope.serviceEnabled = false;
+					oldService();
+				} else {
+					let filtered = $scope.filterSection(response.data, 'usage-stats');
+					$scope.currentSample = ($scope.currentSample + 1) % 2;
+					let afterSample = new Date();
+					$scope.sampleTimes[$scope.currentSample] = new Date((beforeSample.getTime() + afterSample.getTime()) / 2);
 
-				$scope.usageData = {};
-				$scope.updateUsageData(filtered);
+					$scope.usageData = {};
+					$scope.updateUsageData(filtered);
 
-				$scope.macNames = {};
+					$scope.macNames = {};
 
-				let dnsmasqLeasesData = $scope.filterSection(response.data, 'dnsmasq-leases');
-				$scope.updateDnsLeases(dnsmasqLeasesData);
+					let dnsmasqLeasesData = $scope.filterSection(response.data, 'dnsmasq-leases');
+					$scope.updateDnsLeases(dnsmasqLeasesData);
 
-				let dnsmasqConfData = $scope.filterSection(response.data, 'dnsmasq-conf');
-				$scope.updateDnsConf(dnsmasqConfData);
+					let dnsmasqConfData = $scope.filterSection(response.data, 'dnsmasq-conf');
+					$scope.updateDnsConf(dnsmasqConfData);
 
-				$scope.updateMissingEntries($scope.macNames);
+					$scope.updateMissingEntries($scope.macNames);
 
-				$scope.macNamesOverride();
+					$scope.macNamesOverride();
 
-				let ipmappingData = $scope.filterSection(response.data, 'ipmapping');
-				$scope.updatemacToIpMapping(ipmappingData);
+					let ipmappingData = $scope.filterSection(response.data, 'ipmapping');
+					$scope.updatemacToIpMapping(ipmappingData);
 
-				let iptablesData = $scope.filterSection(response.data, 'iptables');
-				$scope.updateUsage(iptablesData);
+					let iptablesData = $scope.filterSection(response.data, 'iptables');
+					$scope.updateUsage(iptablesData);
 
-				$scope.updateRates();
-				$scope.updateDisplayUsage();
+					$scope.updateRates();
+					$scope.updateDisplayUsage();
+				}
 			}, function(response) {
 				$scope.serviceEnabled = false;
 				oldService();
 			});
+		}
+
+		function isNotFound(response) {
+			return response.data.indexOf('<TITLE>404') >= 0;
 		}
 
 		if ($scope.serviceEnabled) {
