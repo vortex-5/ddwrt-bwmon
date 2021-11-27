@@ -24,11 +24,11 @@ fi
 
 # copy html webgui
 if [ "$($SCRIPT_DIR/lighttpd-running.sh)" = "true" ]; then
-	mkdir -p -- "/jffs/www/"
-	cp -R $SCRIPT_DIR/www/* /jffs/www/
+	mkdir -p -- "./temp/www/"
+	cp -R $SCRIPT_DIR/www/* ./temp/www/
 	if [ -f $SCRIPT_DIR/data/password.js ]
 	then
-		cp $SCRIPT_DIR/data/password.js /jffs/www/password.js
+		cp $SCRIPT_DIR/data/password.js ./temp/www/password.js
 	fi
 else
 	cp -R $SCRIPT_DIR/www/* /tmp/www/
@@ -48,14 +48,16 @@ $SCRIPT_DIR/bwmon.sh setup
 
 # Setup cron job
 stopservice crond
-echo "* * * * * root $SCRIPT_DIR/bwmon-cron.sh" > /tmp/cron.d/bwmon_cron
+# every 10 seconds
+echo "*/10 * * * * * root $SCRIPT_DIR/bwmon-cron.sh" > /tmp/cron.d/bwmon_cron
+# every 15 minutes
 echo "*/15 * * * * root $SCRIPT_DIR/backup.sh" >> /tmp/cron.d/bwmon_cron
 startservice crond
 echo "Cron Job Added Successfully DDWRT-BWMON is now running in the background."
 
 # Setup resume on reboot
 if [ "$1" != "auto" ]; then
-nvram set rc_startup="sleep 60;$SCRIPT_DIR/start.sh auto"
+nvram set rc_startup="sleep 10;$SCRIPT_DIR/start.sh auto"
 nvram set rc_shutdown="$SCRIPT_DIR/stop.sh auto"
 nvram set rc_firewall="$SCRIPT_DIR/firewall.sh"
 nvram commit

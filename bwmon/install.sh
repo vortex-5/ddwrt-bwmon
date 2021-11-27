@@ -7,11 +7,11 @@ SCRIPT_DIR=$(cd ${SCRIPT_DIR} && pwd)
 sh "$SCRIPT_DIR/stop.sh">/dev/null 2>&1
 
 # Cleanup junk from previous versions
-rm /jffs/www/bwreader.php
-rm /jffs/www/bwreset.php
-rm /tmp/www/bwreader.php
-rm /tmp/www/bwreset.php
-rm $SCRIPT_DIR/bwmon-autobackup.sh
+rm -f ./temp/www/bwreader.php
+rm -f ./temp/www/bwreset.php
+rm -f /tmp/www/bwreader.php
+rm -f /tmp/www/bwreset.php
+rm -f $SCRIPT_DIR/bwmon-autobackup.sh
 
 chmod +x "$SCRIPT_DIR/startup.sh"
 chmod +x "$SCRIPT_DIR/start.sh"
@@ -28,10 +28,14 @@ chmod +x "$SCRIPT_DIR/www/bwreader.cgi"
 chmod +x "$SCRIPT_DIR/www/bwreset.cgi"
 
 # copy the lighttpd configuration
-if [ ! -d /jffs/etc ]; then
-	mkdir /jffs/etc
-fi
-cp "$SCRIPT_DIR/etc/lighttpd.conf" "/jffs/etc/lighttpd.conf"
+# if [ ! -d /jffs/etc ]; then
+# 	mkdir /jffs/etc
+# fi
+
+mkdir ./temp/etc
+
+
+cp "$SCRIPT_DIR/etc/lighttpd.conf" "./temp/etc/lighttpd.conf"
 
 # confirmation
 echo "Installation completed."

@@ -13,7 +13,7 @@ $SCRIPT_DIR/backup.sh
 
 # Begin Cleanup the WebGUI
 if [ "$($SCRIPT_DIR/lighttpd-running.sh)" = "true" ]; then
-	cd /jffs/www
+	cd ./temp/www
 else
 	cd /tmp/www
 fi
