@@ -470,7 +470,8 @@ bwmon.controller('MainController', ['$scope', '$interval', '$http', '$location',
 		}
 
 		function isNotFound(response) {
-			return response.data.indexOf('<TITLE>404') >= 0;
+			const lcaseData = response.data?.toLowerCase();
+			return lcaseData.indexOf('<title>404') >= 0;
 		}
 
 		if ($scope.serviceEnabled) {
